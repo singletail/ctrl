@@ -8,6 +8,15 @@ Created by and for Singletail@Proudmoore-US, but feel free to use it, learn from
 
 Most of the code is highly optimized and built for speed. Lua is already incredibly fast, and doesn't need this, but I do it for fun.
 
+## Resources
+
+If you are just learning how to write addons, these are the only resources you need:
+
+- https://warcraft.wiki.gg/wiki/World_of_Warcraft_API
+- https://www.lua.org/manual/5.1/
+
+The vast majority of web sites are hopelessly outdated. Stick to these and you'll be fine.
+
 ## Fonts
 
 This addon uses open-source fonts with custom glyphs added. You may want to install one or more at the system level if you want to modify the addon.
