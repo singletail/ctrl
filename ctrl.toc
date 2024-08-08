@@ -1,0 +1,44 @@
+## Interface: 110200
+## Title: ctrl
+## Version: 1.0
+## Notes: |cff24cf19Control system for Singletail's mods.|r
+## Author: |cffd649fft@wse.nyc|r
+## SavedVariables: ctrlprefs, ctrldata, ctrllog
+
+src\init.lua
+src\util.lua
+src\mod.lua
+src\logs.lua
+src\evt.lua
+src\cleu.lua
+src\timer.lua
+
+ux\ux.lua
+ux\frame.lua
+ux\tx.lua
+ux\btns.lua
+ux\fs.lua
+ux\template.lua
+
+templates\btn.lua
+
+core\alert.lua
+core\sfx.lua
+
+mod\cvar.lua
+mod\ui.lua
+mod\worldframe.lua
+mod\minimap.lua
+
+# mod\data.lua
+# mod\events.lua
+mod\taunt.lua
+mod\pet.lua
+mod\main.lua
+
+mod\info.lua
+
+# mod\sys.lua
+# mod\pulled.lua
+
+ctrl.lua
