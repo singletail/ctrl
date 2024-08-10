@@ -1,6 +1,8 @@
 --[[ ctrl - main.lua - t@wse.nyc - 7/24/24 ]]
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
+
 local C, c, s, a = ctrl, ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -90,7 +92,10 @@ function ctrl.main:resize(f, w, h)
     ctrl.f.r.on:SetAllPoints(self.ux.f.r)
     ctrl.f.r.off:SetAllPoints(self.ux.f.r)
     local uis = UIParent:GetScale()
-    ctrl.f:SetScale((1 - uis) * 2)
+
+    local newScale = (1 - uis)*2
+    if newScale < 0.5 then newScale = 0.5 end
+    ctrl.f:SetScale(newScale)
 end
 
 function ctrl.main:reanchor()

@@ -1,6 +1,8 @@
 --[[ ctrl - fs.lua - t@wse.nyc - 9/1/22 ]] --
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
+
 local C, c, s = ctrl, ctrl.c, ctrl.s
 
 ctrl.fs = {

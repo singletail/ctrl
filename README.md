@@ -23,6 +23,18 @@ This addon uses open-source fonts with custom glyphs added. You may want to inst
 
 While all licenses for the fonts are being followed for usage, license files are not up to date -- they will be fixed before official release.
 
+## Console
+
+For easy access to the console, run your app with the '-console' switch. 
+
+### MacOS:
+
+open -a /Applications/World\ of\ Warcraft/_retail_/World\ of\ Warcraft.app --args -console
+
+### Windows:
+
+(Add -console as a switch in a shortcut to the executable.)
+
 ## Feedback is welcome.
 
 t@wse.nyc

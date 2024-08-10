@@ -34,8 +34,13 @@ local client = {
 }
 
 local function set()
+    if (UIParent:GetScale() - ctrl.ui.uiParentScale) < 0.001 then return end
+    --if ctrl.ui.uiParentScale < 0 then
+        --ctrl.log(ctrl.ui, 5, 'UIParent scale is too small, setting to 0.3')
+        --ctrl.ui.uiParentScale = 0.3
+    --end
+    --ctrl.ui:debug('Changing UIParent scale from '..tostring(UIParent:GetScale()) .. ' to ' .. tostring(ctrl.ui.uiParentScale))
     UIParent:SetScale(ctrl.ui.uiParentScale)
-    ctrl.ui:debug('UIParent:SetScale(' .. tostring(ctrl.ui.uiParentScale) .. ')')
 end
 
 local function compute()
@@ -49,39 +54,20 @@ local function cvars()
 end
 
 local function update()
-    cvars()
     compute()
     set()
 end
 
 --
 
-function ctrl.ui.DISPLAY_SIZE_CHANGED(evt)
+function ctrl.ui.DISPLAY_SIZE_CHANGED()
     update()
 end
 
-function ctrl.ui.PLAYER_ENTERING_WORLD(evt)
+function ctrl.ui.PLAYER_ENTERING_WORLD()
+    cvars()
     update()
 end
 
 ctrl.ui:init()
 
---[[
-local function getInfo()
-    local adapters = C_VideoOptions.GetGxAdapterInfo()
-    local antiAliasingSupported = AntiAliasingSupported()        --bool
-    local currentScaledResolution = GetCurrentScaledResolution() --width?
-    local minRenderScale = GetMinRenderScale()
-    local maxRenderScale = GetMaxRenderScale()
-    local monitorAspectRatio = GetMonitorAspectRatio()
-    local monitorCount = GetMonitorCount()                                              --2?
-    local monitorName = GetMonitorName()                                                --nil?
-    local screenW, screenH = GetPhysicalScreenSize()                                    --**
-    local dpiScale = GetScreenDPIScale()
-    local screenHeight = GetScreenHeight()                                              -- UI Scaled 779
-    local screenWidth = GetScreenWidth()                                                -- UI Scaled 1245
-    local c1, c2, c3, c4, c5, c6, c7, c8 = GetVideoCaps()                               -- true, true, true, true, true, 16, true
-    local isOutlineModeSupported = IsOutlineModeSupported()                             -- true
-    local msaa1, msaa2, msaa3, msaa4, msaa5, msaa6 = MultiSampleAntiAliasingSupported() -- 1.0, 2, 2, 2.0, 4, 4
-end
-]]

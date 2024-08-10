@@ -37,6 +37,7 @@ mod\pet.lua
 mod\main.lua
 
 mod\info.lua
+#mod\space1999.lua
 
 # mod\sys.lua
 # mod\pulled.lua

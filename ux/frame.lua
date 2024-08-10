@@ -1,6 +1,7 @@
 --[[ ctrl - frame.lua - t@wse.nyc - 7/24/24 ]] --
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
 
 ctrl.frame = {
     name = "frame",

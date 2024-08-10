@@ -1,82 +1,69 @@
 --[[ ctrl - cleu.lua - t@wse.nyc - 8/5/24 ]] --
 
-local aname, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
 
 local mod = {
     name = 'cleu',
     color = ctrl.c.o,
     symbol = ctrl.s.cleu,
-    reg = {},
-    n = {},
-    options = {
-        debug = nil,
-    }
+    registry = {},
+    index = {},
 }
 
 ctrl.cleu = ctrl.mod:new(mod)
 
-local f = CreateFrame('Frame', nil, UIParent)
-f:SetFrameStrata('BACKGROUND')
-f:SetSize(1, 1)
-f:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
-ctrl.cleu.f = f
+local function addCleuEventToRegistry(e)
+    if ctrl.cleu.registry[e] then return end
+    ctrl.cleu.registry[e] = {}
+    ctrl.cleu.index[e] = 0
+end
 
-local function delegate(et)
-    for i = 1, ctrl.cleu.n[et[2]] do
-        local modname = ctrl.cleu.reg[et[2]][i]
-        if ctrl[modname][et[2]] then
-            ctrl[modname][et[2]](et)
-            if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, 'ctrl:' .. modname .. '.' .. et[2] .. '()') end
-        elseif ctrl[modname].cleu_event(et) then
-            ctrl[modname].cleu_event(et)
-            if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, 'ctrl:' .. modname .. '.cleu' .. '(' .. et[2] .. ')') end
-        end
+local function findCleuModuleIndex(moduleName, cleuevent)
+    for i = 1, ctrl.cleu.index[cleuevent] do
+        if ctrl.cleu.registry[cleuevent][i] == moduleName then return i end
     end
 end
 
-local function process()
-    local et = ctrl.pack(CombatLogGetCurrentEventInfo())
-    if not ctrl.cleu.reg[et[2]] then return end
-    delegate(et)
-end
-
-local function start()
-    f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-    f:SetScript("OnEvent", process)
-    if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, 'Started.') end
-end
-
-local function stop()
-    f:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-    f:SetScript('OnEvent', nil)
-    if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, 'Stopped.') end
-end
-
-function ctrl.cleu.register(module, e)
-    local modname = module.name
-    if not ctrl.cleu.reg[e] then
-        ctrl.cleu.reg[e] = {}
-        ctrl.cleu.n[e] = 0
+function ctrl.cleu:cleuEvent()
+    local cleut = ctrl.pack(CombatLogGetCurrentEventInfo())
+    for i = 1, ctrl.cleu.index[cleut[2]] do
+        ctrl[ctrl.cleu.registry[cleut[2]][i]].cleuEvt(cleut)
     end
-    tinsert(ctrl.cleu.reg[e], module.name)
-    ctrl.cleu.n[e] = ctrl.cleu.n[e] + 1
-    if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, module.name .. 'registered CLEU event ' .. e) end
 end
 
-function ctrl.cleu.unregister(self, module, e)
-    if not ctrl.cleu.reg[e] then return end
-    for i = 1, #ctrl.cleu.n[e] do
-        if ctrl.cleu.reg[e][i] == module.name then
-            tremove(ctrl.cleu.reg[e], i)
-            ctrl.cleu.n[e] = ctrl.cleu.n[e] - 1
-            break
-        end
-    end
-    if ctrl.cleu.options.debug then ctrl.log(ctrl.cleu, 8, module.name .. 'unregistered CLEU event ' .. e) end
+function ctrl.cleu:start()
+    self.f:SetScript("OnEvent", self.cleuEvent)
 end
 
-function ctrl.cleu:init()
-    start()
+function ctrl.cleu:stop()
+    self.f:SetScript("OnEvent", nil)
+end
+
+function ctrl.cleu.register(module, cleuEvent)
+    local moduleName = module.name or module or 'nil'
+    addCleuEventToRegistry(cleuEvent)
+    tinsert(ctrl.cleu.registry[cleuEvent], moduleName)
+    ctrl.cleu.index[cleuEvent] = ctrl.cleu.index[cleuEvent] + 1
+    ctrl.cleu:debug('Registered ' .. moduleName .. ' for ' .. cleuEvent)
+end
+
+function ctrl.cleu.unregister(module, cleuEvent)
+    local moduleName = module.name or module or 'nil'
+    local eventIndex = findCleuModuleIndex(moduleName, cleuEvent)
+    tremove(ctrl.cleu.registry[cleuEvent], eventIndex)
+    ctrl.cleu.index[cleuEvent] = ctrl.cleu.index[cleuEvent] - 1
+    ctrl.cleu:debug('Unegistered ' .. moduleName .. ' for ' .. cleuEvent)
+end
+
+function ctrl.cleu:init() --overwriting module default, to run on load
+    self.f = self.f or CreateFrame('Frame', nil, UIParent)
+    if not self.f then self:error('Frame not created.'); return end
+    self.f:SetFrameStrata('BACKGROUND')
+    self.f:SetSize(1, 1)
+    self.f:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
+    self:register('COMBAT_LOG_EVENT_UNFILTERED')
+    self:start()
 end
 
 ctrl.cleu:init()

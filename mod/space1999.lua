@@ -7,7 +7,7 @@ local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
-    name = 'info',
+    name = 'space1999',
     color = c.o,
     symbol = s.info,
     options = {
@@ -19,7 +19,7 @@ local mod = {
             y = -200,
             isResizable = 1,
             isMovable = 1,
-            globalName = 'ctrlInfo',
+            globalName = 'space1999',
         },
         events = {
             'UI_SCALE_CHANGED'
@@ -30,7 +30,7 @@ local mod = {
     }
 }
 
-ctrl.info = ctrl.mod:new(mod)
+ctrl.space1999 = ctrl.mod:new(mod)
 
 local subframes = {
     --['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -36 }, { a = a.br, pa = a.br, x = -12, y = 12 } } },
@@ -38,7 +38,7 @@ local subframes = {
 }
 
 local textures = {
-    ['tx'] = { t = 'mon2_188', path = ctrl.p.tx, l = -7 },
+    ['tx'] = { t = 'top', path = ctrl.p[1999], l = -7 },
     --['bktx'] = { target = 'bk', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
 }
 
@@ -75,7 +75,7 @@ local function ts()
     local gst = GetServerTime()
     return string.format('%s%s%s', c.r, date('%I:%M:%S', gst), c.d)
 end
-
+--[[
 function ctrl.info:update()
     self.ux.c['fsv_servertime']:SetText(ts())
     self.ux.c['fsv_useuiscale']:SetText(GetCVar('useUiScale'))
@@ -142,7 +142,7 @@ function ctrl.info.UI_SCALE_CHANGED()
     updateScale()
 end
 
---[[
+
 local msgTab = ctrl.newTable('')
 msgTab[1] = c.y
 msgTab[2] = ' '
@@ -163,12 +163,12 @@ end
 ]]
 
 
-function ctrl.info.setup(self)
+function ctrl.space1999.setup(self)
     self.ux.f = ctrl.frame:new(self.options.frame, self)
 
     ctrl.tx:generate(textures, self)
     --ctrl.btns:generate(buttons, self)
-    ctrl.fs:generate(fontstrings, self)
+    --ctrl.fs:generate(fontstrings, self)
 end
 
-ctrl.info:init()
+ctrl.space1999:init()

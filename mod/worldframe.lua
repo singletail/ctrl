@@ -1,6 +1,8 @@
 --[[ ctrl - worldframe.lua - t@wse.nyc - 8/6/24 ]]
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
+
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {

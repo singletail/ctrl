@@ -1,6 +1,8 @@
 --[[ ctrl - logs.lua - t@wse.nyc - 7/25/24 ]] --
 
-local a, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
+
 local c, s = ctrl.c, ctrl.s
 --ctrl.ctrllog = _G.ctrllog
 

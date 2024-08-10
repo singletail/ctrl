@@ -1,6 +1,7 @@
 --[[ ctrl - util.lua - t@wse.nyc - 7/24/24 ]] --
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
 
 --local DevTools_Dump, DisplayTableInspectorWindow, setmetatable = DevTools_Dump, DisplayTableInspectorWindow, setmetatable
 --local print, tostring = print, tostring
@@ -132,7 +133,7 @@ function ctrl.safeset(dest, src, depth, ignoremetatables)
         local t = type(rawV)
         if t == 'table' then
             if getmetatable(t) and ignoremetatables then
-                ctrl.debug(ctrl, 'Skipping table ' .. tostring(k) .. ' because it has a metatable.')
+                --ctrl.debug(ctrl, 'Skipping table ' .. tostring(k) .. ' because it has a metatable.')
             else
                 if depth > 0 then
                     if dest[k] then
@@ -153,7 +154,7 @@ function ctrl.safeset(dest, src, depth, ignoremetatables)
         elseif t == 'string' or t == 'number' or t == 'boolean' then
             dest[k] = rawV
         else
-            ctrl.debug(ctrl, 'safecopy skipped item ' .. tostring(k) .. ' with type ' .. t)
+            --ctrl.debug(ctrl, 'safecopy skipped item ' .. tostring(k) .. ' with type ' .. t)
         end
     end
 end
@@ -162,7 +163,7 @@ function ctrl.pp(input, limit, istr)
     limit = limit or 100
     istr = istr or '->   '
     if (limit < 1) then
-        ctrl.output "ERROR: Item limit reached."
+        --ctrl.output "ERROR: Item limit reached."
         return limit - 1
     end
     local ts = type(input)

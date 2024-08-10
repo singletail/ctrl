@@ -1,4 +1,5 @@
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
 
 local settings = {
     name = 'template',

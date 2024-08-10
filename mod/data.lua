@@ -1,6 +1,7 @@
 --[[ ctrl - data.lua - t@wse.nyc - 7/24/24 ]] --
 
-local _, ctrl = ...
+---@class ctrl
+local ctrl = select(2, ...)
 
 local mod = {
     name = 'data',

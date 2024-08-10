@@ -1,13 +1,13 @@
 --[[ ctrl - init.lua - t@wse.nyc - 7/24/24 ]] --
 
-local UIParentLoadAddOn = UIParentLoadAddOn
+---@class ctrl
+local ctrl = select(2, ...)
 
-local _, ctrl           = ...
 ctrl                    = ctrl or {}
 ctrl.mods               = {}
 
 ctrl.name               = 'ctrl'
-ctrl.description        = 'Mod Controller.'
+ctrl.description        = 'Singletail\'s Quality of Life.'
 ctrl.version            = 1.0
 ctrl.author             = 't@wse.nyc'
 ctrl.color              = [[|cfff563af]]
@@ -35,11 +35,13 @@ ctrl.is                 = {
 }
 
 ctrl.p                  = {
-    fnt = [[Interface\AddOns\ctrl\assets\fnt\full\]],
+    fnt = [[Interface\AddOns\ctrl\assets\fnt\min\]],
+    fntfull = [[Interface\AddOns\ctrl\assets\fnt\full\]],
     tx = [[Interface\AddOns\ctrl\assets\tx\]],
     btns = [[Interface\AddOns\ctrl\assets\btns\]],
     ux = [[Interface\AddOns\ctrl\assets\ux\]],
     sfx = [[Interface\AddOns\ctrl\assets\sfx\]],
+    [1999] = [[Interface\AddOns\ctrl\assets\1999\]],
 }
 
 ctrl.c                  = {
@@ -195,16 +197,3 @@ ctrl.a = {
         h = 'HIGHLIGHT'
     }
 }
-
-
-
---[[
-function ctrl.prelog(mod, level, ...)
-    local msgObj = ctrl.msgObj(mod, level, ...)
-    tinsert(ctrl.buffer, msgObj)
-end
-
-ctrl.prelog(ctrl, 6,
-    ctrl.addon ..
-    ' - ' .. c.d .. tostring(ctrl.description) .. c.y .. ' v' .. tostring(ctrl.version) .. c.d)
-]]
