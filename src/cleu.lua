@@ -27,8 +27,11 @@ end
 
 function ctrl.cleu:cleuEvent()
     local cleut = ctrl.pack(CombatLogGetCurrentEventInfo())
+    if not cleut and not cleut[2] then return end
+    if not ctrl.cleu.index[cleut[2]] then return end
     for i = 1, ctrl.cleu.index[cleut[2]] do
-        ctrl[ctrl.cleu.registry[cleut[2]][i]].cleuEvt(cleut)
+        if not ctrl[ctrl.cleu.registry[cleut[2]][i]] then return end
+        ctrl[ctrl.cleu.registry[cleut[2]][i]]:cleuEventHandler(cleut)
     end
 end
 
@@ -62,7 +65,8 @@ function ctrl.cleu:init() --overwriting module default, to run on load
     self.f:SetFrameStrata('BACKGROUND')
     self.f:SetSize(1, 1)
     self.f:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
-    self:register('COMBAT_LOG_EVENT_UNFILTERED')
+    --self:register('COMBAT_LOG_EVENT_UNFILTERED')
+    self.f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
     self:start()
 end
 

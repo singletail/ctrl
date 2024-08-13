@@ -70,10 +70,10 @@ local function _unregisterCleuEvents(self)
 end
 
 local function _cleuEventHandler(self, cleut)
-    if self[cleut[2]] then
+    if ctrl[self.name][cleut[2]] then
         self[cleut[2]](cleut)
     else
-        self.evt(self, cleut)
+        self.cleuEvt(self, cleut)
     end
 end
 

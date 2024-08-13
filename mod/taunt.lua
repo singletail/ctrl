@@ -42,32 +42,37 @@ local aoe = {
 }
 ]]
 
-local msgTab = ctrl.newTable('')
-msgTab[1] = c.y
-msgTab[2] = ' '
-msgTab[3] = ' cast '
-msgTab[4] = c.o
-msgTab[5] = ' '
-msgTab[6] = ' on '
-msgTab[7] = c.r
-msgTab[8] = ' '
+ctrl.taunt.msgTab = ctrl.newTable('')
+ctrl.taunt.msgTab[1] = c.y
+ctrl.taunt.msgTab[2] = ' '
+ctrl.taunt.msgTab[3] = c.b
+ctrl.taunt.msgTab[4] = ' cast '
+ctrl.taunt.msgTab[5] = c.o
+ctrl.taunt.msgTab[6] = ' '
+ctrl.taunt.msgTab[7] = c.b
+ctrl.taunt.msgTab[8] = ' on '
+ctrl.taunt.msgTab[9] = c.r
+ctrl.taunt.msgTab[10] = ' '
+ctrl.taunt.msgTab[11] = c.d
 
 local function getBuffer(t)
     return table.concat(t, c.d)
 end
 
-local function taunted(evt)
-    msgTab[2] = tostring(evt[5])
-    msgTab[5] = tostring(evt[13])
-    msgTab[8] = tostring(evt[9])
-    ctrl.alert.add(ctrl.taunt, getBuffer(msgTab))
+function ctrl.taunt:taunted(evt)
+    self:debug('taunted', tostring(evt[5]))
+    ctrl.taunt.msgTab[2] = tostring(evt[5])
+    ctrl.taunt.msgTab[6] = tostring(evt[13])
+    ctrl.taunt.msgTab[10] = tostring(evt[9])
+    local msg = getBuffer(ctrl.taunt.msgTab)
+    self:debug('taunt message', msg)
+    ctrl.alert:add(msg)
     ctrl.sfx.play(ctrl.taunt, 'TAUNT', "Master")
 end
 
 function ctrl.taunt.SPELL_CAST_SUCCESS(evt)
-    if taunts[evt[12]] then
-        taunted(evt)
-    end
+    if not taunts[evt[12]] then return end
+    ctrl.taunt:taunted(evt)
 end
 
 ctrl.taunt:init()

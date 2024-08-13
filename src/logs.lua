@@ -47,7 +47,7 @@ end
 
 local function prnt(msgObj)
     local msg = formatMsg(msgObj)
-    if ctrl.main and ctrl.main.is.loaded then --TODO: Change to console exists
+    if ctrl.console and ctrl.console.is.loaded then --TODO: Change to console exists
         ctrl.sf:AddMessage(msg)
     else
         print(msg)

@@ -14,15 +14,56 @@ ctrl.templates.btn = {
         h = 64,
         texture = {
             static = {
-                { file = 'smol_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
+                { file = 'smol_bk', alpha = 1, color = nil, layer = 2, path = ctrl.p.btns }
             },
             value = {
                 [0] = {
-                    { file = 'smol_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                    { file = 'smol_off', alpha = 1, color = 1, layer = 3, path = ctrl.p.btns },
                 },
                 [1] = {
-                    { file = 'smol_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
-                    --{ file = 'smol_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                    { file = 'smol_on', alpha = 1, color = 1, layer = 4, path = ctrl.p.btns },
+                    { file = 'smol_glow', alpha = 0.25, color = nil, layer = 5, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['btn_sq'] = {
+        subclass = 'SPST',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'sq_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'sq_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'sq_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['btn_beeg'] = {
+        subclass = 'SPST',
+        values = { 0, 1 },
+        default = 1,
+        w = 128,
+        h = 48,
+        texture = {
+            static = {
+                { file = 'beeg_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'beeg_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'beeg_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
                 },
             }
         },

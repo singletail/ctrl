@@ -21,25 +21,21 @@ ctrl.fs = {
     ww = false,
 }
 
-function ctrl.fs:new(o, mod)
+function ctrl.fs:new(o)
     o = o or {}
     local meta = { __index = self }
     setmetatable(o, meta)
     setmetatable(self, { __index = ctrl.ux })
 
-    if not o.anchors then
-        o.anchors = {}
-        o.anchors[1] = { a = o.a, pa = o.pa, x = o.x, y = o.y }
-    end
+    o.anchors = o.anchors or {{ a = o.a, pa = o.pa, x = o.x, y = o.y }}
+    o.fontFile = o.fontFile or 'Prompt-Regular.ttf'
+    o.fontFile = ctrl.p.fnt .. o.fontFile
+    o.fontSize = o.fontSize or 12
+    o.fontFlags = o.fontFlags or ''
 
     local fs = o.target:CreateFontString()
-    if o.fontFile then
-        local fontSize = o.fontSize or 12
-        local fontFlags = o.fontFlags or ''
-        fs:SetFont(ctrl.p.fnt .. o.fontFile, fontSize, fontFlags)
-    else
-        self:debug('WARN: no fontFile provided for ' .. o.n)
-    end
+    fs:SetFont(o.fontFile, o.fontSize, o.fontFlags)
+    
 
     if o.w and o.h then fs:SetSize(o.w, o.h) end
 

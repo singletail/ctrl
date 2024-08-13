@@ -43,25 +43,28 @@ end
 function ctrl.timer.unregister(module, interval)
     local moduleName = module.name or module or 'nil'
     local timerIndex = findTimerIndex(moduleName, interval)
-    tremove(ctrl.timer.registry, timerIndex)
     ctrl.timer.index = ctrl.timer.index - 1
-    ctrl.timer:debug('Unregistered ' .. moduleName .. ' for timer, interval' .. tostring(interval))
+    tremove(ctrl.timer.registry, timerIndex)
+    ctrl.timer:debug('Unregistered ' .. moduleName .. ' for timer, interval ' .. tostring(interval))
 end
 
-function ctrl.timer:tick()
-    for i = 1, self.index do
-        if GetTime() >= self.registry[i][1] + self.registry[i][3] then
-            self.registry[i][3] = GetTime()
-            self.registry[i][4] = self.registry[i][4] + 1
-            ctrl[self.registry[i][2] ]:tick(self.registry[i][1], self.registry[i][4])
+function ctrl.timer.tick()
+    for i, r in ipairs(ctrl.timer.registry) do
+        local interval = r[1]
+        local last = r[3]
+        local now = GetTime()
+        if now >= last + interval then
+            r[3] = now
+            r[4] = r[4] + 1
+            ctrl[r[2]]:tick(r[1], r[4])
         end
     end
 end
 
 function ctrl.timer:onUpdate()
-    if GetTime() >= self.time.last + self.time.throttle then
-        self.time.last = GetTime()
-        self:tick()
+    if GetTime() >= ctrl.timer.time.last + ctrl.timer.time.throttle then
+        ctrl.timer.time.last = GetTime()
+        ctrl.timer.tick()
     end
 end
 

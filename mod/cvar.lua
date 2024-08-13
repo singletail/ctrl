@@ -73,7 +73,7 @@ local function set(cvarName, cvarValue)
             msg = c.r .. 'Error: CVar ' .. tostring(cvarName) .. ' NOT set to ' .. cvarValue
         end
         ctrl.cvar.notice(ctrl.cvar, msg)
-        ctrl.alert.add(ctrl.cvar, msg)
+        if ctrl.alert then ctrl.alert.add(ctrl.cvar, msg) end
     end
 end
 

@@ -77,7 +77,8 @@ local function ts()
 end
 
 function ctrl.info:update()
-    self.ux.c['fsv_servertime']:SetText(ts())
+    if not self.ux.c.fsv_servertime then return end
+    self.ux.c.fsv_servertime:SetText(ts())
     self.ux.c['fsv_useuiscale']:SetText(GetCVar('useUiScale'))
     self.ux.c['fsv_uiscale']:SetText(GetCVar('uiScale'))
     local pw, ph = GetPhysicalScreenSize()

@@ -126,6 +126,8 @@ ctrl.s        = {
     ['bow']        = '㍣',
     ['cvar']       = '〲',
     ['cvar_alert'] = '〶',
+    ['zoomIn'] = 'ド',
+    ['zoomOut'] = 'ニ',
 }
 
 local c       = ctrl.c

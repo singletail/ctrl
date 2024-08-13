@@ -22,7 +22,7 @@ end
 local function registerFrame(e)
     if ctrl.evt.f:IsEventRegistered(e) then return end
     ctrl.evt.f:RegisterEvent(e)
-    ctrl.evt:debug('Registered event frame for ' .. e)
+    --ctrl.evt:debug('Registered event frame for ' .. e)
 end
 
 local function unregisterFrame(e)
@@ -30,7 +30,7 @@ local function unregisterFrame(e)
     ctrl.evt.f:UnregisterEvent(e)
     ctrl.evt.registry[e] = nil
     ctrl.evt.index[e] = nil
-    ctrl.evt:debug('Unegistered event frame for ' .. e)
+    --ctrl.evt:debug('Unegistered event frame for ' .. e)
 end
 
 local function findModuleIndex(moduleName, event)

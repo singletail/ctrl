@@ -63,8 +63,8 @@ local textures = {
 }
 
 local fontstrings = {
-    ['fsTime'] = { t = 'T', fontFile = 'Countdown-Regular.otf', fontSize = 32, a = a.tl, pa = a.t, x=-64, y=-2},
-    ['fsDate'] = { t = 'D', fontFile = 'Data70-Regular.otf', fontSize = 18, a = a.b, pa = a.b, x = 0, y = 4 },
+    ['fsTime'] = { t = 'T', fontFile = 'Prompt-Bold.ttf', fontSize = 24, a = a.tl, pa = a.t, x=-50, y=-12},
+    ['fsDate'] = { t = 'D', fontFile = 'Prompt-Medium.ttf', fontSize = 14, a = a.b, pa = a.b, x = 0, y = 6 },
     ['fsZone'] = { target = 'loc', t = 'Z', fontFile = 'Prompt-Bold.ttf', fontSize = 21, a = a.t, pa = a.t, x = 0, y = -5 },
     ['fsSub'] = { target = 'loc', t = 'S', fontFile = 'Prompt-Medium.ttf', fontSize = 16, a = a.c, pa = a.c, x = 0, y = -4 },
     ['fsCoords'] = { target = 'loc', t = 'C', fontFile = 'SpaceMono-Bold.ttf', fontSize = 12, a = a.b, pa = a.b, x = -3, y = 4 },
@@ -247,114 +247,3 @@ end
 ]]
 
 
-
-
-
---[[
-
-
-function ctrl.minimap:UpdateText()
-    coords_table[2] = self:x()
-    coords_table[3] = self:y()
-    zone_table[2] = self.settings.zone
-    sub_table[2] = self.settings.subzone
-    self.frame.string['zone']:SetText(table.concat(zone_table))
-    self.frame.string['sub']:SetText(table.concat(sub_table))
-    self.frame.string['coords']:SetText(table.concat(coords_table, ' '))
-end
-
-
-
-
-function ctrl.minimap.PLAYER_STARTED_MOVING(evt)
-    ctrl.minimap.moving = true
-    --ctrl.minimap:startTimer()
-end
-
-function ctrl.minimap.PLAYER_STOPPED_MOVING(evt)
-    ctrl.minimap.moving = nil
-    --ctrl.minimap:stopTimer()
-end
-
-]]
---[[
-
-
-UIParent
-    MinimapCluster -- UIParent TOPRIGHT 0 0
-        MinimapContainer - MinimapCluster Top Top 10 -30
-            Minimap - MinimapContainer CENTER 0 0
-                MinimapBackdrop - Minimap CENTER 0 0
-
-UIParent
-    MinimapCluster -- UIParent TOPRIGHT 0 0
-        BorderTop
-            BottomEdge
-            BottomLeftCorner
-            BottomRightCorner
-            Center
-            LeftEdge
-            RightEdge
-            TopEdge
-            TopLeftCorner
-            TopRightCorner
-        IndicatorFrame
-            CraftingOrderFrame
-                MiniMapCraftingOrderIcon
-            MailFrame
-                MiniMapMailIcon
-                MailReminderAnim
-                MailReminderFlipbook
-                NewMailAnim
-                NewMailFlipbook
-        InstanceDifficulty
-            ChallengeMode
-                Background
-                Border
-                ChallengeModeTexture
-            Default
-                Background
-                Border
-                HeroicTexture
-                MythicTexture
-                NormalTexture
-                Text
-                WalkInTexture
-            Guild
-                Background
-                Border
-                Emblem
-                Instance
-        MinimapContainer - MinimapCluster Top Top 10 -30
-            Minimap - MinimapContainer CENTER 0 0
-                MinimapBackdrop - Minimap CENTER 0 0
-                    ExpansionLandingPageMinimapButton
-                        AlertBG
-                        AlertText
-                        CircleGlow
-                        LoopingGlow
-                        MinimapAlertAnim
-                        MinimapLoopPulseAnim
-                        MinimapPulseAnim
-                        SideToastGlow
-                        SoftButtonGlow
-                    MinimapCompassTexture
-                ZoomHitArea
-                ZoomIn
-                ZoomOut
-        AddonCompartmentFrame
-            Text
-        GameTimeFrame
-            CalendarEventAlarmTexture
-            CalendarInvitesGlow
-            CalendarInvitesTexture
-            GameTimeTexture
-        Selection
-            Label
-        Tracking
-            Background
-            Button
-        ZoneTextButton
-            Text
-
-]]

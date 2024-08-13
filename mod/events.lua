@@ -55,10 +55,9 @@ ctrl.events = ctrl.mod:new(mod)
 
 local function alert(...)
     local msg, sfx = ...
-    if msg then
-        ctrl.alert.add(ctrl.events, tostring(msg))
-        ctrl.events.info(ctrl.events, tostring(msg))
-    end
+    if not ctrl.alert or not msg then return end
+    ctrl.alert.add(ctrl.events, tostring(msg))
+    ctrl.events.info(ctrl.events, tostring(msg))
     if sfx then
         ctrl.sfx.play(ctrl.events, tostring(sfx))
     end

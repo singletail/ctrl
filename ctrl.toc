@@ -29,12 +29,12 @@ mod\cvar.lua
 mod\ui.lua
 mod\worldframe.lua
 mod\minimap.lua
+mod\console.lua
 
 # mod\data.lua
-# mod\events.lua
+mod\events.lua
 mod\taunt.lua
 mod\pet.lua
-mod\main.lua
 
 mod\info.lua
 #mod\space1999.lua
