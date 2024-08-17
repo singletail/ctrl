@@ -1,6 +1,8 @@
 --[[ ctrl - tx.lua - t@wse.nyc - 7/21/24 ]] --
 
----@class ctrl
+
+--[[ Depreciated.
+@class ctrl
 local ctrl = select(2, ...)
 
 ctrl.tx = {
@@ -60,3 +62,5 @@ function ctrl.tx:generate(tt, mod, ux)
         ux.c[k] = ctrl.tx:new(v, mod)
     end
 end
+
+]]

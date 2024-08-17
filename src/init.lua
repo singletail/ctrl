@@ -36,12 +36,14 @@ ctrl.is                 = {
 
 ctrl.p                  = {
     fnt = [[Interface\AddOns\ctrl\assets\fnt\min\]],
-    fntfull = [[Interface\AddOns\ctrl\assets\fnt\full\]],
+    fntf = [[Interface\AddOns\ctrl\assets\fnt\full\]],
+    fntorig = [[Interface\AddOns\ctrl\assets\fnt\orig\]],
     tx = [[Interface\AddOns\ctrl\assets\tx\]],
     btns = [[Interface\AddOns\ctrl\assets\btns\]],
     ux = [[Interface\AddOns\ctrl\assets\ux\]],
     sfx = [[Interface\AddOns\ctrl\assets\sfx\]],
-    [1999] = [[Interface\AddOns\ctrl\assets\1999\]],
+    ctrl = [[Interface\AddOns\ctrl\assets\ctrl\]],
+    test = [[Interface\AddOns\ctrl\assets\test\]],
 }
 
 ctrl.c                  = {
@@ -128,6 +130,8 @@ ctrl.s        = {
     ['cvar_alert'] = '〶',
     ['zoomIn'] = 'ド',
     ['zoomOut'] = 'ニ',
+    ['min'] =  '󰘕', -- '䔦',
+    ['max'] = '󰘖', --  '䔥',
 }
 
 local c       = ctrl.c

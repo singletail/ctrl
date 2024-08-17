@@ -18,6 +18,8 @@ local mod = {
             pa = a.tr,
             x = -60,
             y = -60,
+            isMovable = nil,
+            isResizable = nil,
         },
         events = {
             'PLAYER_ENTERING_WORLD',
@@ -25,7 +27,6 @@ local mod = {
             'ZONE_CHANGED_INDOORS',
             'PLAYER_STARTED_MOVING',
             'PLAYER_STOPPED_MOVING',
-            --'DISPLAY_SIZE_CHANGED',
             'UI_SCALE_CHANGED',
             'GARRISON_SHOW_LANDING_PAGE',
         },
@@ -42,12 +43,12 @@ local mod = {
 ctrl.minimap = ctrl.mod:new(mod)
 
 local subframes = {
-    ['loc'] = { target = UIParent, w = 300, h = 300 },
+    ['loc'] = { target = 'main', w = 300, h = 300, strata = 'BACKGROUND', a=a.tl, pa=a.tl, x=0, y=0 },
 }
 
 local textures = {
     --['tx'] = { t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
-    --['loctx'] = { target = 'loc', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
+    --['loctx'] = { target = 'loc', t = 'bluebk_full_256', path = ctrl.p.tx, l = -6 },
     ['ct'] = { t = 'pride_t', path = p.ux, l = -6 },
     ['cl'] = { t = 'pride_l', path = p.ux, l = -6 },
     ['cr'] = { t = 'pride_r', path = p.ux, l = -6 },
@@ -63,8 +64,8 @@ local textures = {
 }
 
 local fontstrings = {
-    ['fsTime'] = { t = 'T', fontFile = 'Prompt-Bold.ttf', fontSize = 24, a = a.tl, pa = a.t, x=-50, y=-12},
-    ['fsDate'] = { t = 'D', fontFile = 'Prompt-Medium.ttf', fontSize = 14, a = a.b, pa = a.b, x = 0, y = 6 },
+    ['fsTime'] = { target = 'main', t = 'T', fontFile = 'Prompt-Bold.ttf', fontSize = 24, a = a.tl, pa = a.t, x=-50, y=-12},
+    ['fsDate'] = { target = 'main', t = 'D', fontFile = 'Prompt-Medium.ttf', fontSize = 14, a = a.b, pa = a.b, x = 0, y = 6 },
     ['fsZone'] = { target = 'loc', t = 'Z', fontFile = 'Prompt-Bold.ttf', fontSize = 21, a = a.t, pa = a.t, x = 0, y = -5 },
     ['fsSub'] = { target = 'loc', t = 'S', fontFile = 'Prompt-Medium.ttf', fontSize = 16, a = a.c, pa = a.c, x = 0, y = -4 },
     ['fsCoords'] = { target = 'loc', t = 'C', fontFile = 'SpaceMono-Bold.ttf', fontSize = 12, a = a.b, pa = a.b, x = -3, y = 4 },
@@ -82,29 +83,36 @@ coords_table[1] = c.y
 zone_table[1] = c.b
 sub_table[1] = c.v
 
-function ctrl.minimap:resize()
-    local b = {
-        ['f'] = { { t = Minimap, a = a.tl, pa = a.tl, x = 0, y = 64 }, { t = Minimap, a = a.br, pa = a.tr, x = 0, y = 8 } },
-        --['tx'] = { { t = self.ux.f, a = a.tl, pa = a.tl, x = 0, y = 0 }, { t = self.ux.f, a = a.br, pa = a.br, x = 0, y = 0 } },
+function ctrl.minimap:resize(frame, w, h)
+    local framestoresize = {
+        ['main'] = { { t = Minimap, a = a.tl, pa = a.tl, x = 0, y = 64 }, { t = Minimap, a = a.br, pa = a.tr, x = 0, y = 8 } },
         ['loc'] = { { t = Minimap, a = a.tl, pa = a.bl, x = 0, y = -8 }, { t = Minimap, a = a.br, pa = a.br, x = 0, y = -72 } },
-        --['loctx'] = { { t = self.ux.c.loc, a = a.tl, pa = a.tl, x = 0, y = 0 }, { t = self.ux.c.loc, a = a.br, pa = a.br, x = 0, y = 0 } },
-        ['ct'] = { { t = self.ux.f, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.ux.f, a = a.br, pa = a.tr, x = 1, y = -1 } },
-        ['cl'] = { { t = self.ux.f, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.ux.f, a = a.br, pa = a.bl, x = 0, y = -1 } },
-        ['cr'] = { { t = self.ux.f, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.ux.f, a = a.br, pa = a.br, x = 1, y = -1 } },
-        ['cb'] = { { t = self.ux.f, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = self.ux.f, a = a.br, pa = a.br, x = 1, y = -1 } },
+    }
+    for t, v in pairs(framestoresize) do
+        self.f[t]:ClearAllPoints()
+        for _, x in ipairs(v) do
+            self.f[t]:SetPoint(x.a, x.t, x.pa, x.x, x.y)
+        end
+    end
+    local tx = {
+        --['loctx'] = { { t = self.f.loc, a = a.tl, pa = a.tl, x = 0, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 0, y = 0 } },
+        ['ct'] = { { t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.tr, x = 1, y = -1 } },
+        ['cl'] = { { t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.bl, x = 0, y = -1 } },
+        ['cr'] = { { t = self.f.main, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.f.main, a = a.br, pa = a.br, x = 1, y = -1 } },
+        ['cb'] = { { t = self.f.main, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.br, x = 1, y = -1 } },
         ['t'] = { { t = Minimap, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = Minimap, a = a.br, pa = a.tr, x = 1, y = -1 } },
         ['l'] = { { t = Minimap, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = Minimap, a = a.br, pa = a.bl, x = 0, y = -1 } },
         ['r'] = { { t = Minimap, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = Minimap, a = a.br, pa = a.br, x = 1, y = -1 } },
         ['b'] = { { t = Minimap, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = Minimap, a = a.br, pa = a.br, x = 1, y = -1 } },
-        ['lt'] = { { t = self.ux.c.loc, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.ux.c.loc, a = a.br, pa = a.tr, x = 1, y = -1 } },
-        ['ll'] = { { t = self.ux.c.loc, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.ux.c.loc, a = a.br, pa = a.bl, x = 0, y = -1 } },
-        ['lr'] = { { t = self.ux.c.loc, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.ux.c.loc, a = a.br, pa = a.br, x = 1, y = -1 } },
-        ['lb'] = { { t = self.ux.c.loc, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = self.ux.c.loc, a = a.br, pa = a.br, x = 1, y = -1 } },
+        ['lt'] = { { t = self.f.loc, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.loc, a = a.br, pa = a.tr, x = 1, y = -1 } },
+        ['ll'] = { { t = self.f.loc, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.loc, a = a.br, pa = a.bl, x = 0, y = -1 } },
+        ['lr'] = { { t = self.f.loc, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 1, y = -1 } },
+        ['lb'] = { { t = self.f.loc, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 1, y = -1 } },
     }
-    for t, v in pairs(b) do
-        self.ux.c[t]:ClearAllPoints()
+    for t, v in pairs(tx) do
+        ctrl.minimap.tx[t]:ClearAllPoints()
         for _, x in ipairs(v) do
-            self.ux.c[t]:SetPoint(x.a, x.t, x.pa, x.x, x.y)
+            ctrl.minimap.tx[t]:SetPoint(x.a, x.t, x.pa, x.x, x.y)
         end
     end
 end
@@ -112,19 +120,19 @@ end
 function ctrl.minimap:UpdateClock()
     timeTable[2] = date(" %I"):gsub(' 0', ' ')
     timeTable[3] = date(":%M:%S ")
-    ctrl.minimap.ux.c.fsTime:SetText(table.concat(timeTable))
+    ctrl.minimap.fs.fsTime:SetText(table.concat(timeTable))
     dateTable[2] = date('%A, %B %d, %Y'):gsub(' 0', ' ')
-    ctrl.minimap.ux.c.fsDate:SetText(table.concat(dateTable))
+    ctrl.minimap.fs.fsDate:SetText(table.concat(dateTable))
 end
 
 function ctrl.minimap:UpdateLocation()
     local mapId = C_Map.GetBestMapForUnit('player')
 
     zone_table[2] = GetZoneText() or "Unknown"
-    ctrl.minimap.ux.c.fsZone:SetText(table.concat(zone_table))
+    ctrl.minimap.fs.fsZone:SetText(table.concat(zone_table))
 
     sub_table[2] = GetMinimapZoneText() or "Unknown"
-    ctrl.minimap.ux.c.fsSub:SetText(table.concat(sub_table))
+    ctrl.minimap.fs.fsSub:SetText(table.concat(sub_table))
 
     if not mapId then
         self.x = 0
@@ -142,7 +150,7 @@ function ctrl.minimap:UpdateLocation()
         coords_table[2] = string.format('%.5f', math.floor(self.x * 10000000) / 100000)
         coords_table[3] = string.format('%.5f', math.floor(self.y * 10000000) / 100000)
     end
-    ctrl.minimap.ux.c.fsCoords:SetText(table.concat(coords_table, ' '))
+    ctrl.minimap.fs.fsCoords:SetText(table.concat(coords_table, ' '))
 end
 
 function ctrl.minimap:tick(interval, count)
@@ -153,12 +161,11 @@ function ctrl.minimap:tick(interval, count)
     end
 end
 
-function ctrl.minimap:setup()
-    self.ux.f = ctrl.frame:new(self.options.frame, self)
-    self.ux.c.f = self.ux.f
-    ctrl.frame:generate(subframes, self)
-    ctrl.tx:generate(textures, self)
-    ctrl.fs:generate(fontstrings, self)
+function ctrl.minimap.setup(self)
+    ctrl.minimap.f.main = ctrl.frame.new(ctrl.minimap, ctrl.minimap.options.frame)
+    ctrl.frame.generate(ctrl.minimap, subframes)
+    ctrl.tx.generate(ctrl.minimap, textures)
+    ctrl.fs.generate(ctrl.minimap, fontstrings)
 end
 
 ctrl.minimap:init()
@@ -168,8 +175,8 @@ ctrl.minimap:init()
 local function minimapComputeSize()
     local screenW, screenH = GetPhysicalScreenSize()
     return {
-        w = math.floor(screenH / 4),
-        h = math.floor(screenH / 4),
+        w = math.floor(screenH / 3),
+        h = math.floor(screenH / 3),
         x = -16,
         y = -72,
         s = 1.5,

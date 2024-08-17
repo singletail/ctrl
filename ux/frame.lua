@@ -1,7 +1,8 @@
 --[[ ctrl - frame.lua - t@wse.nyc - 7/24/24 ]] --
 
----@class ctrl
-local ctrl = select(2, ...)
+--[[ Depreciated. 
+
+
 
 ctrl.frame = {
     name = "frame",
@@ -92,9 +93,9 @@ function ctrl.frame:new(o, mod)
         f:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y)
     end
 
-    o.mod = mod
+    --o.mod = mod
     f.mod = mod
-    f.name = o.name .. '.f'
+    --f.name = o.name .. '.f'
 
     if o.target == UIParent then
         f:SetToplevel(true)
@@ -115,7 +116,10 @@ function ctrl.frame:new(o, mod)
         for e, fn in pairs(ctrl.frame.scripts.resize) do f:SetScript(e, fn) end
     end
 
-    f.info = o
+    --f.info = o
+    f.info = {
+        class = o.class,
+    }
     return f
 end
 
@@ -165,3 +169,6 @@ function ctrl.frame:secure(...)
     end
     return f
 end
+
+
+]]

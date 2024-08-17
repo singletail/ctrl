@@ -8,168 +8,251 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
     name = 'info',
-    color = c.o,
+    color = c.w,
     symbol = s.info,
+    taint = nil,
+    error = nil,
     options = {
-        frame = {
-            name = 'info',
-            w = 512,
-            h = 384,
-            x = 200,
-            y = -200,
-            isResizable = 1,
-            isMovable = 1,
-            globalName = 'ctrlInfo',
+        timers = {
+            1
         },
         events = {
-            'UI_SCALE_CHANGED'
+            'PLAYER_ENTERING_WORLD',
+            'ADDON_ACTION_BLOCKED',
+            'ADDON_ACTION_FORBIDDEN',
+            'GENERIC_ERROR',
         },
-        timers = {
-            1,
+        frame = {
+            name = 'info',
+            w=130,
+            h=172,
+            x=84,
+            y=-32,
+            a=a.tl,
+            pa=a.bl,
+            isResizable = nil,
+            isMovable = nil,
+            globalName = 'ctrlinfo',
+            target = ctrl.pwr.f.main,
         },
     }
 }
 
 ctrl.info = ctrl.mod:new(mod)
 
-local subframes = {
-    --['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -36 }, { a = a.br, pa = a.br, x = -12, y = 12 } } },
-    --['sf'] = { subclass = 'ScrollingMessageFrame', target = 'bk', anchors = { { a = a.tl, pa = a.tl, x = 20, y = -20 }, { a = a.br, pa = a.br, x = -16, y = 14 } } },
-}
+local ok = [[|cff60f0f9]]
 
 local textures = {
-    ['tx'] = { t = 'mon2_188', path = ctrl.p.tx, l = -7 },
-    --['bktx'] = { target = 'bk', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
+    ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
+    ['tblue1'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-8 },
+    ['tblue2'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-36 },
+    ['tblue3'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-62 },
+    ['tblue4'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-88 },
+    ['tblue5'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-114 },
+    ['tblue6'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=64, h=24, a=a.tl, pa=a.t, x=-20, y=-140 },
 }
-
-local fft = 'Prompt-Light.ttf'
-local ffv = 'PrintChar21-Medium.ttf'
-local fsl = 48
-local top = 18
-local fs = 24
-local fst = 24
-local fsv = 21
-local spa = 4
 
 local fontstrings = {
-    ['fsTitle'] = { t = ctrl.c.w .. s.info, fontFile = fft, fontSize = 60, a = a.tl, pa = a.tl, x = 56, y = -60 },
-    ['fst_servertime'] = { t = ctrl.c.y .. 'serverTime:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.t, x = fsl, y = -100 },
-    ['fsv_servertime'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.t, x = fsl, y = -100 },
-    ['fst_useuiscale'] = { t = ctrl.c.r .. 'useUiScale:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -150 },
-    ['fsv_useuiscale'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -150 },
-    ['fst_uiscale'] = { t = ctrl.c.r .. 'uiScale:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -200 },
-    ['fsv_uiscale'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -200 },
-    ['fst_pscreenHeight'] = { t = ctrl.c.o .. 'physicalScreenHeight:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -250 },
-    ['fsv_pscreenHeight'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -250 },
-    ['fst_pscreenWidth'] = { t = ctrl.c.o .. 'physicalScreenWidth:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -300 },
-    ['fsv_pscreenWidth'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -300 },
-    ['fst_screenHeight'] = { t = ctrl.c.o .. 'screenHeight:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -250 },
-    ['fsv_screenHeight'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -250 },
-    ['fst_screenWidth'] = { t = ctrl.c.o .. 'screenWidth:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -300 },
-    ['fsv_screenWidth'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -300 },
-    ['fst_uiparentscale'] = { t = ctrl.c.y .. 'uiParent scale:', fontFile = fft, fontSize = fst, a = a.tr, pa = a.tr, x = fsl, y = -350 },
-    ['fsv_uiparentscale'] = { t = ctrl.c.g .. '--', fontFile = ffv, fontSize = fsv, a = a.tl, pa = a.tl, x = fsl, y = -350 },
+    ['fsinfo1_t'] = { target='main', t = c.w..'status', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -15, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo1_v'] = { target='main', t = ok..'ok', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -15, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo2_t'] = { target='main', t = c.w..'fps', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -41, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo2_v'] = { target='main', t = c.c..'100', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -42, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo3_t'] = { target='main', t = c.w..'mem', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -67, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo3_v'] = { target='main', t = c.c..'32', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -68, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo4_t'] = { target='main', t = c.w..'ping', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -93, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo4_v'] = { target='main', t = c.c..'67', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -94, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo5_t'] = { target='main', t = c.w..'sqw', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -119, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo5_v'] = { target='main', t = c.c..'100', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -120, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo6_t'] = { target='main', t = c.w..'loot', fontFile = 'Prompt-Medium.ttf', fontSize = 12, x = -23, y = -145, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo6_v'] = { target='main', t = c.c..'6', fontFile = 'LEDBoard-Bold.ttf', fontPath=ctrl.p.fntorig, fontSize = 15, x = -26, y = -146, a=a.tr, pa=a.tr, jH=a.l },
 }
 
-local function ts()
-    local gst = GetServerTime()
-    return string.format('%s%s%s', c.r, date('%I:%M:%S', gst), c.d)
+local buttons = {
+    ['l1'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = 0 } }},
+    ['l2'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = -26 } }},
+    ['l3'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = -52 } }},
+    ['l4'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = -78 } }},
+    ['l5'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = -104 } }},
+    ['l6'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h = 42, w = 42, anchors = { { a = a.tr, pa = a.tr, x = 9, y = -130 } }},
+}
+
+
+function ctrl.info:fps()
+    local fps = math.floor(GetFramerate()) or 0
+    local col = ok
+    if fps > 90 then
+        col = ok
+        ctrl.info.btn.l2:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l2:off()
+    elseif fps > 60 then
+        col = c.y
+        ctrl.info.btn.l2:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l2:on()
+    else
+        col = c.r
+        ctrl.info.btn.l2:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l2:on()
+    end
+    ctrl.info.fs.fsinfo2_v:SetText(col..tostring(fps))
+end
+
+function ctrl.info:net()
+    local _, _, latencyHome, latencyWorld = GetNetStats()
+    local col2 = ok
+    if latencyWorld < 70 then
+        col2= ok
+        ctrl.info.btn.l4:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l4:off()
+    elseif latencyWorld < 90 then
+        col2 = c.y
+        ctrl.info.btn.l4:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l4:on()
+    else
+        col2 = c.r
+        ctrl.info.btn.l4:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l4:on()
+    end
+    ctrl.info.fs.fsinfo4_v:SetText(col2..tostring(latencyWorld))
+end
+
+function ctrl.info:mem()
+    local kb = (math.floor(collectgarbage('count') / 1000)) --/ 10
+    local col = ok
+    if kb < 300 then
+        col = ok
+        ctrl.info.btn.l3:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l3:off()
+    elseif kb > 500 then
+        col = c.r
+        ctrl.info.btn.l3:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l3:on()
+    else
+        col = c.y
+        ctrl.info.btn.l3:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l3:on()
+    end
+    ctrl.info.fs.fsinfo3_v:SetText(col..tostring(kb))
+end
+
+function ctrl.info:sqw()
+    local sqw = tonumber(GetCVar('SpellQueueWindow')) or 0
+    local col = ok
+    if sqw > 350 then
+        col = c.r
+        ctrl.info.btn.l5:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l5:on()
+    elseif sqw > 200 then
+        col = c.y
+        ctrl.info.btn.l5:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l5:on()
+    else
+        col = ok
+        ctrl.info.btn.l5:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l5:off()
+    end
+    ctrl.info.fs.fsinfo5_v:SetText(col..tostring(sqw))
+end
+
+function ctrl.info:loot()
+    local l = tonumber(GetCVar('autoLootRate')) or 0
+    local col = ok
+    if l > 70 then
+        col = c.r
+        ctrl.info.btn.l6:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l6:on()
+    elseif l > 20 then
+        col = c.y
+        ctrl.info.btn.l6:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l6:on()
+    else
+        col = ok
+        ctrl.info.btn.l6:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l6:off()
+    end
+    ctrl.info.fs.fsinfo6_v:SetText(col..tostring(l))
+end
+
+
+function ctrl.info:status()
+    local status = ok..'ok'
+    if ctrl.info.taint then
+        ctrl.info.btn.l1:setColor( 1.0, 0, 0, 0.5 )
+        ctrl.info.btn.l1:on()
+        status = c.r..'taint'
+    elseif ctrl.info.error then
+        ctrl.info.btn.l1:setColor( 1.0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l1:on()
+        status = c.y..'err'
+    else
+        ctrl.info.btn.l1:setColor( 0, 1.0, 0, 0.5 )
+        ctrl.info.btn.l1:off()
+    end
+    ctrl.info.fs.fsinfo1_v:SetText(status)
 end
 
 function ctrl.info:update()
-    if not self.ux.c.fsv_servertime then return end
-    self.ux.c.fsv_servertime:SetText(ts())
-    self.ux.c['fsv_useuiscale']:SetText(GetCVar('useUiScale'))
-    self.ux.c['fsv_uiscale']:SetText(GetCVar('uiScale'))
-    local pw, ph = GetPhysicalScreenSize()
-    self.ux.c['fsv_pscreenWidth']:SetText(math.floor(pw))
-    self.ux.c['fsv_pscreenHeight']:SetText(math.floor(ph))
-    self.ux.c['fsv_screenHeight']:SetText(math.floor(GetScreenHeight()))
-    self.ux.c['fsv_screenWidth']:SetText(math.floor(GetScreenWidth()))
-    local u = (math.floor(UIParent:GetScale() * 1000)) / 1000
-    self.ux.c['fsv_uiparentscale']:SetText(tostring(u))
-    self:redraw()
+    self:status()
+    self:fps()
+    self:net()
+    self:mem()
+    self:sqw()
+    self:loot()
 end
 
-local function updateScale()
-    local uis = UIParent:GetScale()
-    local newScale = 1 - uis
-    if newScale < 0.5 then newScale = 0.5 end
-    ctrl.info.ux.f:SetScale(newScale)
-end
-
-function ctrl.info:resize()
-    self.ux.f.r:SetSize(128, 128)
-    self.ux.f.r.on:SetAllPoints(self.ux.f.r)
-    self.ux.f.r.off:SetAllPoints(self.ux.f.r)
-end
-
-function ctrl.info:redraw()
-    local list = { 'servertime', 'useuiscale', 'uiscale', 'pscreenHeight', 'pscreenWidth', 'screenHeight', 'screenWidth',
-        'uiparentscale' }
-    local cnt = 1
-    for k, v in pairs(fontstrings) do
-        local this = 0
-        local name = strsub(k, 5)
-        for kk, vv in ipairs(list) do
-            if vv == name then this = kk end
-        end
-
-        if strsub(k, 1, 3) == 'fst' then
-            self.ux.c[k]:ClearAllPoints()
-            self.ux.c[k]:SetPoint(a.tr, self.ux.f, a.t, fsl - 8, -1 * (top + (this * (fs + spa))))
-        elseif strsub(k, 1, 3) == 'fsv' then
-            self.ux.c[k]:ClearAllPoints()
-            self.ux.c[k]:SetPoint(a.tl, self.ux.f, a.t, fsl + 8, -1 * (top + (this * (fs + spa))) - 2)
-        end
-    end
-end
-
-local buttons = {
-    ['bTest'] = {
-        template = 'btn_smol',
-        btnColor = { 0, 0, 1.0, 1 },
-        h = 128,
-        w = 196,
-        anchors = { { a = a.br, pa = a.br, x = -16, y = 4 } }
-    },
-}
-
-function ctrl.info:tick()
+function ctrl.info:tick(interval)
     self:update()
 end
 
-function ctrl.info.UI_SCALE_CHANGED()
-    updateScale()
+function ctrl.info:on()
+    self:registerTimers()
+    self:registerEvents()
+    if self.f.main then self.f.main:Show() end
+    self.is.on = 1
 end
 
---[[
-local msgTab = ctrl.newTable('')
-msgTab[1] = c.y
-msgTab[2] = ' '
-msgTab[3] = ' cast '
-msgTab[4] = c.o
-msgTab[5] = ' '
-msgTab[6] = ' on '
-msgTab[7] = c.r
-msgTab[8] = ' '
-
-local function getBuffer(t)
-    return table.concat(t, c.d)
+function ctrl.info:off()
+    self.is.on = nil
+    self:unregisterTimers()
+    self:unregisterEvents()
+    if self.f.main then self.f.main:Hide() end
 end
 
-function ctrl.info.SPELL_CAST_SUCCESS(evt)
-    --
+function ctrl.info.ADDON_ACTION_BLOCKED(isTainted, fn)
+    if isTainted then
+        ctrl.info.taint = 1
+        ctrl.info:warn('Tainted: ', fn)
+    end
 end
-]]
+
+function ctrl.info.ADDON_ACTION_FORBIDDEN(isTainted, fn)
+    if isTainted then
+        ctrl.info.taint = 1
+        ctrl.info:warn('Tainted: ', fn)
+    end
+end
+
+function ctrl.info.GENERIC_ERROR(err)
+    ctrl.info.error = 1
+    ctrl.info:warn('GENERIC_ERROR: ', err)
+end
+
+function ctrl.info.PLAYER_ENTERING_WORLD()
+    ctrl.info.error = nil
+    ctrl.info.taint = nil
+end
 
 
 function ctrl.info.setup(self)
-    self.ux.f = ctrl.frame:new(self.options.frame, self)
-
-    ctrl.tx:generate(textures, self)
-    --ctrl.btns:generate(buttons, self)
-    ctrl.fs:generate(fontstrings, self)
+    self.f.main = ctrl.frame:new(self.options.frame)
+    ctrl.tx.generate(ctrl.info, textures)
+    ctrl.btns.generate(ctrl.info, buttons)
+    ctrl.fs.generate(ctrl.info, fontstrings)
+    ctrl.info.btn.l1:off()
+    ctrl.info.btn.l2:off()
+    ctrl.info.btn.l3:off()
+    ctrl.info.btn.l4:off()
+    ctrl.info.btn.l5:off()
+    ctrl.info.btn.l6:off()
 end
 
 ctrl.info:init()

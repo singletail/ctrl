@@ -10,36 +10,37 @@ src\util.lua
 src\mod.lua
 src\logs.lua
 src\evt.lua
-src\cleu.lua
+# src\cleu.lua
 src\timer.lua
 
-ux\ux.lua
-ux\frame.lua
-ux\tx.lua
-ux\btns.lua
-ux\fs.lua
-ux\template.lua
+ui\frame.lua
+ui\tx.lua
+ui\fs.lua
+ui\btns.lua
+ui\template.lua
 
 templates\btn.lua
 
 core\alert.lua
 core\sfx.lua
 
-mod\cvar.lua
-mod\ui.lua
-mod\worldframe.lua
+# mod\cvar.lua
+# mod\ui.lua
+# mod\worldframe.lua
 mod\minimap.lua
-mod\console.lua
+# mod\console.lua
 
 # mod\data.lua
-mod\events.lua
-mod\taunt.lua
-mod\pet.lua
+# mod\events.lua
+# mod\taunt.lua
+# mod\pet.lua
 
+mod\pwr.lua
+mod\cmd.lua
 mod\info.lua
-#mod\space1999.lua
+mod\model.lua
+mod\target.lua
 
-# mod\sys.lua
 # mod\pulled.lua
 
 ctrl.lua

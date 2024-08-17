@@ -10,11 +10,20 @@ function ctrl.pack(...)
     return { n = select("#", ...), ... }
 end
 
+function ctrl.firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
 --[[ Metatables ]]
 
 local metakey = {}
-local function metafunction(t) return t[metakey] end
-local metaKeyTable = { __index = metafunction }
+
+--local function metafunction(t) return t[metakey] end
+local metaKeyTable = {
+    __index = function(t)
+        return t[metakey]
+    end
+}
 
 local function setDefault(t, default)
     t[metakey] = default

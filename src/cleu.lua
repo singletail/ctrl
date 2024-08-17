@@ -36,11 +36,11 @@ function ctrl.cleu:cleuEvent()
 end
 
 function ctrl.cleu:start()
-    self.f:SetScript("OnEvent", self.cleuEvent)
+    self.f.main:SetScript("OnEvent", self.cleuEvent)
 end
 
 function ctrl.cleu:stop()
-    self.f:SetScript("OnEvent", nil)
+    self.f.main:SetScript("OnEvent", nil)
 end
 
 function ctrl.cleu.register(module, cleuEvent)
@@ -60,13 +60,13 @@ function ctrl.cleu.unregister(module, cleuEvent)
 end
 
 function ctrl.cleu:init() --overwriting module default, to run on load
-    self.f = self.f or CreateFrame('Frame', nil, UIParent)
-    if not self.f then self:error('Frame not created.'); return end
-    self.f:SetFrameStrata('BACKGROUND')
-    self.f:SetSize(1, 1)
-    self.f:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
+    self.f.main = self.f.main or CreateFrame('Frame', nil, UIParent)
+    if not self.f.main then self:error('Frame not created.'); return end
+    self.f.main:SetFrameStrata('BACKGROUND')
+    self.f.main:SetSize(1, 1)
+    self.f.main:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
     --self:register('COMBAT_LOG_EVENT_UNFILTERED')
-    self.f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
+    self.f.main:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
     self:start()
 end
 

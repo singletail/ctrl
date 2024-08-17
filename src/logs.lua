@@ -4,7 +4,6 @@
 local ctrl = select(2, ...)
 
 local c, s = ctrl.c, ctrl.s
---ctrl.ctrllog = _G.ctrllog
 
 local lvl = {
     [1] = { 'emerg', c.c, s.emerg },

@@ -1,6 +1,7 @@
 --[[ ctrl - fs.lua - t@wse.nyc - 9/1/22 ]] --
 
----@class ctrl
+--[[
+@class ctrl
 local ctrl = select(2, ...)
 
 local C, c, s = ctrl, ctrl.c, ctrl.s
@@ -68,3 +69,4 @@ function ctrl.fs:generate(tt, mod, ux)
         ux.c[k] = ctrl.fs:new(v, mod)
     end
 end
+]]

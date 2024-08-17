@@ -12,7 +12,7 @@ local mod = {
     zoom = 1,
     options = {
         fontFile = 'MartianMono-sWdMd.otf',
-        fontSize = 18,
+        fontSize = 12,
         frame = {
             name = 'ctrl',
             w = 480,
@@ -30,28 +30,28 @@ local mod = {
 ctrl.console = ctrl.mod:new(mod)
 
 local subframes = {
-    ['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 24, y = -64 }, { a = a.br, pa = a.br, x = -24, y = 8, isClipsChildren = 1, } } },
-    ['sf'] = { subclass = 'ScrollingMessageFrame', target = ctrl.console.ux.c.bk, anchors = { { a = a.tl, pa = a.tl, x = 16, y = -20 }, { a = a.br, pa = a.br, x = -8, y = 16 } } },
+    --['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -36 }, { a = a.br, pa = a.br, x = -12, y = 8, isClipsChildren = 1, } } },
+    ['sf'] = { template = 'ScrollingMessageFrame', target = 'main', anchors = { { a = a.tl, pa = a.tl, x = 16, y = -8 }, { a = a.br, pa = a.br, x = -8, y = 16 } } },
 }
 
 local textures = {
-    ['tx'] = { t = 'dark1', path = ctrl.p.tx, l = -7 },
-    ['bktx'] = { target = 'bk', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
+    ['tx'] = { t = 'dark1', target='main', path = ctrl.p.tx, l = -7 },
+    ['bktx'] = { target='main', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
 }
 
 local fontstrings = {
-    ['fsTitle'] = {t = ctrl.name, fontFile = 'Data70-Regular.otf', fontSize = 48, a = a.tl, pa = a.tl, x = 36, y = -12},
-    ['fsbReload'] = { t = 'C_UI.Reload()', target = 'bReload', fontFile = 'Prompt-Medium.ttf', fontSize = 24, x = -2, y = -3},
-    ['fsbZoomIn'] = { t = ctrl.s.zoomIn, target = 'bZoomIn', fontFile = 'Prompt-Medium.ttf', fontSize = 36, x = -2, y = -3},
-    ['fsbZoomOut'] = { t = ctrl.s.zoomOut, target = 'bZoomOut', fontFile = 'Prompt-Medium.ttf', fontSize = 36, x = -2, y = -3},
-    ['fsbInspect'] = { t = ctrl.s.i, target = 'bInspect', fontFile = 'Prompt-Medium.ttf', fontSize = 32, x = -4, y = -3},
+    ['fsTitle'] = {t = ctrl.name, fontFile = 'Data70-Regular.otf', fontSize = 32, a = a.tl, pa = a.tl, x = 24, y = -2},
+    ['fsbReload'] = { t = 'C_UI.Reload()', target = 'bReload', fontFile = 'Prompt-Medium.ttf', fontSize = 16, x = -1, y = -1},
+    ['fsbZoomIn'] = { t = ctrl.s.zoomIn, target = 'bZoomIn', fontFile = 'Prompt-Medium.ttf', fontSize = 18, x = -1, y = -1},
+    ['fsbZoomOut'] = { t = ctrl.s.zoomOut, target = 'bZoomOut', fontFile = 'Prompt-Medium.ttf', fontSize = 18, x = -1, y = -1},
+    ['fsbInspect'] = { t = ctrl.s.i, target = 'bInspect', fontFile = 'Prompt-Medium.ttf', fontSize = 18, x = -1, y = -1},
 }
 
 local buttons = {
-    ['bReload'] = { template = 'btn_beeg', btnColor = { 0.75, 0, 0, 1 }, h = 90, w = 224, anchors = { { a = a.tr, pa = a.tr, x = -268, y = 7 } }},
-    ['bZoomIn'] = { template = 'btn_smol', btnColor = { 0, 0.75, 0, 1 }, h = 84, w = 84, anchors = { { a = a.tr, pa = a.tr, x = -184, y = 4 } }},
-    ['bZoomOut'] = { template = 'btn_smol', btnColor = { 0, 0, 0.75, 1 }, h = 84, w = 84, anchors = { { a = a.tr, pa = a.tr, x = -100, y = 4 } }},
-    ['bInspect'] = { template = 'btn_smol', btnColor = { 0, 0.75, 0.75, 1 }, h = 84, w = 84, anchors = { { a = a.tr, pa = a.tr, x = -16, y = 4 } }},
+    ['bReload'] = { template = 'btn_beeg', btnColor = { 0.75, 0, 0, 1 }, h = 52, w = 148, anchors = { { a = a.tr, pa = a.tr, x = -166, y = 7 } }},
+    ['bZoomIn'] = { template = 'btn_smol', btnColor = { 0, 0.75, 0, 1 }, h = 48, w = 56, anchors = { { a = a.tr, pa = a.tr, x = -116, y = 4 } }},
+    ['bZoomOut'] = { template = 'btn_smol', btnColor = { 0, 0, 0.75, 1 }, h = 48, w = 56, anchors = { { a = a.tr, pa = a.tr, x = -66, y = 4 } }},
+    ['bInspect'] = { template = 'btn_smol', btnColor = { 0, 0.75, 0.75, 1 }, h = 48, w = 56, anchors = { { a = a.tr, pa = a.tr, x = -16, y = 4 } }},
 }
 
 local function ConfigureScrollFrame(self, f)
@@ -97,6 +97,7 @@ function ctrl.console:click(btn, btn2)
 end
 
 function ctrl.console:resize(f, w, h)
+--[[
     ctrl.f.r:ClearAllPoints()
     ctrl.f.r:SetSize(36, 36)
     ctrl.f.r:SetPoint('BOTTOMRIGHT', ctrl.f, 'BOTTOMRIGHT', -8, 8)
@@ -116,6 +117,7 @@ function ctrl.console:resize(f, w, h)
     if newScale < 0.3 then newScale = 0.3 end
     newScale = newScale * ctrl.console.zoom
     ctrl.f:SetScale(newScale)
+    ]]
 end
 
 --[[
@@ -137,17 +139,27 @@ end
 ]]
 
 function ctrl.console.setup(self)
-    self.ux.f = ctrl.frame:new(self.options.frame, self)
-    ctrl.f = self.ux.f
+    ctrl.power.f = {}
+    ctrl.power.tx = {}
 
-    ctrl.frame:generate(subframes, self)
+    ctrl.power.f.main = ctrl.frame:new(self.options.frame)
 
-    ctrl.sf = ctrl.console.ux.c.sf
+    for fname, fopts in pairs(subframes) do
+        if type(fopts.target) == 'string' then fopts.target = self.f[fopts.target] end
+        self.f[fname] = ctrl.frame:new(fopts)
+    end
+
+    ctrl.sf = ctrl.console.f.sf
     ConfigureScrollFrame(self, ctrl.sf)
 
-    ctrl.tx:generate(textures, self)
-    ctrl.btns:generate(buttons, self)
-    ctrl.fs:generate(fontstrings, self)
+    for tname, topts in pairs(textures) do
+        if type(topts.target) == 'string' then topts.target = self.f[topts.target] end
+        ctrl.power.tx[tname] = ctrl.tx:new(topts) 
+    end
+
+
+    --ctrl.btns:generate(buttons, self)
+    --ctrl.fs:generate(fontstrings, self)
 
     self:debug(string.format('%sConsole Initialized %s', ctrl.c.b, date('%I:%M:%S', GetTime())))
     --_G.ctrl = ctrl.external

@@ -5,7 +5,7 @@ local ctrl = select(2, ...)
 
 ctrl.templates = ctrl.templates or {}
 ctrl.templates.btn = {
-
+    --[[
     ['btn_smol'] = {
         subclass = 'SPST',
         values = { 0, 1 },
@@ -48,7 +48,8 @@ ctrl.templates.btn = {
             }
         },
     },
-    ['btn_beeg'] = {
+    ]]
+    ['beeg'] = {
         subclass = 'SPST',
         values = { 0, 1 },
         default = 1,
@@ -61,6 +62,7 @@ ctrl.templates.btn = {
             value = {
                 [0] = {
                     { file = 'beeg_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                    { file = 'beeg_on', alpha = 0.5, color = 1, layer = -4, path = ctrl.p.btns },
                 },
                 [1] = {
                     { file = 'beeg_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
@@ -68,6 +70,97 @@ ctrl.templates.btn = {
             }
         },
     },
+    --[[
+    ['prot'] = {
+        subclass = 'SPST',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'prot_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'sq_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'sq_glow', alpha = 0.5, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ]]
+    ['sq'] = {
+        subclass = 'NC',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'sq_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'sq_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'sq_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['retrolamp'] = {
+        subclass = 'NO',
+        values = { 0, 1 },
+        default = 0,
+        w = 36,
+        h = 36,
+        texture = {
+            static = {
+                { file = 'retrolamp_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'retrolamp_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'retrolamp_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                    { file = 'retrolamp_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'retrolamp_on', alpha = 0.5, color = nil, layer = -3, path = ctrl.p.btns },
+                    { file = 'retrolamp_glow', alpha = 1, color = nil, layer = -2, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['dolby'] = {
+        subclass = 'NO',
+        values = { 0, 1 },
+        default = 0,
+        w = 36,
+        h = 36,
+        texture = {
+            static = {
+                { file = 'dolby_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'dolby_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'dolby_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                    { file = 'dolby_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'dolby_glow', alpha = 1, color = nil, layer = -3, path = ctrl.p.btns },
+                    { file = 'dolby_glow', alpha = 1, color = nil, layer = -2, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    --[[
     ['btn_power'] = {
         subclass = 'SPST',
         values = { 0, 1 },
@@ -161,4 +254,5 @@ ctrl.templates.btn = {
             }
         },
     },
+    ]]
 }

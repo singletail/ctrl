@@ -16,8 +16,8 @@ local mod = {
         fontFile = 'Prompt-Bold.ttf',
         fontSize = 24,
         maxLines = 5,
-        ttl = 10,
-        fade = 5,
+        ttl = 5,
+        fade = 4,
         debug = nil,
         throttle = 1/30,
         frame = {
@@ -27,23 +27,13 @@ local mod = {
             y = 200,
             a = 'CENTER',
             pa = 'CENTER',
-            isMovable = 0,
-            isResizable = 0,
+            isMovable = nil,
+            isResizable = nil,
         }
     }
 }
 
 ctrl.alert = ctrl.mod:new(mod)
-
-local subframes = {
-    ['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -12 }, { a = a.br, pa = a.br, x = -12, y = 12 } } },
-    --['sf'] = { subclass = 'ScrollingMessageFrame', target = 'bk', anchors = { { a = a.tl, pa = a.tl, x = 20, y = -20 }, { a = a.br, pa = a.br, x = -16, y = 14 } } },
-}
-
-local textures = {
-    ['tx'] = { t = 'dark1', path = ctrl.p.tx, l = -7 },
-    ['bktx'] = { target = 'bk', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
-}
 
 function ctrl.alert:add(msg)
     if not msg then msg = self end
@@ -51,8 +41,6 @@ function ctrl.alert:add(msg)
     tinsert(ctrl.alert.buffer, 1, { ts = GetTime(), msg = tostring(msg), alpha = 1 })
     ctrl.alert:drawBuffer()
     ctrl.alert:debug(msg)
-
-    
 end
 
 function ctrl.alert:resize(f, w, h)
@@ -60,30 +48,23 @@ function ctrl.alert:resize(f, w, h)
 end
 
 function ctrl.alert:createFontStrings()
-    if not ctrl.alert.ux.c.bk then 
-        ctrl.alert:warn('no bk found')
-        return
-    end
-    
-
-    ctrl.alert.fs = ctrl.alert.fs or {}
-    for i = 1, ctrl.alert.options.maxLines do
+    for i = 1, self.options.maxLines do
         local set = {
-            target = ctrl.alert.ux.c.bk,
-            fontFile = ctrl.alert.options.fontFile,
-            fontSize = ctrl.alert.options.fontSize,
+            target = self.f.main,
+            fontFile = self.options.fontFile,
+            fontSize = self.options.fontSize,
+            w=1024,
+            h=30,
             x = 24,
             y = -((i-1) * 30),
             jH = 'CENTER',
             jV = 'MIDDLE',
             n = 'fs' .. i
         }
-
-        ctrl.alert.fs[i] = ctrl.fs:new(set)
-        ctrl.alert.fs[i]:SetText('fs ' .. i)
+        self.fs[i] = ctrl.fs:new(set)
+        self.fs[i]:SetText('fs ' .. i)
     end
 end
-
 
 function ctrl.alert:startTimer()
     ctrl.timer.register(ctrl.alert, ctrl.alert.options.throttle)
@@ -96,7 +77,6 @@ function ctrl.alert:stopTimer()
 end
 
 function ctrl.alert:checkBuffer()
-    --local bufferSize = ctrl.count(ctrl.alert.buffer)
     local bufferSize = 0
     for i, v in ipairs(ctrl.alert.buffer) do
         bufferSize = bufferSize + 1
@@ -129,7 +109,6 @@ function ctrl.alert:drawBuffer()
             local msg = tostring(ctrl.alert.buffer[i].msg) or ''
             ctrl.alert.fs[i]:SetText(msg)
             ctrl.alert.fs[i]:SetAlpha(alpha)
-
         end
     end
 end
@@ -139,28 +118,15 @@ function ctrl.alert:tick()
     ctrl.alert:drawBuffer()
 end
 
-function ctrl.alert:redrawAlertFrame()
-    for i = 1, self.options.maxLines do
-        if not ctrl.alert.fs[i] then
-            ctrl.alert:warn('no fs found: ' .. i)
-        else
-            ctrl.alert.fs[i]:ClearAllPoints()
-            ctrl.alert.fs[i]:SetPoint(a.t, ctrl.alert.ux.c.bk, a.t, 0, 0 - ((i-1) * 46))
-        end
-    end
-end
-
 function ctrl.alert.setup(self)
-    self.ux.f = ctrl.frame:new(self.options.frame, self)
-    self.f = self.ux.f
-
-    ctrl.frame:generate(subframes, self)
-    --ctrl.tx:generate(textures, self)
-
+    self.f.main = ctrl.frame:new(self.options.frame)
     self:createFontStrings()
-    --self:redrawAlertFrame()
 
-    self:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' initialized')
+    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' initialized')
+    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 2')
+    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 3')
+    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 4')
+    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 5')
     if ctrl.alert.options.debug then self:add(c.y .. s.warn .. ' Debug mode enabled.') end
 end
 

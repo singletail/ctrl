@@ -16,8 +16,6 @@ local mod = {
             'PLAYER_REGEN_DISABLED',
             'PLAYER_REGEN_ENABLED',
             'PLAYER_DEAD',
-            'PLAYER_ALIVE',
-            'PLAYER_GUILD_UPDATE',
             'SYSTEM_VISIBILITY_CHANGED',
             'UI_ERROR_MESSAGE',
             'UI_INFO_MESSAGE',

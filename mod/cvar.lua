@@ -34,7 +34,7 @@ local default = {
     ['autoLootRate'] = 6,
     ['advancedCombatLogging'] = 1,
     ['disableAELooting'] = 0,
-    ['enableSourceLocationLookup'] = 1,
+    --['enableSourceLocationLookup'] = 1,
 }
 
 local cvarTab = ctrl.newTable('')

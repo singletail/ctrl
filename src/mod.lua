@@ -129,7 +129,7 @@ local function _crit(self, ...) ctrl.log(self, 3, ...) end
 local function _alert(self, ...) ctrl.log(self, 2, ...) end
 local function _emerg(self, ...) ctrl.log(self, 1, ...) end
 
-ctrl.mod = {
+local mod = {
     name = '?',
     color = ctrl.c.r,
     symbol = ctrl.s['?'],
@@ -152,8 +152,13 @@ ctrl.mod = {
     emerg = _emerg,
 }
 
-function ctrl.mod:new(o)
-    if o.is then return end
+ctrl.mod = {}
+
+function ctrl.mod:new(t)
+
+    local o = {}
+    for k,v in pairs(mod) do o[k] = v end
+    for k2,v2 in pairs(t) do o[k2] = v2 end
 
     o.is = {
         enabled = 1,
@@ -188,10 +193,13 @@ function ctrl.mod:new(o)
         o.tick = _tick
     end
 
-    o.ux = {}
-    o.ux.c = {}
-    setmetatable(o, self)
-    self.__index = self
+    o.f = {}
+    o.tx = {}
+    o.fs = {}
+    o.btn = {}
+
+    --setmetatable(o, self)
+    --self.__index = self
 
     ctrl.mods[#ctrl.mods + 1] = o
     return o

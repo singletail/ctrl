@@ -1,13 +1,13 @@
 ---@class ctrl
 local ctrl = select(2, ...)
 
-local settings = {
+ctrl.template = {
     name = 'template',
     color = ctrl.c.c,
     symbol = ctrl.s.template,
 }
 
-ctrl.template = ctrl.mod:new(settings)
+--ctrl.template = ctrl.mod:new(settings)
 
 function ctrl.template:loadTemplateItem(sectionName, itemData)
     if itemData.template then
@@ -24,11 +24,11 @@ function ctrl.template:loadTemplateItem(sectionName, itemData)
 end
 
 function ctrl.template:get(name)
-    if not ctrl.templates.ux[name] then
+    if not ctrl.templates.ui[name] then
         error('No such template', 2)
         return
     end
-    local templateCopy = ctrl.safecopy(ctrl.templates.ux[name], 10)
+    local templateCopy = ctrl.safecopy(ctrl.templates.ui[name], 10)
 
     for sectionName, sectionData in pairs(templateCopy) do
         if sectionName == 'frame' then

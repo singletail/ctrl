@@ -1,14 +1,20 @@
---[[ ctrl - btns.lua - t@wse.nyc - 7/24/24 ]] --
+--[[ ctrl - ui/btns.lua - t@wse.nyc - 8/14/24 ]] --
 
---[[
-@class ctrl
+---@class ctrl
 local ctrl = select(2, ...)
 
-ctrl.btns = {
+local c, s, a = ctrl.c, ctrl.s, ctrl.a
+
+local mod = {
     name = 'btns',
-    color = ctrl.c.p,
-    symbol = ctrl.s.btns,
-    class = 'btns',
+    color = c.r,
+    symbol = s.frame,
+}
+
+ctrl.btns = ctrl.mod:new(mod)
+
+local default = {
+    class = 'Button',
     subclass = 'SPST',
     path = ctrl.p.btns,
     strata = 'DIALOG',
@@ -25,16 +31,16 @@ local function mouseUp(self, btn, ...)
     if self.enabled == 1 then
         if self.info.subclass == 'SPST' then
             self:showValue(1)
-            self.mod:click(self, self.info)
+            self.module:click(self, self.info)
         elseif self.info.subclass ~= 'LIGHT' then
-            self.mod:click(self, self.info)
+            self.module:click(self, self.info)
         else
             ctrl.log(ctrl, 5, 'Warning: button subclass not found: ', self.info.subclass)
         end
     end
     --[[ctrl.log(ctrl, 8,
         ctrl.c.b .. 'button ' .. tostring(btn.name) .. ' enabled:' ..
-        tostring(btn.enabled) .. ' value:' .. tostring(btn.value))] ]
+        tostring(btn.enabled) .. ' value:' .. tostring(btn.value))]]
     self:refresh(btn)
 end
 
@@ -136,13 +142,28 @@ local function refresh(self)
     self:showValue(self.value)
 end
 
-function ctrl.btns:new(o, mod)
+local function _on(self)
+    self:setValue(1)
+    self:refresh()
+end
+
+local function _off(self)
+    self:setValue(0)
+    self:refresh()
+end
+
+local function _toggle(self)
+    self:setValue(abs(self.value - 1))
+    self:refresh()
+end
+
+function ctrl.btns.new(module, o)
     o = o or {}
     if o.template then ctrl.template:loadTemplateItem('btn', o) end
 
-    local meta = { __index = self }
-    setmetatable(o, meta)
-    setmetatable(self, { __index = ctrl.ux })
+    --local meta = { __index = self }
+    --setmetatable(o, meta)
+    --setmetatable(self, { __index = ctrl.ux })
 
     local btn = CreateFrame('Frame', nil, o.target)
     btn:SetFrameStrata('DIALOG')
@@ -154,12 +175,17 @@ function ctrl.btns:new(o, mod)
     btn:EnableMouse(true)
 
     btn.name = o.name
-    btn.mod = mod
+    btn.module = module
+    btn.info = o
     btn.btnColor = o.btnColor or { 1.0, 1.0, 0.7, 1.0 }
     btn.ts = {}                         -- temp holding texture info
     btn.t = { s = {}, e = {}, v = {}, } --textures - static / enabled / value
     btn.p = { e = {}, v = {}, }         --alpha for those textures
     btn.c = {}                          -- textures that need SetVertexColor
+
+    btn.on = _on
+    btn.off = _off
+    btn.toggle = _toggle
 
     if o.texture.static then
         for i = 1, #o.texture.static do
@@ -222,19 +248,17 @@ function ctrl.btns:new(o, mod)
         btn:SetScript(func, script)
     end
 
-    btn.info = o
     btn:refresh()
     return btn
 end
 
-function ctrl.btns:generate(tt, mod, ux)
-    ux = ux or mod.ux
-    for k, v in pairs(tt) do
+function ctrl.btns.generate(module, btntable, container)
+    container = container or module.btn
+    for k, v in pairs(btntable) do
         v.name = v.name or k
         if v.target == 'UIParent' then v.target = UIParent end
-        if type(v.target) == 'string' then v.target = ux.c[v.target] end
-        if not v.target then v.target = ux.f end
-        ux.c[k] = ctrl.btns:new(v, mod)
+        print('*** btns generate ', v.name, v.target)
+        if type(v.target) == 'string' then v.target = module.f[v.target] end
+        container[k] = ctrl.btns.new(module, v)
     end
 end
-]]
