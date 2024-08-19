@@ -184,7 +184,9 @@ function ctrl.group:updateUnit(unit)
     local u = ctrl.group.unit[unit]
     u.unitHealth = UnitHealth(unit) or 0
     u.unitHealthMax = UnitHealthMax(unit) or 0
-    u.healthPct = math.floor((u.unitHealth / u.unitHealthMax) * 100)
+    if u.unitHealth > 0 and u.unitHealthMax > 0 then
+        u.healthPct = math.floor((u.unitHealth / u.unitHealthMax) * 100)
+        else u.healthPct = 0 end
     u.healthPctStr = ctrl.healthPctStr(u.healthPct)
     u.isDead = UnitIsDead(unit)
     u.isGhost = UnitIsGhost(unit)
