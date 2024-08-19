@@ -31,7 +31,7 @@ ctrl.console = ctrl.mod:new(mod)
 
 local subframes = {
     --['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -36 }, { a = a.br, pa = a.br, x = -12, y = 8, isClipsChildren = 1, } } },
-    ['sf'] = { template = 'ScrollingMessageFrame', target = 'main', anchors = { { a = a.tl, pa = a.tl, x = 16, y = -8 }, { a = a.br, pa = a.br, x = -8, y = 16 } } },
+    ['sf'] = { class = 'ScrollingMessageFrame', target = 'main', anchors = { { a = a.tl, pa = a.tl, x = 16, y = -8 }, { a = a.br, pa = a.br, x = -8, y = 16 } } },
 }
 
 local textures = {
@@ -139,24 +139,30 @@ end
 ]]
 
 function ctrl.console.setup(self)
-    ctrl.power.f = {}
-    ctrl.power.tx = {}
+    --ctrl.power.f = {}
+    --ctrl.power.tx = {}
 
-    ctrl.power.f.main = ctrl.frame:new(self.options.frame)
+    ctrl.console.f.main = ctrl.frame.new(self, self.options.frame)
+    ctrl.frame.generate(self, subframes)
+    ctrl.tx.generate(self, textures)
+    --ctrl.fs.generate(self, fontstrings)
 
+    --[[
     for fname, fopts in pairs(subframes) do
         if type(fopts.target) == 'string' then fopts.target = self.f[fopts.target] end
         self.f[fname] = ctrl.frame:new(fopts)
     end
+    ]]
 
     ctrl.sf = ctrl.console.f.sf
     ConfigureScrollFrame(self, ctrl.sf)
 
+--[[
     for tname, topts in pairs(textures) do
         if type(topts.target) == 'string' then topts.target = self.f[topts.target] end
         ctrl.power.tx[tname] = ctrl.tx:new(topts) 
     end
-
+]]
 
     --ctrl.btns:generate(buttons, self)
     --ctrl.fs:generate(fontstrings, self)

@@ -85,10 +85,6 @@ function ctrl.events.PLAYER_DEAD()
     alert(c.r .. 'PLAYER_DEAD()', 'wrong')
 end
 
-function ctrl.events.PLAYER_ALIVE()
-    alert(c.g .. 'PLAYER_ALIVE()', 'sonicring')
-end
-
 function ctrl.events.PLAYER_GUILD_UPDATE(et)
     local unitId = et[1] or 'unknown'
     local unitName = UnitName(unitId) or unitId

@@ -4,13 +4,13 @@
 local ctrl = select(2, ...)
 
 local function _resize(self, f, w, h)
-    ctrl.log(self, 8, 'frame ' ..
-        tostring(f.name) .. ' resize caught by metatable in mod.lua. Add resize(f,w,h) to module to customize.')
+    --ctrl.log(self, 8, 'frame ' ..
+        --tostring(f.name) .. ' resize caught by metatable in mod.lua. Add resize(f,w,h) to module to customize.')
 end
 
 local function _click(self, btn, btn_info)
-    ctrl.log(self, 8, 'btn: ' ..
-        tostring(btn.name) .. ' click caught by metatable in mod.lua. Add click(btn, btn_info) to module to customize.')
+    --ctrl.log(self, 8, 'btn: ' ..
+        --tostring(btn.name) .. ' click caught by metatable in mod.lua. Add click(btn, btn_info) to module to customize.')
 end
 
 local function _registerTimers(self)
@@ -52,7 +52,7 @@ local function _eventHandler(self, e, et)
 end
 
 local function _evt(self, e, et) --overwrite this in your module
-    self:warn(string.format('%sUncaught event: %s%s%s. Add evt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(e), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
+    --self:warn(string.format('%sUncaught event: %s%s%s. Add evt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(e), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
 end
 
 --
@@ -78,13 +78,12 @@ local function _cleuEventHandler(self, cleut)
 end
 
 local function _cleuEvt(self, cleut) --overwrite this in your module
-    self:warn(string.format('%sUncaught event: %s%s%s. Add cleuEvt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(cleut[2]), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
+    --self:warn(string.format('%sUncaught event: %s%s%s. Add cleuEvt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(cleut[2]), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
 end
 
 --
 
 local function _on(self)
-    ctrl.log(self, 8, 'Enabling module ' .. self.name)
     if self.options then
         if self.options.events then self:registerEvents() end
         if self.options.cleu then self:registerCleuEvents() end
@@ -94,7 +93,6 @@ local function _on(self)
 end
 
 local function _off(self)
-    ctrl.log(self, 8, 'Disabling ' .. self.name)
     if self.options.events then self:unregisterEvents() end
     if self.options.cleu then self:unregisterCleuEvents() end
     if self.options.timers then self:unregisterTimers() end
@@ -129,6 +127,18 @@ local function _crit(self, ...) ctrl.log(self, 3, ...) end
 local function _alert(self, ...) ctrl.log(self, 2, ...) end
 local function _emerg(self, ...) ctrl.log(self, 1, ...) end
 
+local function _registerCtrlFrame(self, index, f)
+    local frameObj = {
+        index = index,
+        frame = f,
+        module = self,
+        symbol = self.symbol,
+        colorObj = ctrl.hexMarkupToRGBA(self.color),
+    }
+    if not ctrl.pwr then return end
+    ctrl.pwr.register(self, frameObj)
+end
+
 local mod = {
     name = '?',
     color = ctrl.c.r,
@@ -150,6 +160,8 @@ local mod = {
     crit = _crit,
     alert = _alert,
     emerg = _emerg,
+
+    registerCtrlFrame = _registerCtrlFrame,
 }
 
 ctrl.mod = {}
@@ -197,9 +209,6 @@ function ctrl.mod:new(t)
     o.tx = {}
     o.fs = {}
     o.btn = {}
-
-    --setmetatable(o, self)
-    --self.__index = self
 
     ctrl.mods[#ctrl.mods + 1] = o
     return o

@@ -66,9 +66,6 @@ end
 
 
 function ctrl.frame.new(module, o)
-    print('ctrl.frame.new', module.name)
-    print(o.w, o.h, o.a, o.pa, o.x, o.y)
-    --DevTools_Dump(o)
     o = o or {}
     o.target = o.target or default.target
     o.globalName = o.globalName or nil

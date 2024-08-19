@@ -257,7 +257,6 @@ function ctrl.btns.generate(module, btntable, container)
     for k, v in pairs(btntable) do
         v.name = v.name or k
         if v.target == 'UIParent' then v.target = UIParent end
-        print('*** btns generate ', v.name, v.target)
         if type(v.target) == 'string' then v.target = module.f[v.target] end
         container[k] = ctrl.btns.new(module, v)
     end

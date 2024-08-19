@@ -8,7 +8,7 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
     name = 'info',
-    color = c.w,
+    color = c.o,
     symbol = s.info,
     taint = nil,
     error = nil,
@@ -253,6 +253,7 @@ function ctrl.info.setup(self)
     ctrl.info.btn.l4:off()
     ctrl.info.btn.l5:off()
     ctrl.info.btn.l6:off()
+    self:registerCtrlFrame(2, self.f.main)
 end
 
 ctrl.info:init()

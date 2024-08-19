@@ -7,8 +7,8 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
     name = 'model',
-    color = c.w,
-    symbol = s.target,
+    color = c.y,
+    symbol = s.butt,
     options = {
         events = {
             'PLAYER_TARGET_CHANGED',
@@ -70,16 +70,8 @@ function ctrl.model.setup(self)
         isMovable = nil,
         target = ctrl.model.f.main
     }
-    ctrl.model.f.player = ctrl.frame.new(ctrl.model, pf)
-    --ctrl.model.f.player:SetUnit('player')
-    ctrl.model.f.player:SetDisplayInfo(21723)
-
-    local x = ctrl.model.f.player:CanSetUnit('player')
-    self:warn('CanSetUnit: ' .. tostring(x))
-
-    --ctrl.tgt:createFontStrings()
-    --ctrl.btns.generate(ctrl.info, buttons)
-    --ctrl.fs.generate(ctrl.info, fontstrings)-
+    ctrl.model.f.player = ctrl.model.f.player or ctrl.frame.new(ctrl.model, pf)
+    self:registerCtrlFrame(3, self.f.main)
 end
 
 ctrl.model:init()

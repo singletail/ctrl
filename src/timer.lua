@@ -37,7 +37,7 @@ function ctrl.timer.register(module, interval)
     local moduleName = module.name or module or 'nil'
     tinsert(ctrl.timer.registry, {interval, moduleName, 0, 0})
     ctrl.timer.index = ctrl.timer.index + 1
-    ctrl.timer:debug('Registered ' .. moduleName .. ' for  timer, interval ' .. tostring(interval))
+    --ctrl.timer:debug('Registered ' .. moduleName .. ' for  timer, interval ' .. tostring(interval))
 end
 
 function ctrl.timer.unregister(module, interval)
@@ -45,7 +45,7 @@ function ctrl.timer.unregister(module, interval)
     local timerIndex = findTimerIndex(moduleName, interval)
     ctrl.timer.index = ctrl.timer.index - 1
     tremove(ctrl.timer.registry, timerIndex)
-    ctrl.timer:debug('Unregistered ' .. moduleName .. ' for timer, interval ' .. tostring(interval))
+    --ctrl.timer:debug('Unregistered ' .. moduleName .. ' for timer, interval ' .. tostring(interval))
 end
 
 function ctrl.timer.tick()
@@ -75,12 +75,12 @@ end
 function ctrl.timer:start()
     self.time.start = GetTime()
     self.f:SetScript('OnUpdate', updateScript)
-    self:debug('Timer Started')
+    --self:debug('Timer Started')
 end
 
 function ctrl.timer:stop()
     self.f:SetScript('OnUpdate', nil)
-    self:debug('Timer Stopped')
+    --self:debug('Timer Stopped')
 end
 
 function ctrl.timer.profileStart()

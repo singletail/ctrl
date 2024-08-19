@@ -69,7 +69,7 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
     name = 'tgt',
-    color = c.w,
+    color = c.g,
     symbol = s.target,
     options = {
         numFontStrings = 12,
@@ -91,7 +91,7 @@ local mod = {
             isMovable = nil,
             globalName = 'ctrltgt',
             target = ctrl.pwr.f.main,
-            isClipsChildren = 1,
+            isClipsChildren = nil,
         },
     }
 }
@@ -110,19 +110,16 @@ local db = ctrl.tgt.cache
 local playerTable = {} --ctrl.newTable('')
 local mobTable = {} -- ctrl.newTable('')
 
-
 local textures = {
     ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
     ['tnasa'] = { target = 'main', t = 'nasa_43_c', path = ctrl.p.test, l = -5, w=210, h=164 },
 }
 
-
-
 local fs_default = {
     t='',
     target='main',
-    fontFile = 'Hack-Bold.ttf',
-    fontSize = 11,
+    fontFile = 'Prompt-Regular.ttf',
+    fontSize = 12,
     x = 0,
     y = 0,
     w = 220,
@@ -137,6 +134,18 @@ local fontstrings = {
 }
 
 function ctrl.tgt:createFontStrings()
+    local io = {}
+    for k,v in pairs(fs_default) do io[k] = v end
+    io.w = nil
+    io.h = nil
+    io.x = 12
+    io.y = -20
+    io.a = a.tl
+    io.pa = a.tl
+    io.fontSize = 36
+    ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, io)
+
+    local origY = -18
     for i=1,12 do
         local o = {}
         for k,v in pairs(fs_default) do o[k] = v end
@@ -150,15 +159,51 @@ function ctrl.tgt:createFontStrings()
         else
             ymod = 11
         end
-        o.y = -14 - (ymod * (i-1))
+        o.y = origY - (ymod * (i-1))
         ctrl.tgt.fs['fs'..i] = ctrl.fs.new(ctrl.tgt, o)
     end
 end
 
+function ctrl.tgt:makeRoomForIcon()
+    local iconSize = 36
+    local ymod = 11
+    local origY = -18
+    for i=1,3 do
+        local fs = ctrl.tgt.fs['fs'..i]
+        local y = origY - (ymod * (i-1))
+        fs:ClearAllPoints()
+        fs:SetWidth(ctrl.tgt.options.frame.w  - iconSize)
+        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT',  iconSize, y)
+    end
+end
 
+function ctrl.tgt:noIcon()
+    local ymod = 11
+    local origY = -18
+    for i=1,3 do
+        local fs = ctrl.tgt.fs['fs'..i]
+        local y = origY - (ymod * (i-1))
+        fs:ClearAllPoints()
+        fs:SetWidth(ctrl.tgt.options.frame.w - 8)
+        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8, y)
+    end
+end
 
-
-
+local guildicon = {
+    ["The Immortal Taint"]  = c.c .. '䀈',
+    ["Tainted Angels"]      = c.p .. '㌦',
+    ["Taintcraft"]          = c.o .. '䂭',
+    ["Power Word Taint"]    = c.y .. '㍋',
+    ["War Taint"]           = c.v .. '㎆',
+    ["Taint of the Titans"] = c.b .. '㏛',
+    ["Taint"]               = c.o .. '㏠',
+    ["Bear Taint"]          = c.v .. '󱙵',
+    ["Tainter Tots"]        = c.v .. '󱜚',
+    ["Tainted Love"]        = c.v .. '㎡',
+    ["Taint of Madness"]    = c.v .. '䅡',
+    ["Taint No Thang"]      = c.v .. '〡',
+    ["Spreading Taint"]     = c.v .. '㐃',
+}
 
 function ctrl.tgt:loaddbplayer(guid)
     wipe(ctrl.tgt.db.target)
@@ -202,6 +247,20 @@ function ctrl.tgt:updatePlayer(guid) -- slow but constant
     if ctrl.tgt.db.player[guid].inGroup then
         ctrl.tgt.db.player[guid].role = UnitGroupRolesAssigned('target')
     end
+    local gn, gr, _, rr = GetGuildInfo('target')
+    ctrl.tgt.db.player[guid].guild = gn
+    ctrl.tgt.db.player[guid].guildRank = gr
+    ctrl.tgt.db.player[guid].realm = rr
+
+    if ctrl.tgt.db.player[guid].isFriend then
+        ctrl.tgt.db.player[guid].icon = c.r..s.heart
+    elseif ctrl.tgt.db.player[guid].role then
+        ctrl.tgt.db.player[guid].icon = ctrl.tgt.db.player[guid].hexColor .. s[ctrl.tgt.db.player[guid].role]
+    elseif guildicon[ctrl.tgt.db.player[guid].guild] then
+        ctrl.tgt.db.player[guid].icon = guildicon[ctrl.tgt.db.player[guid].guild]
+    else
+        ctrl.tgt.db.player[guid].icon = nil
+    end
 end
 
 function ctrl.tgt:updatePlayerOncePerSession(guid)
@@ -232,10 +291,6 @@ function ctrl.tgt:createnewplayer(guid)
     ctrl.tgt.db.player[guid].race = UnitRace('target')
     ctrl.tgt.db.player[guid].class = UnitClass('target')
     ctrl.tgt.db.player[guid].level = UnitLevel('target')
-    local gn, gr, _, rr = GetGuildInfo('target')
-    ctrl.tgt.db.player[guid].guild = gn
-    ctrl.tgt.db.player[guid].guildRank = gr
-    ctrl.tgt.db.player[guid].realm = rr
     ctrl.tgt.db.player[guid].unitSex = UnitSex('target')
     ctrl.tgt.db.player[guid].isFriend = C_FriendList.IsFriend(guid)
     ctrl.tgt.db.player[guid].isIgnored = C_FriendList.IsIgnored('target')
@@ -280,6 +335,7 @@ function ctrl.tgt:createnewmob(guid)
     ctrl.tgt.db.mob[guid] = {}
     ctrl.tgt.db.mob[guid].guid = guid
     ctrl.tgt.db.mob[guid].name = UnitName('target')
+    ctrl.tgt.db.mob[guid].displayName = UnitName('target')
     ctrl.tgt.db.mob[guid].race = UnitRace('target')
     ctrl.tgt.db.mob[guid].class = UnitClass('target')
     ctrl.tgt.db.mob[guid].level = UnitLevel('target')
@@ -305,7 +361,9 @@ function ctrl.tgt:createnewmob(guid)
         local sID, sTime = ctrl.tgt:spawnId(spawnUid)
         ctrl.tgt.db.mob[guid].spawnId = sID
         ctrl.tgt.db.mob[guid].spawnTime = sTime
-        ctrl.tgt.db.mob[guid].displayName = string.format('%s %d', ctrl.tgt.db.mob[guid].name, sID)
+        if sID and sID > 0 then
+            ctrl.tgt.db.mob[guid].displayName = string.format('%s %d', ctrl.tgt.db.mob[guid].name, sID)
+        end
     end
 end
 
@@ -341,69 +399,92 @@ end
 function ctrl.tgt:drawPlayer(guid)
     wipe(playerTable)
     playerTable[1] = tostring(ctrl.tgt.db.player[guid].hexColor) .. tostring(ctrl.tgt.db.player[guid].pvpName)
-    playerTable[2] = c.v..tostring(ctrl.tgt.db.player[guid].realm or '')
-    playerTable[3] = c.g..tostring(ctrl.tgt.db.player[guid].guild or '')
-    playerTable[4] = c.b..tostring(ctrl.tgt.db.player[guid].guildRank or '')
-    playerTable[5] = ''
+    playerTable[2] = c.g..tostring(ctrl.tgt.db.player[guid].guild or '')
+    playerTable[3] = c.b..tostring(ctrl.tgt.db.player[guid].guildRank or '')
 
     local classString = ''
     if ctrl.tgt.db.player[guid].role then
         classString = ctrl.tgt.db.player[guid].role .. ' '
     end
-    playerTable[6] = classString .. c.y..tostring(ctrl.tgt.db.player[guid].level) .. ' ' .. c.g..tostring(ctrl.tgt.db.player[guid].race) .. ' ' .. c.b..tostring(ctrl.tgt.db.player[guid].class)
-    playerTable[7] = c.o .. 'Target: ' .. c.y .. (UnitName('targettarget') or '')
-
-    if ctrl.tgt.db.player[guid].inCombat then
-        playerTable[8] = c.r..'In Combat - ' .. tostring(ctrl.tgt.db.player[guid].isTanking) .. ' - ' .. tostring(ctrl.tgt.db.player[guid].scaledPercentage)
-    else
-        playerTable[8] = ''
-    end
-    playerTable[9] = tostring(ctrl.tgt.db.player[guid].health) .. ' / ' .. tostring(ctrl.tgt.db.player[guid].maxHealth) .. ' (' .. tostring(ctrl.tgt.db.player[guid].healthPct) .. '%)'
+    playerTable[4] = ''
+    playerTable[5] = classString .. c.y..tostring(ctrl.tgt.db.player[guid].level) .. ' ' .. c.g..tostring(ctrl.tgt.db.player[guid].race) .. ' ' .. c.b..tostring(ctrl.tgt.db.player[guid].class)
+    playerTable[6] = c.o .. 'Target: ' .. c.y .. (UnitName('targettarget') or '')
+    local hStr = ctrl.healthPctStr(ctrl.healthPct('target'))
+    local combatStr = ctrl.tgt.db.player[guid].inCombat and c.p..' Combat' or ''
+    local tankingStr = ctrl.tgt.db.player[guid].isTanking and c.r..' Tanking' or ''
+    local scaledPercentageStr = ctrl.tgt.db.player[guid].scaledPercentage and c.o .. ctrl.tgt.db.player[guid].scaledPercentage .. '%' or ''
+    local deadStr = ctrl.tgt.db.player[guid].isDead and c.r..' Dead' or ''
+    local ghostStr = ctrl.tgt.db.player[guid].isGhost and c.a..' Ghost' or ''
+    local afkStr = ctrl.tgt.db.player[guid].isAFK and c.y..' AFK' or ''
+    local dndStr = ctrl.tgt.db.player[guid].isDND and c.o..' DND' or ''
+    local offlineStr = ctrl.tgt.db.player[guid].isConnected and '' or c.w..' Offline'
+    playerTable[7] = hStr .. combatStr .. tankingStr .. scaledPercentageStr .. deadStr .. ghostStr .. afkStr .. dndStr .. offlineStr
+    playerTable[8] = ''
+    playerTable[9] = ''
     playerTable[10] = ''
     playerTable[11] = ''
     playerTable[12] = tostring(guid)
     for i=1, ctrl.tgt.options.numFontStrings do
         if ctrl.tgt.fs['fs'..i] then ctrl.tgt.fs['fs'..i]:SetText(playerTable[i]) end
     end
+    if ctrl.tgt.db.player[guid].icon then
+        self:makeRoomForIcon()
+        ctrl.tgt.fs['fsicon']:SetText(ctrl.tgt.db.player[guid].icon)
+    else
+        ctrl.tgt.fs['fsicon']:SetText('')
+        self:noIcon()
+    end
 end
 
 function ctrl.tgt:drawMob(guid)
     wipe(mobTable)
     mobTable[1] = tostring(ctrl.tgt.db.mob[guid].hexColor) .. tostring(ctrl.tgt.db.mob[guid].displayName)
-    mobTable[2] = ctrl.firstToUpper(ctrl.tgt.db.mob[guid].unitClassification) .. ' ' .. ctrl.tgt.db.mob[guid].unitType .. ' ' .. tostring(ctrl.tgt.db.mob[guid].unitCreatureFamily) .. ' ' .. tostring(ctrl.tgt.db.mob[guid].unitCreatureType)
     
+    local ucStr = ctrl.tgt.db.mob[guid].unitClassification and ctrl.firstToUpper(ctrl.tgt.db.mob[guid].unitClassification) .. ' ' or ''
+    local utStr = ctrl.tgt.db.mob[guid].unitType and ctrl.tgt.db.mob[guid].unitType .. ' ' or ''
+    local ucfStr = ctrl.tgt.db.mob[guid].unitCreatureFamily and tostring(ctrl.tgt.db.mob[guid].unitCreatureFamily) .. ' ' or ''
+    local uctStr = ctrl.tgt.db.mob[guid].unitCreatureType and ctrl.tgt.db.mob[guid].unitCreatureType ~= ctrl.tgt.db.mob[guid].unitCreatureFamily and tostring(ctrl.tgt.db.mob[guid].unitCreatureType) or ''
+    mobTable[2] = ucStr .. utStr .. ucfStr .. uctStr
+
     local levelStr = c.y..tostring(ctrl.tgt.db.mob[guid].level)
-    if ctrl.tgt.db.mob[guid].level ~= ctrl.tgt.db.mob[guid].effectiveLevel then
-        levelStr = levelStr .. ' (' .. tostring(ctrl.tgt.db.mob[guid].effectiveLevel) .. ')'
-    end
-    if ctrl.tgt.db.mob[guid].race then
-        levelStr = levelStr .. ' ' .. ctrl.tgt.db.mob[guid].race 
-    end
-    if ctrl.tgt.db.mob[guid].class then
-        levelStr = levelStr .. ' ' .. ctrl.tgt.db.mob[guid].class
-    end
+    if ctrl.tgt.db.mob[guid].level ~= ctrl.tgt.db.mob[guid].effectiveLevel then levelStr = levelStr .. c.o.. ' (' .. tostring(ctrl.tgt.db.mob[guid].effectiveLevel) .. ')' end
+    if ctrl.tgt.db.mob[guid].race then levelStr = levelStr .. ' ' .. c.g..ctrl.tgt.db.mob[guid].race end
+    if ctrl.tgt.db.mob[guid].class then levelStr = levelStr .. ' ' .. c.v..ctrl.tgt.db.mob[guid].class end
+    mobTable[3] = levelStr
+    mobTable[4] = ''
 
-    mobTable[4] = levelStr
-    mobTable[5] = ''
+    local hStr = ctrl.healthPctStr(ctrl.healthPct('target'))
+    local combatStr = ctrl.tgt.db.mob[guid].inCombat and c.p..' Combat' or ''
+    local tankingStr = ctrl.tgt.db.mob[guid].isTanking and c.r..' Tanking' or ''
+    local scaledPercentageStr = ctrl.tgt.db.mob[guid].scaledPercentage and c.o .. ctrl.tgt.db.mob[guid].scaledPercentage .. '%' or ''
+    mobTable[5] = hStr .. combatStr .. tankingStr .. scaledPercentageStr
 
-    local tgtStr = UnitName('targettarget')
-    if tgtStr then 
-        tgtStr = c.o .. 'Target: ' .. c.y .. tgtStr 
-    else
-        tgtStr = ''
-    end
+    local tgtStr = UnitName('targettarget') and c.o .. 'Target: ' .. c.y .. UnitName('targettarget') or ''
     mobTable[6] = tgtStr
+    mobTable[7] = ''
 
-    if ctrl.tgt.db.mob[guid].inCombat then
-        mobTable[7] = 'In Combat - Tanking:' .. tostring(ctrl.tgt.db.mob[guid].isTanking) .. ' - Threat: ' .. tostring(ctrl.tgt.db.mob[guid].scaledPercentage)
-    else
-        mobTable[7] = ''
+    local t1, t2, t3, symbol = '', '', '', ''
+    if _G.CtrlDB then
+        local entry = _G.CtrlDB[tonumber(ctrl.tgt.db.mob[guid].npcId)]
+        if entry then
+            self:makeRoomForIcon()
+            local col = entry.color or c.w
+            t1 = col..entry.t1 or ''
+            t2 = col..entry.t2 or ''
+            t3 = col..entry.t3 or ''
+            symbol = col..entry.symbol or ''
+            ctrl.tgt.fs['fsicon']:SetText(symbol)
+        else
+            ctrl.tgt.fs['fsicon']:SetText('')
+            self:noIcon()
+        end
     end
-    mobTable[8] = tostring(ctrl.tgt.db.mob[guid].health) .. ' / ' .. tostring(ctrl.tgt.db.mob[guid].maxHealth) .. ' (' .. tostring(ctrl.tgt.db.mob[guid].healthPct) .. '%)'
-    mobTable[9] = ''
-    mobTable[10] = 'NpcId: '..(ctrl.tgt.db.mob[guid].npcId or '?')
+
+    mobTable[8] = t1
+    mobTable[9] = t2
+    mobTable[10] = t3
     mobTable[11] = ''
-    mobTable[12] = ''
+    mobTable[12] = c.a..'NpcId: '..(ctrl.tgt.db.mob[guid].npcId or '?')
     for i=1,self.options.numFontStrings do
         if ctrl.tgt.fs['fs'..i] then ctrl.tgt.fs['fs'..i]:SetText(mobTable[i]) end
     end
@@ -457,8 +538,7 @@ function ctrl.tgt.setup(self)
     ctrl.tgt.f.main = ctrl.frame.new(ctrl.tgt, ctrl.tgt.options.frame)
     ctrl.tx.generate(ctrl.tgt, textures)
     ctrl.tgt:createFontStrings()
-    --ctrl.btns.generate(ctrl.info, buttons)
-    --ctrl.fs.generate(ctrl.info, fontstrings)-
+    self:registerCtrlFrame(4, self.f.main)
 end
 
 ctrl.tgt:init()

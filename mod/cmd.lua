@@ -8,9 +8,12 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
     name = 'cmd',
-    color = c.o,
-    symbol = s.info,
+    color = c.r,
+    symbol = s.ctrl,
     options = {
+        events = {
+            'UI_SCALE_CHANGED',
+        },
         frame = {
             name = 'cmd',
             w=84,
@@ -134,20 +137,19 @@ function ctrl.cmd:redraw()
 end
 
 
-function ctrl.cmd:on()
-    self.is.on = 1
-    self.f.main:Show()
-end
-
-function ctrl.cmd:off()
-    self.is.on = nil
-    self.f.main:Hide()
+function ctrl.cmd.UI_SCALE_CHANGED()
+    ctrl.cmd:debug('UI_SCALE_CHANGED - setting window scale to 1')
+    ctrl.cmd.f.main:SetScale(1)
+    ctrl.cmd.btn.b1:SetScale(1)
+    ctrl.cmd.fs.b1:SetScale(1)
 end
 
 function ctrl.cmd.setup(self)
     self.f.main = ctrl.frame:new(self.options.frame)
+    self.f.main:SetScale(1)
     ctrl.tx.generate(ctrl.cmd, textures)
     self:buttons()
+    self:registerCtrlFrame(1, self.f.main)
 end
 
 ctrl.cmd:init()

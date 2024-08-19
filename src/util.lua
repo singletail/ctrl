@@ -14,6 +14,39 @@ function ctrl.firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
+function ctrl.groupConfig()
+    local unitId = 'player'
+    local groupSize = 1
+    if IsInRaid() then
+        unitId = 'raid'
+        groupSize = 40
+    elseif IsInGroup() then
+        unitId = 'party'
+        groupSize = 5
+    end
+    return unitId, groupSize
+end
+
+function ctrl.hexMarkupToRGBA(hexMarkup)
+    local hexString = strsub(hexMarkup, 5, 10)
+    hexString = hexString .. strsub(hexMarkup, 3, 4)
+    local clr = CreateColorFromRGBAHexString(hexString)
+    local r, g, b, a = clr:GetRGBA()
+    return {r, g, b, a}
+end
+
+function ctrl.healthPct(unit)
+    return math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+end
+
+function ctrl.healthPctStr(perc)
+    local color = ctrl.c.g
+    if perc < 50 then color = ctrl.c.y end
+    if perc < 25 then color = ctrl.c.r end
+    if perc < 1 then color = ctrl.c.dim end
+    return color..perc..'%'
+end
+
 --[[ Metatables ]]
 
 local metakey = {}

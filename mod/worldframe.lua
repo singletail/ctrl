@@ -57,18 +57,13 @@ local function check()
     if not ok then doSet() end
 end
 
-function ctrl.worldframe.DISPLAY_SIZE_CHANGED(evt)
-    check()
-end
-
-function ctrl.worldframe.UI_SCALE_CHANGED(evt)
+function ctrl.worldframe.UPDATE_CHAT_WINDOWS(evt)
     check()
 end
 
 function ctrl.worldframe.PLAYER_ENTERING_WORLD()
     doSet()
-    ctrl.evt.register(ctrl.worldframe, 'UI_SCALE_CHANGED')
-    ctrl.evt.register(ctrl.worldframe, 'DISPLAY_SIZE_CHANGED')
+    ctrl.evt.register(ctrl.worldframe, 'UPDATE_CHAT_WINDOWS')
 end
 
 ctrl.worldframe:init()

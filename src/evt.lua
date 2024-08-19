@@ -43,7 +43,7 @@ function ctrl.evt.eventHandler(self, e, et) -- to catch events for ctrl.evt only
     if self[e] then
         self[e](et)
     else
-        self:warn(string.format('%sUncaught event: %s%s%s. Add evt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(e), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
+        --self:warn(string.format('%sUncaught event: %s%s%s. Add evt() to module %s%s%s.%s', ctrl.c.r, ctrl.c.o, tostring(e), ctrl.c.r, ctrl.c.y, self.name, ctrl.c.r, ctrl.c.d))
     end
 end
 
@@ -68,8 +68,7 @@ function ctrl.evt.register(module, event)
     tinsert(ctrl.evt.registry[event], moduleName)
     ctrl.evt.index[event] = ctrl.evt.index[event] + 1
     registerFrame(event)
-    print('Registered ' .. moduleName .. ' for ' .. event)
-    ctrl.evt:debug('Registered ' .. moduleName .. ' for ' .. event)
+    --ctrl.evt:debug('Registered ' .. moduleName .. ' for ' .. event)
 end
 
 function ctrl.evt.unregister(module, event)
@@ -77,7 +76,7 @@ function ctrl.evt.unregister(module, event)
     local eventIndex = findModuleIndex(moduleName, event)
     tremove(ctrl.evt.registry[event], eventIndex)
     ctrl.evt.index[event] = ctrl.evt.index[event] - 1
-    ctrl.evt:debug('Unegistered ' .. moduleName .. ' for ' .. event)
+    --ctrl.evt:debug('Unegistered ' .. moduleName .. ' for ' .. event)
     if ctrl.evt.index[event] == 0 then unregisterFrame(event) end
 end
 

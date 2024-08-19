@@ -11,7 +11,7 @@ local mod = {
     options = {
         events = {
             'PLAYER_ENTERING_WORLD',
-            'DISPLAY_SIZE_CHANGED',
+            'UPDATE_CHAT_WINDOWS',
         }
     }
 }
@@ -35,11 +35,6 @@ local client = {
 
 local function set()
     if (UIParent:GetScale() - ctrl.ui.uiParentScale) < 0.001 then return end
-    --if ctrl.ui.uiParentScale < 0 then
-        --ctrl.log(ctrl.ui, 5, 'UIParent scale is too small, setting to 0.3')
-        --ctrl.ui.uiParentScale = 0.3
-    --end
-    --ctrl.ui:debug('Changing UIParent scale from '..tostring(UIParent:GetScale()) .. ' to ' .. tostring(ctrl.ui.uiParentScale))
     UIParent:SetScale(ctrl.ui.uiParentScale)
 end
 
@@ -60,7 +55,7 @@ end
 
 --
 
-function ctrl.ui.DISPLAY_SIZE_CHANGED()
+function ctrl.ui.UPDATE_CHAT_WINDOWS()
     update()
 end
 

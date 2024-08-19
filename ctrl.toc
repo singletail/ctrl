@@ -10,7 +10,7 @@ src\util.lua
 src\mod.lua
 src\logs.lua
 src\evt.lua
-# src\cleu.lua
+src\cleu.lua
 src\timer.lua
 
 ui\frame.lua
@@ -24,23 +24,26 @@ templates\btn.lua
 core\alert.lua
 core\sfx.lua
 
-# mod\cvar.lua
-# mod\ui.lua
-# mod\worldframe.lua
+mod\cvar.lua
+mod\ui.lua
+mod\worldframe.lua
 mod\minimap.lua
-# mod\console.lua
+mod\console.lua
 
 # mod\data.lua
-# mod\events.lua
-# mod\taunt.lua
-# mod\pet.lua
+mod\events.lua
+mod\taunt.lua
+mod\pet.lua
 
 mod\pwr.lua
 mod\cmd.lua
 mod\info.lua
 mod\model.lua
 mod\target.lua
-
+# mod\group.lua
 # mod\pulled.lua
 
+# secure\test.lua
+
+DB.lua
 ctrl.lua

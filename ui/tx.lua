@@ -32,7 +32,6 @@ function ctrl.tx.new(module, o)
     if not o.anchors then o.anchors = {{ a = o.a, pa = o.pa, x = o.x, y = o.y }} end
 
     local tx = o.target:CreateTexture(nil, o.lvl, nil, o.l)
-    print('=== texture: ' .. o.path , o.t)
 
     tx:SetTexture(o.path .. o.t, o.wrap, o.wrap, o.filter)
     if o.w == 0 then

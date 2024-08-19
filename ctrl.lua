@@ -25,4 +25,5 @@ function ctrl.master.load()
         ctrl.loads[n]()
     end
     ctrl.master.ready()
+    --ctrl.secure.setup()
 end
