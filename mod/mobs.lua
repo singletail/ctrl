@@ -42,7 +42,7 @@ function ctrl.mob:add(guid, unit)
         unitClassification = nil,
         unitCreatureFamily = nil,
         unitCreatureType = nil,
-        UnitAffectingCombat = nil
+        UnitAffectingCombat = nil,
         unit = unit,
         unitType = nil,
         npcId = nil,
@@ -124,4 +124,4 @@ function ctrl.mob.setup(self)
     ctrl.mob.npc = ctrl.mob.npc or {}
 end
 
-ctrl.mobs:init()
+ctrl.mob:init()

@@ -44,6 +44,7 @@ mod\group.lua
 # mod\pulled.lua
 mod\death.lua
 mod\mobs.lua
+mod\mobframe.lua
 
 # secure\test.lua
 

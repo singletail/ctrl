@@ -5,7 +5,7 @@
 local ctrl = select(2, ...)
 
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
-
+local mag = 4
 local mod = {
     name = 'pwr',
     color = c.r,
@@ -14,25 +14,28 @@ local mod = {
     nFrames = 0,
     options = {
         timers = { 1 },
-        frame = { w = 86, h = 28, x = 200, y = -200, a=a.tl, pa=a.tl,isMovable = true },
+        frame = { w=24*mag, h=176*mag, x=0, y=0, a=a.tl, pa=a.tl, isMovable = true },
     },
 }
 
 ctrl.pwr = ctrl.mod:new(mod)
 
+
 local subframes = {
-    ['btnframe'] = { target='main', w=86, h=28, a=a.tl, pa=a.tr, x=0, y=0},
+    ['btnframe'] = {target='main', w=24*mag, h=108*mag, a=a.t, pa=a.t, x=0*mag, y=-52*mag},
 }
 
 local textures = {
-    ['main'] = { t = 'metal_half_h', path = ctrl.p.tx, target='main', l = -7 },
-    ['btnsbk'] = { target = 'btnframe', t = 'metal_half_h', path = ctrl.p.tx, l = -6 },
+    ['main'] = { t='dark1', path=ctrl.p.tx, target='main', l=-7 },
+    --['btnsbk'] = {target='btnframe', t='decktex512', path=ctrl.p.tx, l=-6, alpha=0.5 },
+    ['ctrl_v'] = {target='main', t='ctrl_v_top', path=ctrl.p.ctrl, l=-6, w=16*mag, h=68*mag, a=a.t, pa=a.t, x=0.5*mag, y=-4*mag },
 }
 
 local fontstrings = {
-    ['fsctrl'] = { target='main', t = ctrl.c.r .. 'c'..c.y..'t'..c.g..'r'..c.c..'l', fontFile = 'Data70-Regular.otf', fontSize = 18, x = 8, y = -1 },
-    ['fsbpwr'] = { target='bpower', t = c.k..s.power, fontFile = 'Data70-Regular.otf', fontSize = 14, x = 0, y = 0, a=a.c, pa=a.c, jH=a.c },
-    ['fsbmin'] = { target='bmin', t = c.k..s.min, fontFile = 'AnkaCoder-Bold.ttf', fontPath=ctrl.p.fntf, fontSize = 14, x = 0, y = 0, a=a.c, pa=a.c, jH=a.c },
+    --['fsctrl'] = { target='main', t = ctrl.c.r .. 'c'..c.y..'t'..c.g..'r'..c.c..'l', fontFile = 'Data70-Regular.otf', fontSize = 18, x = 8, y = -1 },
+    --['fsctrl'] = { target='main', t = ctrl.c.r .. 'c'..c.y..'t'..c.g..'r'..c.c..'l', fontFile = 'Data70-Regular.otf', fontSize = 24, x = 0, y = -1, a=a.t, pa=a.t, jH=a.c  },
+    ['fsbpwr'] = { target='bpower', t = c.k..s.power, fontFile = 'Data70-Regular.otf', fontSize = 14*mag, x = 0, y = 0, a=a.c, pa=a.c, jH=a.c },
+    --['fsbmin'] = { target='bmin', t = c.k..s.min, fontFile = 'AnkaCoder-Bold.ttf', fontPath=ctrl.p.fntf, fontSize = 14, x = 0, y = 0, a=a.c, pa=a.c, jH=a.c },
     ['fsb1'] = { target='b1', t = c.k..s.ctrl, fontFile = 'AnkaCoder-Bold.ttf', fontSize = 14, x = 0.5, y = -0.5, a=a.c, pa=a.c, jH=a.c },
     ['fsb2'] = { target='b2', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = 14, x = 0.5, y = -0.5, a=a.c, pa=a.c, jH=a.c },
     ['fsb3'] = { target='b3', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = 14, x = 0.5, y = -0.5, a=a.c, pa=a.c, jH=a.c },
@@ -48,6 +51,7 @@ function ctrl.pwr:resize()
     --self:debug('resize')
 end
 
+--[[
 local buttons = {
     ['bpower'] = { target = 'main', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 30, y = -1 } }},
     ['bmin'] = { target = 'main', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 54, y = -1 } }},
@@ -61,6 +65,21 @@ local buttons = {
     ['b8'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 174, y = -1 } }},
     ['b9'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 198, y = -1 } }},
 }
+]]
+
+local buttons = {
+    ['bpower'] = { target = 'btnframe', template = 'power', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=28*mag, w=28*mag, anchors = { { a = a.t, pa = a.t, y = 0, x = 0*mag } }},
+    --['bmin'] = { target = 'main', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -60, x = -1 } }},
+    ['b1'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28*mag, w = 28*mag, anchors = { { a = a.tl, pa = a.tl, y = -24*mag, x = 0 } }},
+    ['b2'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -108, x = -1 } }},
+    ['b3'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -132, x = -1 } }},
+    ['b4'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -156, x = -1 } }},
+    ['b5'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -180, x = -1 } }},
+    ['b6'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -204, x = -1 } }},
+    ['b7'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -228, x = -1 } }},
+    ['b8'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -252, x = -1 } }},
+    ['b9'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, y = -276, x = -1 } }},
+}
 
 function ctrl.pwr:register(fObj)
     ctrl.pwr.frames = ctrl.pwr.frames or {}
@@ -70,7 +89,7 @@ function ctrl.pwr:register(fObj)
 end
 
 function ctrl.pwr:tick()
-    ctrl.pwr:draw()
+    --ctrl.pwr:draw()
 end
 
 function ctrl.pwr:click(btn)
@@ -83,7 +102,7 @@ function ctrl.pwr:click(btn)
             module.on(module)
         end
     end
-    ctrl.pwr:draw()
+    --ctrl.pwr:draw()
 end
 
 function ctrl.pwr:draw()
@@ -91,6 +110,7 @@ function ctrl.pwr:draw()
     for i=1, self.nFrames do
         local fObj = self.frames['f'..i]
         local btn = ctrl.pwr.btn['b'..i]
+        if not btn then return end
         local hexString = strsub(fObj.module.color, 9, 10)
         hexString = hexString .. strsub(fObj.module.color, 3, 8)
         btn:setColor(fObj.colorObj[1], fObj.colorObj[2], fObj.colorObj[3], fObj.colorObj[4])

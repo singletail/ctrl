@@ -114,6 +114,70 @@ ctrl.templates.btn = {
             }
         },
     },
+    ['gv'] = {
+        subclass = 'NC',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'sq_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'gv_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'gv_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'gv_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['power'] = {
+        subclass = 'NC',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'power_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'power_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'power_under', alpha = 1, color = 1, layer = -8, path = ctrl.p.btns },
+                    { file = 'power_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'power_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['ins'] = {
+        subclass = 'NC',
+        values = { 0, 1 },
+        default = 1,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'ins_bk', alpha = 0.5, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'ins_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'ins_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
+                    { file = 'ins_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
     ['retrolamp'] = {
         subclass = 'NO',
         values = { 0, 1 },

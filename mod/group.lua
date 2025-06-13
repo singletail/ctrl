@@ -72,7 +72,7 @@ ctrl.group.guid = ctrl.group.guid or {}
 
 local textures = {
     ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
-    ['tnasa'] = { target = 'main', t = 'nasa_43_b', path = ctrl.p.test, l = -5, w=210, h=164 },
+    ['tbluebk'] = { target = 'main', t = 'bluebk_full_256', path = ctrl.p.tx, l = -5, w=210, h=164 },
 }
 
 local fs_default = {

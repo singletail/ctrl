@@ -44,6 +44,7 @@ ctrl.p                  = {
     ux = [[Interface\AddOns\ctrl\assets\ux\]],
     sfx = [[Interface\AddOns\ctrl\assets\sfx\]],
     ctrl = [[Interface\AddOns\ctrl\assets\ctrl\]],
+    s1999 = [[Interface\AddOns\ctrl\assets\1999\]],
     test = [[Interface\AddOns\ctrl\assets\test\]],
 }
 

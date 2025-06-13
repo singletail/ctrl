@@ -1,68 +1,7 @@
 --[[ ctrl - tgt.lua - t@wse.nyc - 8/7/24 ]]
---
-
---[[
-
-TODO:
-
-all:
-
-c  red, green, blue, alpha = UnitSelectionColor(unit [, useExtendedColors])
-c selectionType = UnitSelectionType(unit [, useExtendedColors])
-
-- player:
-
-Icon - Friend?
-Icon - Guild?
-Icon - Role?
-
-c PVPName
-c Realm
-c Guild, c Guild Rank
-
--- range, UnitAffectingCombat(unit)  / threat / UnitIsDead/UnitIsGhost/UnitIsDND/UnitIsConnected/UnitIsAFK
-Target
-
-UnitGroupRolesAssigned([unit]) (if in party) iLvl Score
-c Level c Race c Class c UnitSex
-
-GUID
-timestamp
-
-
-- Mob:
-
-
-Icon - DB or Classification or ?
-Name + SpawnID  range  in combat
-
-UnitAffectingCombat(unit)  / API_UnitIsTapDenied / UnitThreatSituation(unit [, mobUnit]) 
-
-UnitEffectiveLevel(name) / Level / Race Class UnitSex 
-UnitCreatureType UnitCreatureFamily
-
-db entry??
-
-
-
-local m = CreateFrame("PlayerModel", nil, UIParent)
-m:SetPoint("CENTER")
-m:SetSize(256, 256)
-m:SetDisplayInfo(21723) -- creature/murloccostume/murloccostume.m2
-
-
-PlayerModel:CanSetUnit(unit)
-PlayerModel:SetUnit
-PlayerModel:SetCreature(creatureID [, displayID])
-
-]]
-
-
-
-
-
 
 ---@class ctrl
+
 local ctrl = select(2, ...)
 
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
@@ -112,7 +51,7 @@ local mobTable = {} -- ctrl.newTable('')
 
 local textures = {
     ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
-    ['tnasa'] = { target = 'main', t = 'nasa_43_c', path = ctrl.p.test, l = -5, w=210, h=164 },
+    ['tbluebk'] = { target = 'main', t = 'bluebk_full_256', path = ctrl.p.tx, l = -5, w=210, h=164 },
 }
 
 local fs_default = {
