@@ -19,9 +19,7 @@ The vast majority of web sites are hopelessly outdated. Stick to these and you'l
 
 ## Fonts
 
-This addon uses open-source fonts with custom glyphs added. You may want to install one or more at the system level if you want to modify the addon.
-
-While all licenses for the fonts are being followed for usage, license files are not up to date -- they will be fixed before official release.
+This addon uses fonts with custom glyphs added. You may want to install one or more at the system level if you want to modify the addon.
 
 ## Console
 
