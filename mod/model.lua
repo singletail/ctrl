@@ -70,8 +70,9 @@ function ctrl.model.setup(self)
         isMovable = nil,
         target = ctrl.model.f.main
     }
-    ctrl.model.f.player = ctrl.model.f.player or ctrl.frame.new(ctrl.model, pf)
+    ctrl.model.f.player = ctrl.frame.new(ctrl.model, pf)
     self:registerCtrlFrame(3, self.f.main)
+    ctrl.model.f.player:SetDisplayInfo(21723)
 end
 
 ctrl.model:init()

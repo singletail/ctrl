@@ -35,7 +35,7 @@ local mod = {
         scanGroup = 1,
     },
     options = {
-        numStrings = 25,
+        numStrings = 5,
         numFields = 4,
         fieldW = {28, 100, 56, 36},
         lineHeight = 24,
@@ -51,9 +51,13 @@ local mod = {
             name = 'ctrlgroup',
             w=220,
             h=172,
+            y=-32,
+            a=a.tl,
+            pa=a.bl,
             isResizable = nil,
             isMovable = nil,
             globalName = 'ctrlgroup',
+            target = ctrl.pwr.f.main,
             isClipsChildren = nil,
         },
     }
@@ -102,7 +106,7 @@ local function createFontStrings()
             o.y = o.y + -16 - (ctrl.group.options.lineHeight * (i-1))
             ctrl.group.fs['l'..i] = ctrl.group.fs['l'..i] or {}
             ctrl.group.fs['l'..i]['f'..f] = ctrl.fs.new(ctrl.group, o)
-            ctrl.group.fs['l'..i]['f'..f]:SetText(tostring(i) .. ' ' .. tostring(f))
+            ctrl.group.fs['l'..i]['f'..f]:SetText('')
             curX = curX + ctrl.group.options.fieldW[f]
         end
     end
@@ -133,10 +137,11 @@ end
 function ctrl.group:updateGuidEntryColor(unit, guid)
     if not unit or not guid or not ctrl.group.guid[guid] then return end
     local g = ctrl.group.guid[guid]
+    local cr,cg,cb
     if g.classFilename and g.classFilename ~= 'Unknown' then
         g.classColor = C_ClassColor.GetClassColor(g.classFilename)
+        if g.classColor then cr, cg, cb = g.classColor:GetRGB() end
     end
-    local cr,cg,cb = g.classColor:GetRGB()
     g.r = cr or 0.6
     g.g = cg or 0.6
     g.b = cb or 0.6
@@ -204,7 +209,7 @@ function ctrl.group:checkUnit(unit)
     if not ctrl.group.unit[unit] or guid ~= ctrl.group.unit[unit].guid then
         self:addUnit(unit, guid)
     end
-    u.role = UnitGroupRolesAssigned(unit) or 'NONE'
+    ctrl.group.unit[unit].role = UnitGroupRolesAssigned(unit) or 'NONE'
 end
 
 function ctrl.group:scanGroup()
@@ -228,15 +233,16 @@ end
 function ctrl.group:draw()
     local line = 1
     for i=1,self.groupSize do
+        if line > self.options.numStrings then break end
         local unit = self.unitId..i
         if unit == 'party5' or unit == 'player1' then unit = 'player' end
-        local u = self.unit[self.unitId..i]
+        local u = self.unit[unit]
         if u then
             local col = u.hex or c.a
             if u.isDead then col = c.dim end
-            self.fs['line'..line]['field1']:SetText(col..tostring(s[u.role]))
-            self.fs['line'..line]['field2']:SetText(col..tostring(u.name))
-            self.fs['line'..line]['field3']:SetText(tostring(u.healthPctStr))
+            self.fs['l'..line]['f1']:SetText(col..tostring(s[u.role]))
+            self.fs['l'..line]['f2']:SetText(col..tostring(u.name))
+            self.fs['l'..line]['f3']:SetText(tostring(u.healthPctStr))
             line = line + 1
         end
     end
@@ -263,7 +269,7 @@ function ctrl.group.setup(self)
     ctrl.group.f.main = ctrl.frame.new(ctrl.group, ctrl.group.options.frame)
     ctrl.tx.generate(ctrl.group, textures)
     createFontStrings()
-    ctrl.group:registerCtrlFrame(5, ctrl.group.f.main)
+    self:registerCtrlFrame(5, self.f.main)
     ctrl.group.unitId, ctrl.group.groupSize = ctrl.groupConfig()
 end
 

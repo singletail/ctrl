@@ -38,10 +38,12 @@ mod\pet.lua
 mod\pwr.lua
 mod\cmd.lua
 mod\info.lua
-mod\model.lua
+# mod\model.lua
 mod\target.lua
-# mod\group.lua
+mod\group.lua
 # mod\pulled.lua
+mod\death.lua
+mod\mobs.lua
 
 # secure\test.lua
 

@@ -13,9 +13,6 @@ local mod = {
     options = {
         events = {
             'DUEL_REQUESTED',
-            'PLAYER_REGEN_DISABLED',
-            'PLAYER_REGEN_ENABLED',
-            'PLAYER_DEAD',
             'SYSTEM_VISIBILITY_CHANGED',
             'UI_ERROR_MESSAGE',
             'UI_INFO_MESSAGE',
@@ -44,7 +41,6 @@ local mod = {
             'OBJECT_ENTERED_AOI',
             'OBJECT_LEFT_AOI',
             'PLAYER_IMPULSE_APPLIED',
-            'UNIT_TARGETABLE_CHANGED',
         },
     }
 }

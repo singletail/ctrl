@@ -272,7 +272,7 @@ function ctrl.tgt:updatePlayerFast(guid)
     ctrl.tgt.db.player[guid].inCombat = UnitAffectingCombat('target')
     ctrl.tgt.db.player[guid].target = UnitGUID('targettarget')
     ctrl.tgt.db.player[guid].targetName = UnitName('targettarget')
-    if ctrl.tgt.db.player[guid].inCombat then
+    if ctrl.tgt.db.player[guid].inCombat and UnitExists("target") and UnitExists(ctrl.tgt.db.player[guid].target) then
         local isTanking, status, scaledPercentage, rawPercentage, rawThreat = UnitDetailedThreatSituation('target', ctrl.tgt.db.player[guid].target)
         ctrl.tgt.db.player[guid].scaledPercentage = scaledPercentage
         ctrl.tgt.db.player[guid].isTanking = isTanking
@@ -467,6 +467,10 @@ function ctrl.tgt:drawMob(guid)
     if _G.CtrlDB then
         local entry = _G.CtrlDB[tonumber(ctrl.tgt.db.mob[guid].npcId)]
         if entry then
+            entry.t1 = entry.t1 or ''
+            entry.t2 = entry.t2 or ''
+            entry.t3 = entry.t3 or ''
+            entry.symbol = entry.symbol or ''
             self:makeRoomForIcon()
             local col = entry.color or c.w
             t1 = col..entry.t1 or ''

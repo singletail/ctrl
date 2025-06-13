@@ -28,13 +28,16 @@ local default = {
     ['chatBubbles'] = 1,
     ['chatBubblesParty'] = 1,
     ['colorChatNamesByClass'] = 1,
-    ['SpellQueueWindow'] = 100,
+    ['SpellQueueWindow'] = 240,
     ['cameraDistanceMaxZoomFactor'] = 2.6,
     ['autoLootDefault'] = 1,
     ['autoLootRate'] = 6,
     ['advancedCombatLogging'] = 1,
     ['disableAELooting'] = 0,
     --['enableSourceLocationLookup'] = 1,
+
+    ['scriptErrors'] = 1,
+    ['showErrors'] = 1,
 }
 
 local cvarTab = ctrl.newTable('')

@@ -15,11 +15,13 @@ local mod = {
 }
 
 ctrl.sfx = ctrl.mod:new(mod)
+ctrl.sfx.handle = nil
 
 local sf = {
     ['TANK'] = 'tank-train',
-    ['HEALER'] = 'healer-ambulance',
-    ['DAMAGER'] = 'amongus_imposter',
+    ['HEALER'] = 'tindeck',
+    ['DAMAGER'] = 'pacman_death',
+    ['NONE'] = 'pacman_death',
     ['RESURRECT'] = 'sonicring',
     ['TAUNT'] = 'orch_hit',
 }
@@ -38,10 +40,12 @@ local function sfxPath(input)
     return pathStr
 end
 
-local willPlay, soundHandle
+
 
 local function playfile(soundFile, chnl)
-    willPlay, soundHandle = PlaySoundFile(soundFile, chnl)
+    local willPlay
+    ctrl.sfx:stop()
+    willPlay, ctrl.sfx.handle = PlaySoundFile(soundFile, chnl)
     if not willPlay then
         ctrl.sfx.error(ctrl.sfx, 'Error playing soundFile ' .. soundFile)
     end
@@ -54,7 +58,7 @@ function ctrl.sfx:play(snd, chnl)
 end
 
 function ctrl.sfx:stop()
-    if soundHandle then StopSound(soundHandle, 0) end
+    if ctrl.sfx.handle then StopSound(ctrl.sfx.handle, 0) end
 end
 
 function ctrl.sfx:error(msg)

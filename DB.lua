@@ -1,31 +1,164 @@
 --[[ ctrl - DB.lua - t@wse.nyc - 8/17/24 ]] --
 
-
 ---@class ctrl
 local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
+local rgba = {
+    red = { 0.5, 0.0, 0.0, 0.75, },
+    orange = { 1.0, 0.5, 0.0, 0.75, },
+    yellow = { 0.5, 0.5, 0.0, 0.75, },
+    yelloworange = { 0.75, 0.5, 0.0, 0.75, },
+    green = { 0.0, 0.5, 0.0, 0.75, },
+    blue = { 0.0, 0.0, 0.5, 0.75, },
+    violet = { 0.5, 0.0, 0.5, 0.75, },
+    cyan = { 0.0, 0.5, 0.5, 0.75, },
+    pink = { 1.0, 0.0, 0.5, 0.75, },
+    gray = { 0.5, 0.5, 0.5, 0.75, },
+    white = { 0.5, 0.5, 0.5, 0.75, },
+    dim = { 0.0, 0.0, 0.0, 0.25, },
+    ['nil'] = { 0.0, 0.0, 0.0, 1.0, },
+}
+
+local i = {
+    kick = '㏅',
+    caster = '〗',
+    stop = 'ゕ',
+    frontal = '㏘',
+    dispel = '㍈',
+    poison = '㍑',
+    disease = '䆿',
+    purge = '㍓',
+    avoid = '䃯',
+    tankbuster = '䁶',
+    tanking = '㍵',
+    warn = 'ゃ', 
+    cc = '㇂',
+    boss = '䅴',
+    rotate = '䂈',
+    penis = '㏤',
+    ['nil'] = '␀',
+}
+
+local h = {
+    reset       = [[|r]],
+    white       = [[|cffffffff]],
+    red         = [[|cffff2e38]],
+    orange      = [[|cffffb836]],
+    yellow      = [[|cfffff000]],
+    green       = [[|cff24cf19]],
+    blue        = [[|cff4975ff]],
+    violet      = [[|cffd649ff]],
+    cyan        = [[|cff5bcefa]],
+    pink        = [[|cfff563af]],
+    gray        = [[|cff888888]],
+    black       = [[|cff000000]],
+    dim         = [[|cff333333]],
+    ['nil']     = [[|c33000000]],
+}
+
+local p = {
+    kick = { i.kick, rgba.yellow, h.yellow, i.warn..' Prio Kick '},
+    caster = { i.caster, rgba.green, h.green, 'Kick '},
+    stop = { i.stop, rgba.yelloworange, h.yelloworange, 'Stop '},
+    frontal = { i.rotate, rgba.orange, h.orange, 'Frontal '},
+    dispel = { i.dispel, rgba.blue, h.blue, 'Dispel '},
+    poison = { i.poison, rgba.blue, h.blue, 'Poison '},
+    disease = { i.disease, rgba.blue, h.blue, 'Disease '},
+    purge = { i.purge, rgba.violet, h.violet, 'Purge '},
+    avoid = { i.avoid, rgba.gray, h.gray, 'Avoid '},
+    boss = { i.boss, rgba.red, h.red, 'Boss '},
+    warn = { i.warn, rgba.orange, h.orange, 'Warn: '},
+    tankbuster = { i.tankbuster, rgba.orange, h.orange, 'Tankbuster '},
+    tanking = { i.tanking, rgba.cyan, h.cyan, 'Tanking '},
+    cc = { i.cc, rgba.red, h.red, 'CC '},
+}
+
 _G.CtrlDB = {
+    -- Beledar
+    [207802] = {p.warn, t="Beledar's Spawn"},
 
-    -- Test
+    --Test
+    [61657] = { p = p.kick, t = p.kick[4]..'Arcing Void' }, -- Cursedheart Invader
 
-    [104091] = {
-        t1 = s.tits..' Dem titties',
-        t2 = s.crit .. ' Imposter!',
-        t3 = '㏈ Lingerie',
-        color = c.o,
-        symbol = s.d20,
-        debug = '104091',
-    },
-    [185562] = {
-        t1 = s.tits..' Dem titties',
-        t2 = s.crit .. ' Imposter!',
-        t3 = '㏈ Lingerie',
-        color = c.o,
-        symbol = s.d20,
-        debug = '104091',
-    },
+    --Darkflame Cleft
+    [210812] = { p = p.caster, t = i.kick..' Wicklighter Bolt' },
 
+
+    -- Delves
+    [216583] = { p=p.kick, t='Fearful Shriek'},
+    [218103] = { p=p.warn, t=p.warn[4]..'Teleports behind you'},
+    [214551] = { p=p.warn, t=p.warn[4]..'Wandering Elite'},
+    [217870] = { p=p.warn, t=p.warn[4]..'Elite, Knockback'},
+    [221896] = { p=p.boss, t='Avoid cart on tracks'},
+    [207481] = { p=p.warn, t='Fungalstorm: 6s Spin'},
+    [204188] = { p=p.boss, t='Big Knockback'},
+    [220158] = { p=p.boss, t='Sidestep Impale'},
+    [225401] = { p=p.warn, t='Puzzle'},
+    [214263] = { p=p.boss, t='AoE Knockbacks'},
+    [220314] = { p=p.kick, t='Kick Sporesong', t2='Watch for Charge'},
+    [217570] = { p=p.boss, t='Sidestep Shadow Sweep',t2=c.v..'10yd Shadow AoE'},
+    [219676] = { p=p.boss, t='Cone leaves pool',t2='Summons adds w/Silence'},
+    [219763] = { p=p.warn, t='Summons Illusions'},
+    [220437] = { p=p.warn, t='Watch your Feet'},
+    [214348] = { p=p.boss, t='Avoid cone',t2='Suck in, blast out'},
+    [219856] = { p=p.boss, t='Disarm or Outrange Poison Traps'},
+    
+
+
+
+    -- Stonevault
+    [212389] = { p = p.kick, t = p.kick[4]..'Arcing Void' }, -- Cursedheart Invader
+    [212403] = { p = p.kick, t = p.kick[4]..'Arcing Void' }, -- Cursedheart Invader
+    [224962] = { p = p.kick, t = p.kick[4]..'Restoring Metals' }, -- Cursedforge Mender
+    [213338] = { p = p.kick, t = p.kick[4]..'Restoring Metals' }, -- Forgebound Mender
+    [221979] = { p = p.kick, t = p.kick[4]..'Piercing Wail' }, -- Void Bound Howler
+    [212453] = { p = p.kick, t = p.kick[4]..'Howling Fear' }, -- Ghastly Voidsoul
+    [214066] = { p = p.stop, t = p.stop[4]..'Earth Burst Totem' }, -- Cursedforge Stoneshaper
+    [214350] = { p = p.kick, t = 'Censoring Gear==Silence' }, -- Turned Speaker
+    [214264] = { p = p.stop, t = p.stop[4]..'Shield Stampede', t2=h.orange..i.tankbuster..' Tankbuster: Stonebreaker Strike' }, -- Cursedforge Honor Guard
+    [213954] = { p = p.stop, t = p.stop[4]..'Granite Eruption' }, -- Rock Smasher
+    [222923] = { p = p.stop, t = p.stop[4]..'Pulverizing Pounce' }, -- Repurposed Loaderbot
+    [212765] = { p = p.purge, t= 'Purge Void Storm AoE', t2=h.orange..i.tankbuster..' Tankbuster Shadow Claw'},  --Void Bound Despoiler
+    [212405] = { p = p.purge, t = 'Purge Fracturing Blows', t2=h.orange..i.tankbuster..' Tankbuster Fracture'}, --Aspiring Forgehand
+    [213217] = { p = p.boss, t = p.kick[4]..'Molten Metal' }, -- Speaker Brokk
+    [213216] = { p = p.boss, t=h.orange..i.tankbuster..' Tankbuster Igneous Hammer', t2='Purge if alone'}, --Speaker Dorlita
+    [210156] = { p = p.boss, t='Purge Crumbling Shell'}, --Skarmorak
+    [212764] = { p = p.boss, t=h.blue..i.dispel..' Dispel Concussive Smash', t2=h.orange..i.tankbuster..' Tankbuster Concussive Smash'}, --Engine Speaker
+    [210108] = { p = p.boss, t=h.orange..i.tankbuster..' Tankbusters Seismic Reverbe, Smash'},
+
+    -- Ara'Kara
+
+    [217531] = { p = p.kick, t = p.kick[4]..' Horrifying Shrill (fear)'}, --Ixin
+    [223253] = {p = p.kick, t = p.kick[4]..' Revolting Volley', t2='Kick Web Bolt' }, --Bloodstained Webmage
+    [217533] = {p = p.kick, t = p.kick[4]..' Poison Bolt'}, --Atik
+    [216364] = {p = p.kick, t = p.kick[4]..' Venom Volley'}, --Blood Overseer
+    [216293] = { p = p.kick, t = p.kick[4]..' Resonant Barrage'}, --Trilling Attendant
+
+    -- City of Threads
+
+    [223844] = { p = p.kick, t=p.kick[4]..' Mending Web', t2=p.caster[4]..' Grimweave Blast' }, --Covert Webmancer,
+    [224732] = { p = p.kick, t=p.kick[4]..' Mending Web', t2=p.caster[4]..' Grimweave Blast' }, --Covert Webmancer,
+    [220004] = { p = p.kick, t=p.kick[4]..' Mending Web', t2=p.caster[4]..' Grimweave Blast' }, --Covert Webmancer,
+    [223357] = { p = p.kick, t=p.kick[4]..' Mending Web' }, --Conscript,
+    [220196] = { p = p.caster, t=p.caster[4]..' Twist Thoughts'}, -- Herald of Ansurek
+    [221102] = { p = p.caster, t=p.caster[4]..' Web Bolt'}, -- Elder Shadeweaver
+    [220404] = { p = p.caster, t=p.caster[4]..' Web Bolt'}, -- Royal Acolyte
+    [219984] = { p = p.caster, t=p.caster[4]..' Web Bolt'}, -- Xeph'itik 
+    [220195] = {p = p.kick, t=p.kick[4]..' Silk Binding', t2=p.caster[4]..' Web Bolt'}, -- Silkbinder
+
+    -- Dawnbreaker
+
+    [213892] = {p = p.kick, t=p.kick[4]..' Ensnaring Shadows'}, --Shadowmage
+    [213893] = {p = p.kick, t=p.kick[4]..' Tormenting Beam'}, --Darkcaster
+
+    -- Grim Batol
+
+    [224249] = {p = p.kick, t=p.kick[4]..' Mass Tremor'}, --Lavabender
+
+
+    -- CONVERT:
+    --[[
     --Necrotic Wake
 
     [165137] = { --Zolramus Gatekeeper
@@ -459,6 +592,6 @@ _G.CtrlDB = {
         symbol = s.kick,
         debug = '',
     },
-
+    ]]
 }
 

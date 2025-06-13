@@ -19,6 +19,11 @@ function ctrl.master.ready()
     ctrl.log(ctrl.master, 6, ctrl.name .. ' is ready.')
 end
 
+local function ctrlprint(x)
+    ctrl.log(ctrl.master, 6, x)
+end
+
+
 function ctrl.master.load()
     if ctrl.is.loaded then return end
     for n = 1, #ctrl.loads do
@@ -26,4 +31,7 @@ function ctrl.master.load()
     end
     ctrl.master.ready()
     --ctrl.secure.setup()
+    _G.CTRL = {}
+    _G.CTRL.print = ctrlprint
+    
 end

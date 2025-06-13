@@ -83,8 +83,6 @@ function ctrl.frame.new(module, o)
     o.isClipsChildren = o.isClipsChildren or default.isClipsChildren
     if not o.anchors then o.anchors = {{ a = o.a, pa = o.pa, x = o.x, y = o.y }} end
 
-
-
     local f = CreateFrame(o.class, o.globalName, o.target, o.template)
     f:SetSize(o.w, o.h)
     for an = 1, #o.anchors do

@@ -138,7 +138,7 @@ end
 
 
 function ctrl.cmd.UI_SCALE_CHANGED()
-    ctrl.cmd:debug('UI_SCALE_CHANGED - setting window scale to 1')
+    --ctrl.cmd:debug('UI_SCALE_CHANGED - setting window scale to ' .. '1')
     ctrl.cmd.f.main:SetScale(1)
     ctrl.cmd.btn.b1:SetScale(1)
     ctrl.cmd.fs.b1:SetScale(1)

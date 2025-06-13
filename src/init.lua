@@ -26,6 +26,7 @@ ctrl.setting            = {
     debug   = 1,
     verbose = 1,
     log     = 1,
+    scale   = 0.75,
 }
 
 ctrl.is                 = {
@@ -144,6 +145,7 @@ ctrl.s        = {
     ['frost']          = '',
     ['pirate']         = '󰨈',
     ['sparkle']        = '󰙴',
+    ['heart'] = '㎠',
 
     ['kick']           = '㏅',
     ['kick2']          = '㏆',
@@ -218,6 +220,8 @@ ctrl.s        = {
     ['threesome']      = '㐅',
     ['spank']          = '㐇',
     ['anal']           = '㐉',
+    ['gag'] = '㎱',
+    ['fear'] = '㎖',
     ['whip']           = '㐩',
     ['singletail']     = '㐪',
 

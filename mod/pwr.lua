@@ -21,12 +21,12 @@ local mod = {
 ctrl.pwr = ctrl.mod:new(mod)
 
 local subframes = {
-    ['btnframe'] = { target='main', w=234, h=33, a=a.tl, pa=a.bl, x=0, y=0},
+    ['btnframe'] = { target='main', w=86, h=28, a=a.tl, pa=a.tr, x=0, y=0},
 }
 
 local textures = {
     ['main'] = { t = 'metal_half_h', path = ctrl.p.tx, target='main', l = -7 },
-    ['btnsbk'] = { target = 'btnframe', t = 'metal_eighth_h', path = ctrl.p.tx, l = -6 },
+    ['btnsbk'] = { target = 'btnframe', t = 'metal_half_h', path = ctrl.p.tx, l = -6 },
 }
 
 local fontstrings = {
@@ -51,21 +51,22 @@ end
 local buttons = {
     ['bpower'] = { target = 'main', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 30, y = -1 } }},
     ['bmin'] = { target = 'main', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 54, y = -1 } }},
-    ['b1'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 6, y = -3 } }},
-    ['b2'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 30, y = -3 } }},
-    ['b3'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 54, y = -3 } }},
-    ['b4'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 78, y = -3 } }},
-    ['b5'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 102, y = -3 } }},
-    ['b6'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 126, y = -3 } }},
-    ['b7'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 150, y = -3 } }},
-    ['b8'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 174, y = -3 } }},
-    ['b9'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 198, y = -3 } }},
+    ['b1'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 6, y = -1 } }},
+    ['b2'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 30, y = -1 } }},
+    ['b3'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 54, y = -1 } }},
+    ['b4'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 78, y = -1 } }},
+    ['b5'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 102, y = -1 } }},
+    ['b6'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 126, y = -1 } }},
+    ['b7'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 150, y = -1 } }},
+    ['b8'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 174, y = -1 } }},
+    ['b9'] = { target = 'btnframe', template = 'sq', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h = 28, w = 28, anchors = { { a = a.tl, pa = a.tl, x = 198, y = -1 } }},
 }
 
 function ctrl.pwr:register(fObj)
     ctrl.pwr.frames = ctrl.pwr.frames or {}
-    ctrl.pwr.frames['f' .. fObj.index] = fObj
-    ctrl.pwr.nFrames = ctrl.pwr.nFrames + 1
+    local fNum = ctrl.pwr.nFrames + 1
+    ctrl.pwr.frames['f' .. fNum] = fObj
+    ctrl.pwr.nFrames = fNum
 end
 
 function ctrl.pwr:tick()
@@ -74,19 +75,21 @@ end
 
 function ctrl.pwr:click(btn)
     local fNum = tonumber(string.sub(btn.name, 2))
-    local module = ctrl.pwr.frames['f'..fNum].module
-    if btn:getValue() == 1 then
-        module.off(module)
-    else
-        module.on(module)
+    if ctrl.pwr.frames['f'..fNum] then
+        local module = ctrl.pwr.frames['f'..fNum].module
+        if btn:getValue() == 1 then
+            module.off(module)
+        else
+            module.on(module)
+        end
     end
     ctrl.pwr:draw()
 end
 
 function ctrl.pwr:draw()
-    local x, y = 0, -32
+    local x, y = 1, -1
     for i=1, self.nFrames do
-        fObj = self.frames['f'..i]
+        local fObj = self.frames['f'..i]
         local btn = ctrl.pwr.btn['b'..i]
         local hexString = strsub(fObj.module.color, 9, 10)
         hexString = hexString .. strsub(fObj.module.color, 3, 8)
@@ -103,10 +106,16 @@ function ctrl.pwr:draw()
             fObj.frame:Hide()
         end
     end
+    for off=self.nFrames+1, 9 do
+        ctrl.pwr.btn['b'..off]:Hide()
+        ctrl.pwr.fs['fsb'..off]:Hide()
+    end
+    self.f.btnframe:SetWidth((self.nFrames * 24) + 16)
 end
 
 function ctrl.pwr.setup(self)
     ctrl.pwr.f.main = ctrl.frame.new(self, self.options.frame)
+    ctrl.pwr.f.main:SetScale(ctrl.setting.scale)
     ctrl.frame.generate(self, subframes)
 
     ctrl.tx.generate(self, textures)
