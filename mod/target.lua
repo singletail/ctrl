@@ -219,6 +219,7 @@ function ctrl.tgt:updatePlayerFast(guid)
     ctrl.tgt.db.player[guid].health = UnitHealth('target')
     ctrl.tgt.db.player[guid].maxHealth = UnitHealthMax('target')
     ctrl.tgt.db.player[guid].healthPct = math.floor((ctrl.tgt.db.player[guid].health / ctrl.tgt.db.player[guid].maxHealth) * 100)
+    ctrl.tgt.db.player[guid].range = ctrl.unitRange('target')
 end
 
 function ctrl.tgt:createnewplayer(guid)
@@ -268,6 +269,7 @@ function ctrl.tgt:updateMobFast(guid)
     ctrl.tgt.db.mob[guid].health = UnitHealth('target')
     ctrl.tgt.db.mob[guid].maxHealth = UnitHealthMax('target')
     ctrl.tgt.db.mob[guid].healthPct = math.floor((ctrl.tgt.db.mob[guid].health / ctrl.tgt.db.mob[guid].maxHealth) * 100)
+    ctrl.tgt.db.mob[guid].range = ctrl.unitRange('target')
 end
 
 function ctrl.tgt:createnewmob(guid)
@@ -304,6 +306,7 @@ function ctrl.tgt:createnewmob(guid)
             ctrl.tgt.db.mob[guid].displayName = string.format('%s %d', ctrl.tgt.db.mob[guid].name, sID)
         end
     end
+    ctrl.tgt.db.mob[guid].range = 0
 end
 
 function ctrl.tgt:spawnId(spawnUid)
@@ -357,8 +360,8 @@ function ctrl.tgt:drawPlayer(guid)
     local afkStr = ctrl.tgt.db.player[guid].isAFK and c.y..' AFK' or ''
     local dndStr = ctrl.tgt.db.player[guid].isDND and c.o..' DND' or ''
     local offlineStr = ctrl.tgt.db.player[guid].isConnected and '' or c.w..' Offline'
-    playerTable[7] = hStr .. combatStr .. tankingStr .. scaledPercentageStr .. deadStr .. ghostStr .. afkStr .. dndStr .. offlineStr
-    playerTable[8] = ''
+    playerTable[7] = c.o .. 'Range: ' .. c.y .. tostring(ctrl.tgt.db.player[guid].range)
+    playerTable[8] = hStr .. combatStr .. tankingStr .. scaledPercentageStr .. deadStr .. ghostStr .. afkStr .. dndStr .. offlineStr
     playerTable[9] = ''
     playerTable[10] = ''
     playerTable[11] = ''
@@ -400,7 +403,7 @@ function ctrl.tgt:drawMob(guid)
 
     local tgtStr = UnitName('targettarget') and c.o .. 'Target: ' .. c.y .. UnitName('targettarget') or ''
     mobTable[6] = tgtStr
-    mobTable[7] = ''
+    mobTable[7] = c.o .. 'Range: ' .. c.y .. tostring(ctrl.tgt.db.mob[guid].range)
 
     local t1, t2, t3, symbol = '', '', '', ''
     if _G.CtrlDB then

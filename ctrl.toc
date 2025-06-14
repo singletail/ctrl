@@ -5,7 +5,10 @@
 ## Author: |cffd649fft@wse.nyc|r
 ## SavedVariables: ctrlprefs, ctrldata, ctrllog
 
+embeds.xml
+
 src\init.lua
+src\libs.lua
 src\util.lua
 src\mod.lua
 src\logs.lua

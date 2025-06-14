@@ -11,16 +11,16 @@ local mod = {
     symbol = '%',
     options = {
         numRows = 40,
-        numCols = 4,
+        numCols = 5,
         border = 10,
         events = {
         },
         timers = {
-            5,
+            0.1,
         },
         frame = {
             name = 'ctrlmobframe',
-            w=600,
+            w=360,
             h=500,
             x=200,
             y=-100,
@@ -40,8 +40,7 @@ local mod = {
 ctrl.mobframe = ctrl.mod:new(mod)
 
 local textures = {
-    ['info'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
-    ['bk'] = { target = 'main', t = 'bluebk_full_256', path = ctrl.p.tx, l = -5, w=210, h=164 },
+    ['bk'] = { target='main', t='bluebk_full_256', path=ctrl.p.tx, l=-5, al=0.5 },
 }
 
 local fs_default = {
@@ -56,18 +55,18 @@ local fs_default = {
 }
 
 local fontstrings = {
-    ['fs1'] = { fontFile = 'Prompt-Regular.ttf', fontSize = 14,},
+    --['fs1'] = { fontFile = 'Prompt-Regular.ttf', fontSize = 14,},
 }
 
 function ctrl.mobframe:createFontStrings()
-    local fs = {} -- fontstrings holder
+    local fs = {}
     local numRows = ctrl.mobframe.options.numRows
     local numCols = ctrl.mobframe.options.numCols
     local w = ctrl.mobframe.options.frame.w
     local h = ctrl.mobframe.options.frame.h
     local border = ctrl.mobframe.options.border
-    local rowh = (h - (border * 2)) / numRows
-    local rowwidths = {80, 140, 40, 4340}
+    local rowh = 12 -- (h - (border * 2)) / numRows
+    local rowwidths = {160, 40, 40, 20, 100}
 
     for i=1,numRows do
         local curX = border + 10
@@ -113,51 +112,36 @@ ctrl.mobframe.displayTable = {}
 
 function ctrl.mobframe:updateDisplayTable()
     ctrl.mobframe.displayTable = {}
-    local displayTableSize = 0
     for guid, mob in pairs(ctrl.mob.guid) do
-        table.insert(ctrl.mobframe.displayTable, {guid=guid, unit=mob.unit, name=mob.displayName, healthPct=mob.healthPct})
-        displayTableSize = displayTableSize + 1
-    end
-    if ctrl.mobframe.options.debug then
-        ctrl.mobframe:debug(ctrl.c.p..'displayTableSize: ' .. displayTableSize)
+        if not mob then return end
+        ctrl.mobframe.displayTable[#ctrl.mobframe.displayTable+1] = {
+            string.format('%s %d', mob.name, mob.spawnId),
+            string.format('%d%%', mob.healthPct),
+            string.format('%d', mob.range),
+            mob.inCombat and '*' or '',
+            mob.unitClassification,
+        }
     end
 end
 
+-- name-spawnId, health, range, incombat, classification
+
+local displayString = ''
 function ctrl.mobframe:draw()
-    if ctrl.mobframe.options.debug then
-        ctrl.mobframe:debug(ctrl.c.r..'draw()')
-    end
-    local numRows = ctrl.mobframe.options.numRows
-    local numCols = ctrl.mobframe.options.numCols
-    for i=1,numRows do
-        local tempstring = ''
+    for i=1,ctrl.mobframe.options.numRows do
         if ctrl.mobframe.displayTable[i] then
-            tempstring = ctrl.mobframe.displayTable[i].unit or '[nil]'
-            ctrl.mobframe.fs['fs'..i..1]:SetText(tempstring)
-            tempstring = ctrl.mobframe.displayTable[i].name or '[nil]'
-            ctrl.mobframe.fs['fs'..i..2]:SetText(tempstring)
-            tempstring = ctrl.mobframe.displayTable[i].healthPct or '[nil]'
-            ctrl.mobframe.fs['fs'..i..3]:SetText(tempstring)
-            tempstring = ctrl.mobframe.displayTable[i].guid or '[nil]'
-            ctrl.mobframe.fs['fs'..i..4]:SetText(tempstring)
+            for j=1,ctrl.mobframe.options.numCols do
+                ctrl.mobframe.fs['fs'..i..j]:SetText(ctrl.mobframe.displayTable[i][j])
+            end
         else
-            ctrl.mobframe.fs['fs'..i..1]:SetText('-')
-            ctrl.mobframe.fs['fs'..i..2]:SetText('-')
-            ctrl.mobframe.fs['fs'..i..3]:SetText('-')
-            ctrl.mobframe.fs['fs'..i..4]:SetText('-')
+            for j=1,ctrl.mobframe.options.numCols do
+                ctrl.mobframe.fs['fs'..i..j]:SetText('')
+            end
         end
     end
 end
 
-function ctrl.mobframe:clear()
-    local numRows = ctrl.mobframe.options.numRows
-    local numCols = ctrl.mobframe.options.numCols
-    for i=1,numRows do
-        for j=1,numCols do
-            if ctrl.mobframe.fs['fs'..i..j] then ctrl.mobframe.fs['fs'..i..j]:SetText('') end
-        end
-    end
-end
+
 
 function ctrl.mobframe:update()
     self:updateDisplayTable()
