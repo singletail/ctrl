@@ -16,25 +16,32 @@ local mod = {
         },
         frame = {
             name = 'cmd',
-            w=84,
-            h=172,
+            w=84*ctrl.uimult,
+            h=ctrl.uiheight,
             x=0,
-            y=-32,
+            y=0,
             a=a.tl,
-            pa=a.bl,
+            pa=a.tl,
             isResizable = nil,
             isMovable = nil,
             globalName = 'ctrlcmd',
             target = ctrl.pwr.f.main,
         },
+        uimult = 4
     }
 }
 
 ctrl.cmd = ctrl.mod:new(mod)
 
 local textures = {
-    ['txcmd'] = { target = 'main', t = 'metal_half_v', path = ctrl.p.tx, l = -6 },
+    --['txcmd'] = { target = 'main', t = 'metal_half_v', path = ctrl.p.tx, l = -6 },
+    --['main'] = { t='decktex512', path=ctrl.p.tx, target='main', l=-7 },
+    ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6 },
 }
+
+local btnw = 72 *ctrl.uimult
+local btnh = 32 *ctrl.uimult
+local btnfntsize = 13 *ctrl.uimult
 
 local buttons = {
     [1] = { name = 'b1', t = c.w..'reload', btnColor = { 1.0, 0, 0, 1 }, },
@@ -50,15 +57,15 @@ function ctrl.cmd:buttons()
         local button = {
             target = ctrl.cmd.f.main,
             template = 'beeg',
-            w = 72,
-            h = 32,
+            w = btnw,
+            h = btnh,
             x = 0,
             name = buttons[i].name,
         }
         button.btnColor = buttons[i].btnColor
-        button.anchors = { { a = a.t, pa = a.t, x = 0, y = ((i-1) * -26) - 4 } }
+        button.anchors = { { a = a.t, pa = a.t, x = 0, y = ((i-1) * -(26*ctrl.uimult)) + 1*ctrl.uimult } }
         ctrl.cmd.btn[buttons[i].name] = ctrl.btns.new(ctrl.cmd, button)
-        local fs = { target = ctrl.cmd.btn[buttons[i].name], t = buttons[i].t, fontFile = 'Prompt-Medium.ttf', fontSize = 13, x = 0, y = -1, a = a.c, pa = a.c, jH = a.c }
+        local fs = { target = ctrl.cmd.btn[buttons[i].name], t = buttons[i].t, fontFile = 'Prompt-Medium.ttf', fontSize=btnfntsize, x=(-0.5*ctrl.uimult), y=(-1*ctrl.uimult), a = a.c, pa = a.c, jH = a.c }
         ctrl.cmd.fs[buttons[i].name] = ctrl.fs.new(ctrl.cmd, fs)
         ctrl.cmd.btn[buttons[i].name]:setValue(0)
         ctrl.cmd.btn[buttons[i].name]:refresh()

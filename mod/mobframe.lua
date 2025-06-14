@@ -10,29 +10,30 @@ local mod = {
     color = c.o,
     symbol = '%',
     options = {
-        numRows = 10,
+        numRows = 40,
         numCols = 4,
         border = 10,
         events = {
         },
         timers = {
-            30
+            5,
         },
         frame = {
             name = 'ctrlmobframe',
-            w=320,
-            h=372,
-            x=354,
-            y=-32,
+            w=600,
+            h=500,
+            x=200,
+            y=-100,
             a=a.tl,
             pa=a.bl,
             isResizable = 1,
             isMovable = 1,
             globalName = 'ctrlmobframe',
             --target = ctrl.pwr.f.main,
-            isClipsChildren = nil,
+            isClipsChildren = 1,
             scale = 1,
         },
+        debug = 1,
     }
 }
 
@@ -47,14 +48,15 @@ local fs_default = {
     t='',
     target='main',
     fontFile = 'Prompt-Regular.ttf',
-    fontSize = 16,
+    fontSize = 10,
     a = a.tl,
     pa = a.tl,
     jH = a.l,
+    ww = false,
 }
 
 local fontstrings = {
-    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14,},
+    ['fs1'] = { fontFile = 'Prompt-Regular.ttf', fontSize = 14,},
 }
 
 function ctrl.mobframe:createFontStrings()
@@ -65,7 +67,7 @@ function ctrl.mobframe:createFontStrings()
     local h = ctrl.mobframe.options.frame.h
     local border = ctrl.mobframe.options.border
     local rowh = (h - (border * 2)) / numRows
-    local rowwidths = {32, 120, 64, 64}
+    local rowwidths = {80, 140, 40, 4340}
 
     for i=1,numRows do
         local curX = border + 10
@@ -107,12 +109,42 @@ function ctrl.mobframe:resize()
     end
 end
 
+ctrl.mobframe.displayTable = {}
+
+function ctrl.mobframe:updateDisplayTable()
+    ctrl.mobframe.displayTable = {}
+    local displayTableSize = 0
+    for guid, mob in pairs(ctrl.mob.guid) do
+        table.insert(ctrl.mobframe.displayTable, {guid=guid, unit=mob.unit, name=mob.displayName, healthPct=mob.healthPct})
+        displayTableSize = displayTableSize + 1
+    end
+    if ctrl.mobframe.options.debug then
+        ctrl.mobframe:debug(ctrl.c.p..'displayTableSize: ' .. displayTableSize)
+    end
+end
+
 function ctrl.mobframe:draw()
+    if ctrl.mobframe.options.debug then
+        ctrl.mobframe:debug(ctrl.c.r..'draw()')
+    end
     local numRows = ctrl.mobframe.options.numRows
     local numCols = ctrl.mobframe.options.numCols
     for i=1,numRows do
-        for j=1,numCols do
-            if ctrl.mobframe.fs['fs'..i..j] then ctrl.mobframe.fs['fs'..i..j]:SetText(i..','..j) end
+        local tempstring = ''
+        if ctrl.mobframe.displayTable[i] then
+            tempstring = ctrl.mobframe.displayTable[i].unit or '[nil]'
+            ctrl.mobframe.fs['fs'..i..1]:SetText(tempstring)
+            tempstring = ctrl.mobframe.displayTable[i].name or '[nil]'
+            ctrl.mobframe.fs['fs'..i..2]:SetText(tempstring)
+            tempstring = ctrl.mobframe.displayTable[i].healthPct or '[nil]'
+            ctrl.mobframe.fs['fs'..i..3]:SetText(tempstring)
+            tempstring = ctrl.mobframe.displayTable[i].guid or '[nil]'
+            ctrl.mobframe.fs['fs'..i..4]:SetText(tempstring)
+        else
+            ctrl.mobframe.fs['fs'..i..1]:SetText('-')
+            ctrl.mobframe.fs['fs'..i..2]:SetText('-')
+            ctrl.mobframe.fs['fs'..i..3]:SetText('-')
+            ctrl.mobframe.fs['fs'..i..4]:SetText('-')
         end
     end
 end
@@ -128,7 +160,8 @@ function ctrl.mobframe:clear()
 end
 
 function ctrl.mobframe:update()
-    --self:draw()
+    self:updateDisplayTable()
+    self:draw()
 end
 
 function ctrl.mobframe:tick(interval)

@@ -20,8 +20,8 @@ local mod = {
         },
         frame = {
             name = 'ctrltgt',
-            w=220,
-            h=172,
+            w=240*ctrl.uimult,
+            h=ctrl.uiheight,
             x=354,
             y=-32,
             a=a.tl,
@@ -50,26 +50,26 @@ local playerTable = {} --ctrl.newTable('')
 local mobTable = {} -- ctrl.newTable('')
 
 local textures = {
-    ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
-    ['tbluebk'] = { target = 'main', t = 'bluebk_full_256', path = ctrl.p.tx, l = -5, w=210, h=164 },
+    ['txinfo'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6 },
+    ['tbluebk'] = { target='main', t='blu_256', path=ctrl.p.tx, l=-5, w=236*ctrl.uimult, h=ctrl.uiheight },
 }
 
 local fs_default = {
     t='',
     target='main',
     fontFile = 'Prompt-Regular.ttf',
-    fontSize = 12,
+    fontSize = 12*ctrl.uimult,
     x = 0,
     y = 0,
-    w = 220,
-    h = 14,
+    w = 200*ctrl.uimult,
+    h = 14*ctrl.uimult,
     a = a.tl,
     pa = a.tl,
     jH = a.c,
 }
 
 local fontstrings = {
-    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14,},
+    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14*ctrl.uimult,},
 }
 
 function ctrl.tgt:createFontStrings()
@@ -77,14 +77,14 @@ function ctrl.tgt:createFontStrings()
     for k,v in pairs(fs_default) do io[k] = v end
     io.w = nil
     io.h = nil
-    io.x = 12
-    io.y = -20
+    io.x = 12*ctrl.uimult
+    io.y = -20*ctrl.uimult
     io.a = a.tl
     io.pa = a.tl
-    io.fontSize = 36
+    io.fontSize = 36*ctrl.uimult
     ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, io)
 
-    local origY = -18
+    local origY = -18*ctrl.uimult
     for i=1,12 do
         local o = {}
         for k,v in pairs(fs_default) do o[k] = v end
@@ -92,11 +92,11 @@ function ctrl.tgt:createFontStrings()
             for k,v in pairs(fontstrings['fs'..i]) do o[k] = v end
         end
         o.t = ''
-        local ymod = 11
+        local ymod = 11*ctrl.uimult
         if fontstrings['fs'..i] and fontstrings['fs'..i].y then
             ymod = fontstrings['fs'..i].y
         else
-            ymod = 11
+            ymod = 11*ctrl.uimult
         end
         o.y = origY - (ymod * (i-1))
         ctrl.tgt.fs['fs'..i] = ctrl.fs.new(ctrl.tgt, o)
@@ -104,9 +104,9 @@ function ctrl.tgt:createFontStrings()
 end
 
 function ctrl.tgt:makeRoomForIcon()
-    local iconSize = 36
-    local ymod = 11
-    local origY = -18
+    local iconSize = 36*ctrl.uimult
+    local ymod = 11*ctrl.uimult
+    local origY = -18*ctrl.uimult
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
         local y = origY - (ymod * (i-1))
@@ -117,14 +117,14 @@ function ctrl.tgt:makeRoomForIcon()
 end
 
 function ctrl.tgt:noIcon()
-    local ymod = 11
-    local origY = -18
+    local ymod = 11*ctrl.uimult
+    local origY = -18*ctrl.uimult
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
         local y = origY - (ymod * (i-1))
         fs:ClearAllPoints()
-        fs:SetWidth(ctrl.tgt.options.frame.w - 8)
-        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8, y)
+        fs:SetWidth(ctrl.tgt.options.frame.w - 8*ctrl.uimult)
+        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8*ctrl.uimult, y)
     end
 end
 

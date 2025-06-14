@@ -29,6 +29,9 @@ ctrl.setting            = {
     scale   = 0.75,
 }
 
+ctrl.uimult = 1
+ctrl.uiheight = 168 *ctrl.uimult --take this out eventually
+
 ctrl.is                 = {
     loaded  = nil,
     enabled = 1,

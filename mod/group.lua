@@ -37,7 +37,7 @@ local mod = {
     options = {
         numStrings = 5,
         numFields = 4,
-        fieldW = {28, 100, 56, 36},
+        fieldW = {20, 120, 40, 40},
         lineHeight = 24,
         timers = {
             1,
@@ -49,9 +49,9 @@ local mod = {
         },
         frame = {
             name = 'ctrlgroup',
-            w=220,
-            h=172,
-            y=-32,
+            w=250*ctrl.uimult,
+            h=ctrl.uiheight,
+            y=-32*ctrl.uimult,
             a=a.tl,
             pa=a.bl,
             isResizable = nil,
@@ -71,13 +71,13 @@ ctrl.group.guid = ctrl.group.guid or {}
 
 
 local textures = {
-    ['txinfo'] = { target = 'main', t = 'metal_34_v', path = ctrl.p.tx, l = -6 },
-    ['tbluebk'] = { target = 'main', t = 'bluebk_full_256', path = ctrl.p.tx, l = -5, w=210, h=164 },
+    ['txinfo'] = { target = 'main', t='dark1', path = ctrl.p.tx, l=-6 },
+    ['tbluebk'] = { target = 'main', t='blu_256', path = ctrl.p.tx, l=-5, w=250*ctrl.uimult, h=ctrl.uiheight },
 }
 
 local fs_default = {
     fontFile = 'Hack-Regular.ttf',
-    fontSize = 18,
+    fontSize = 15*ctrl.uimult,
     x = 0,
     y = 0,
     a = a.tl,
@@ -88,26 +88,27 @@ local fs_default = {
 }
 
 local fs_override = {
-    ['f1'] = { fontSize = 18, y=-2},
-    ['f2'] = { fontFile = 'Prompt-Medium.ttf', fontSize = 18, y=-2},
-    ['f3'] = { jH = a.r }
+    ['f1'] = { fontSize = 16*ctrl.uimult, y=-2*ctrl.uimult},
+    ['f2'] = { fontFile = 'Hack-Regular.ttf', fontSize = 16*ctrl.uimult, y=-2*ctrl.uimult},
+    ['f3'] = { jH = a.r, y=-2*ctrl.uimult },
+    ['f4'] = { jH = a.c, y=-2*ctrl.uimult }
 }
 
 local function createFontStrings()
     for i=1, ctrl.group.options.numStrings do
-        local curX = 18
+        local curX = 10*ctrl.uimult
         for f = 1, ctrl.group.options.numFields do
             local o = {}
             for k,v in pairs(fs_default) do o[k] = v end
             if fs_override['f'..f] then for k,v in pairs(fs_override['f'..f]) do o[k] = v end end
             o.x = o.x + curX
-            o.w = ctrl.group.options.fieldW[f]
-            o.h = ctrl.group.options.lineHeight
-            o.y = o.y + -16 - (ctrl.group.options.lineHeight * (i-1))
+            o.w = ctrl.group.options.fieldW[f]*ctrl.uimult
+            o.h = ctrl.group.options.lineHeight*ctrl.uimult
+            o.y = o.y + -16*ctrl.uimult - (ctrl.group.options.lineHeight*ctrl.uimult * (i-1))
             ctrl.group.fs['l'..i] = ctrl.group.fs['l'..i] or {}
             ctrl.group.fs['l'..i]['f'..f] = ctrl.fs.new(ctrl.group, o)
-            ctrl.group.fs['l'..i]['f'..f]:SetText('')
-            curX = curX + ctrl.group.options.fieldW[f]
+            ctrl.group.fs['l'..i]['f'..f]:SetText(' ')
+            curX = curX + ctrl.group.options.fieldW[f]*ctrl.uimult
         end
     end
 end

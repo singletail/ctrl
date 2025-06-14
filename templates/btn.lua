@@ -150,7 +150,7 @@ ctrl.templates.btn = {
                     { file = 'power_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
                 },
                 [1] = {
-                    { file = 'power_under', alpha = 1, color = 1, layer = -8, path = ctrl.p.btns },
+                    { file = 'power_under', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
                     { file = 'power_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
                     { file = 'power_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
                 },
