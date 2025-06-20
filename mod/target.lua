@@ -20,7 +20,7 @@ local mod = {
         },
         frame = {
             name = 'ctrltgt',
-            w=240*ctrl.uimult,
+            w=200*ctrl.uimult,
             h=ctrl.uiheight,
             x=354,
             y=-32,
@@ -50,8 +50,8 @@ local playerTable = {} --ctrl.newTable('')
 local mobTable = {} -- ctrl.newTable('')
 
 local textures = {
-    ['txinfo'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6 },
-    ['tbluebk'] = { target='main', t='blu_256', path=ctrl.p.tx, l=-5, w=236*ctrl.uimult, h=ctrl.uiheight },
+    --['txinfo'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6 },
+    ['tbluebk'] = { target='main', t='blu_256', path=ctrl.p.tx, l=-5, al=0.6 },
 }
 
 local fs_default = {
@@ -72,19 +72,24 @@ local fontstrings = {
     ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14*ctrl.uimult,},
 }
 
+local tgtStrX = 12 * ctrl.uimult
+local tgtStrY = -20 * ctrl.uimult
+local tgtStrTop = -18 * ctrl.uimult
+local tgtStrLH = 10 * ctrl.uimult
+local tgtStrFS = 36 * ctrl.uimult
+
 function ctrl.tgt:createFontStrings()
     local io = {}
     for k,v in pairs(fs_default) do io[k] = v end
     io.w = nil
     io.h = nil
-    io.x = 12*ctrl.uimult
-    io.y = -20*ctrl.uimult
+    io.x = tgtStrX
+    io.y = tgtStrY
     io.a = a.tl
     io.pa = a.tl
-    io.fontSize = 36*ctrl.uimult
+    io.fontSize = tgtStrFS
     ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, io)
 
-    local origY = -18*ctrl.uimult
     for i=1,12 do
         local o = {}
         for k,v in pairs(fs_default) do o[k] = v end
@@ -92,13 +97,13 @@ function ctrl.tgt:createFontStrings()
             for k,v in pairs(fontstrings['fs'..i]) do o[k] = v end
         end
         o.t = ''
-        local ymod = 11*ctrl.uimult
+        local ymod = tgtStrLH
         if fontstrings['fs'..i] and fontstrings['fs'..i].y then
             ymod = fontstrings['fs'..i].y
         else
-            ymod = 11*ctrl.uimult
+            ymod = tgtStrLH
         end
-        o.y = origY - (ymod * (i-1))
+        o.y = tgtStrTop - (ymod * (i-1))
         ctrl.tgt.fs['fs'..i] = ctrl.fs.new(ctrl.tgt, o)
     end
 end
@@ -484,7 +489,7 @@ function ctrl.tgt.setup(self)
     ctrl.tgt.f.main = ctrl.frame.new(ctrl.tgt, ctrl.tgt.options.frame)
     ctrl.tx.generate(ctrl.tgt, textures)
     ctrl.tgt:createFontStrings()
-    self:registerCtrlFrame(4, self.f.main)
+    self:registerCtrlFrame(3, self.f.main)
 end
 
 ctrl.tgt:init()

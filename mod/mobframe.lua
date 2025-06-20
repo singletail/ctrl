@@ -10,9 +10,14 @@ local mod = {
     color = c.o,
     symbol = '%',
     options = {
-        numRows = 40,
+        fontSize = 12,
+        fontFile = 'Prompt-Regular.ttf',
+        numRows = 20,
         numCols = 5,
-        border = 10,
+        border = 8,
+        rowHeight = 12,
+        rowWidths = {160, 40, 20, 20, 20},
+        statusRowSize = 20,
         events = {
         },
         timers = {
@@ -20,16 +25,10 @@ local mod = {
         },
         frame = {
             name = 'ctrlmobframe',
-            w=360,
-            h=500,
-            x=200,
-            y=-100,
-            a=a.tl,
-            pa=a.bl,
+            w=276,
+            h=ctrl.uiheight,
             isResizable = 1,
-            isMovable = 1,
-            globalName = 'ctrlmobframe',
-            --target = ctrl.pwr.f.main,
+            target = ctrl.pwr.f.main,
             isClipsChildren = 1,
             scale = 1,
         },
@@ -39,15 +38,20 @@ local mod = {
 
 ctrl.mobframe = ctrl.mod:new(mod)
 
+ctrl.mobframe.displayTable = {}
+
 local textures = {
-    ['bk'] = { target='main', t='bluebk_full_256', path=ctrl.p.tx, l=-5, al=0.5 },
+    ['bk'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6, al=1 },
+    ['fsbk']= { target='main', t='LCDbig.png', path=ctrl.p.tx, l=-5, al=1, x=0, y=0, w=mod.options.frame.w - 8, h=mod.options.frame.h - mod.options.statusRowSize, a=a.b, pa=a.b },
+    ['tr1'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-186, y=-2 },
+    ['tr2'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-96, y=-2 },
+    ['tr3'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-6, y=-2 },
 }
 
 local fs_default = {
-    t='',
     target='main',
-    fontFile = 'Prompt-Regular.ttf',
-    fontSize = 10,
+    fontFile = ctrl.mobframe.options.fontFile,
+    fontSize = ctrl.mobframe.options.fontSize,
     a = a.tl,
     pa = a.tl,
     jH = a.l,
@@ -55,97 +59,85 @@ local fs_default = {
 }
 
 local fontstrings = {
-    --['fs1'] = { fontFile = 'Prompt-Regular.ttf', fontSize = 14,},
+    ['h1'] = { t='total:', a=a.tr, pa=a.tr, x=-225, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11*ctrl.uimult),},
+    ['h2'] = { t='combat:', a=a.tr, pa=a.tr, x=-135, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11*ctrl.uimult),},
+    ['h3'] = { t='aggro:', a=a.tr, pa=a.tr, x=-45, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11*ctrl.uimult),},
+    ['v1'] = { t='0', a=a.tr, pa=a.tr, x=-188, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13*ctrl.uimult),},
+    ['v2'] = { t='0', a=a.tr, pa=a.tr, x=-98, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13*ctrl.uimult),},
+    ['v3'] = { t='0', a=a.tr, pa=a.tr, x=-8, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13*ctrl.uimult),},
 }
 
 function ctrl.mobframe:createFontStrings()
-    local fs = {}
-    local numRows = ctrl.mobframe.options.numRows
-    local numCols = ctrl.mobframe.options.numCols
-    local w = ctrl.mobframe.options.frame.w
-    local h = ctrl.mobframe.options.frame.h
-    local border = ctrl.mobframe.options.border
-    local rowh = 12 -- (h - (border * 2)) / numRows
-    local rowwidths = {160, 40, 40, 20, 100}
-
-    for i=1,numRows do
-        local curX = border + 10
-        for j=1,numCols do
+    ctrl.mobframe.fsdata = ctrl.mobframe.fsdata or {}
+    for i=1,self.options.numRows do
+        ctrl.mobframe.fsdata[i] = ctrl.mobframe.fsdata[i] or {}
+        local curX = self.options.border
+        for j=1,self.options.numCols do
             local o = {}
             for k,v in pairs(fs_default) do o[k] = v end
-            o.w = rowwidths[j]
-            o.h = rowh
+            o.w = self.options.rowWidths[j]
+            o.h = self.options.rowHeight
             o.x = curX
-            o.y = (rowh * (i-1) + border) * -1
-            ctrl.mobframe.fs['fs'..i..j] = ctrl.fs.new(ctrl.mobframe, o)
-            ctrl.mobframe.fs['fs'..i..j]:SetText(curX)
-            curX = curX + rowwidths[j]
+            o.y = (self.options.rowHeight * (i-1) + self.options.statusRowSize + (self.options.border / 2)) * -1
+            ctrl.mobframe.fsdata[i][j] = ctrl.fs.new(ctrl.mobframe, o)
+            curX = curX + self.options.rowWidths[j]
         end
     end
 end
 
 function ctrl.mobframe:resize()
-    local fw = ctrl.mobframe.f.main:GetWidth()
-    local fh = ctrl.mobframe.f.main:GetHeight()
-    local b = ctrl.mobframe.options.border
-    local origw = ctrl.mobframe.options.frame.w
-    local origh = ctrl.mobframe.options.frame.h
-    local scale = fw / origw
-
-    ctrl.mobframe.tx.bk:ClearAllPoints()
-    ctrl.mobframe.tx.bk:SetPoint('TOPLEFT', ctrl.mobframe.f.main, 'TOPLEFT', b, -b)
-    ctrl.mobframe.tx.bk:SetPoint('BOTTOMRIGHT', ctrl.mobframe.f.main, 'BOTTOMRIGHT', -b, b)
-
-    local numRows = ctrl.mobframe.options.numRows
-    local numCols = ctrl.mobframe.options.numCols
-    for i=1,numRows do
-        for j=1,numCols do
-            if ctrl.mobframe.fs['fs'..i..j] then
-                local fs = ctrl.mobframe.fs['fs'..i..j]
-                fs:SetScale(scale)
+    local fsScale = self.f.main:GetWidth() / self.options.frame.w
+    for i=1,self.options.numRows do
+        for j=1,self.options.numCols do
+            if ctrl.mobframe.fsdata and ctrl.mobframe.fsdata[i] and ctrl.mobframe.fsdata[i][j] then
+                ctrl.mobframe.fsdata[i][j]:SetScale(fsScale)
             end
         end
     end
 end
 
-ctrl.mobframe.displayTable = {}
-
 function ctrl.mobframe:updateDisplayTable()
     ctrl.mobframe.displayTable = {}
-    for guid, mob in pairs(ctrl.mob.guid) do
+    for _, mob in pairs(ctrl.mob.guid) do
         if not mob then return end
-        ctrl.mobframe.displayTable[#ctrl.mobframe.displayTable+1] = {
-            string.format('%s %d', mob.name, mob.spawnId),
+        mob.color = mob.color or c.v
+        mob.name = mob.name or "Error"
+        mob.spawnId = mob.spawnId or 999
+        self.displayTable[#self.displayTable+1] = {
+            string.format('%s%s %d', mob.color, mob.name, mob.spawnId),
             string.format('%d%%', mob.healthPct),
             string.format('%d', mob.range),
             mob.inCombat and '*' or '',
-            mob.unitClassification,
+            string.format('%d', mob.last - mob.time),
         }
     end
 end
 
--- name-spawnId, health, range, incombat, classification
-
-local displayString = ''
 function ctrl.mobframe:draw()
-    for i=1,ctrl.mobframe.options.numRows do
-        if ctrl.mobframe.displayTable[i] then
-            for j=1,ctrl.mobframe.options.numCols do
-                ctrl.mobframe.fs['fs'..i..j]:SetText(ctrl.mobframe.displayTable[i][j])
+    for i=1,self.options.numRows do
+        for j=1,self.options.numCols do
+            local displayString = ''
+            if self.displayTable[i] and self.displayTable[i][j] then
+                displayString = self.displayTable[i][j] or 'err'
             end
-        else
-            for j=1,ctrl.mobframe.options.numCols do
-                ctrl.mobframe.fs['fs'..i..j]:SetText('')
-            end
+            ctrl.mobframe.fsdata[i][j]:SetText(displayString)
         end
     end
 end
 
-
+function ctrl.mobframe:counters()
+    local total = ctrl.mob.count.total or 0
+    local combat = ctrl.mob.count.combat or 0
+    local aggro = ctrl.mob.count.tanking or 0
+    self.fs.v1:SetText(string.format('%s%d', c.c, total))
+    self.fs.v2:SetText(string.format('%s%d', c.y, combat))
+    self.fs.v3:SetText(string.format('%s%d', c.p, aggro))
+end
 
 function ctrl.mobframe:update()
     self:updateDisplayTable()
     self:draw()
+    self:counters()
 end
 
 function ctrl.mobframe:tick(interval)
@@ -153,10 +145,11 @@ function ctrl.mobframe:tick(interval)
 end
 
 function ctrl.mobframe.setup(self)
-    ctrl.mobframe.f.main = ctrl.frame.new(ctrl.mobframe, ctrl.mobframe.options.frame)
-    ctrl.tx.generate(ctrl.mobframe, textures)
-    ctrl.mobframe:createFontStrings()
-    --self:registerCtrlFrame(5, self.f.main)
+    self.f.main = ctrl.frame.new(self, self.options.frame)
+    ctrl.tx.generate(self, textures)
+    ctrl.fs.generate(self, fontstrings)
+    self:createFontStrings()
+    self:registerCtrlFrame(4, self.f.main)
 end
 
 ctrl.mobframe:init()

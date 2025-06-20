@@ -24,7 +24,7 @@ local mod = {
         },
         frame = {
             name = 'info',
-            w=120*ctrl.uimult,
+            w=96*ctrl.uimult,
             h=ctrl.uiheight,
             x=84,
             y=-32,
@@ -43,50 +43,54 @@ ctrl.info = ctrl.mod:new(mod)
 local ok = [[|cff60f0f9]]
 
 
-local tboxw = 64 *ctrl.uimult
-local tboxh = 24 *ctrl.uimult
-local tboxx = -20 *ctrl.uimult
+local tboxw = 48 *ctrl.uimult
+local tboxh = 20 *ctrl.uimult
+local tboxx = -14 *ctrl.uimult
 
 local textures = {
-    ['txinfo'] = { target = 'main', t = 'dark1', path = ctrl.p.tx, l = -6 },
+    ['txinfo'] = { target = 'main', t = 'dark1', path = ctrl.p.tx, l=-6, al=0.6 },
     ['tblue1'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-6*ctrl.uimult },
-    ['tblue2'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-33*ctrl.uimult },
-    ['tblue3'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-58*ctrl.uimult },
-    ['tblue4'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-83*ctrl.uimult },
-    ['tblue5'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-108*ctrl.uimult },
-    ['tblue6'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-133*ctrl.uimult },
+    ['tblue2'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-30*ctrl.uimult },
+    ['tblue3'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-54*ctrl.uimult },
+    ['tblue4'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-78*ctrl.uimult },
+    ['tblue5'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-102*ctrl.uimult },
+    ['tblue6'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-126*ctrl.uimult },
 }
 
-local ifst = 12 *ctrl.uimult
-local ifsv = 24 *ctrl.uimult
-local fntt = 'Prompt-Medium.ttf'
-local fntv = 'ProFontWindows-Regular.ttf'
+local ifst = 9 *ctrl.uimult
+local ifsv = 13 *ctrl.uimult
+local fntt = 'AnkaCoder-Regular.ttf'
+local fntv = 'LEDBoard.ttf'
+local fntx = -18 * ctrl.uimult
 
 local fontstrings = {
-    ['fsinfo1_t'] = { target='main', t = c.w..'status', fontFile=fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -14*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo1_v'] = { target='main', t = ok..'ok', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -8*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo2_t'] = { target='main', t = c.w..'fps', fontFile = fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -40*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo2_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -34*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo3_t'] = { target='main', t = c.w..'mem', fontFile = fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -65*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo3_v'] = { target='main', t = c.c..'32', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -59*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo4_t'] = { target='main', t = c.w..'ping', fontFile = fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -89*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo4_v'] = { target='main', t = c.c..'67', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -84*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo5_t'] = { target='main', t = c.w..'sqw', fontFile = fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -116*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo5_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -109*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo6_t'] = { target='main', t = c.w..'loot', fontFile = fntt, fontSize=ifst, x = -22*ctrl.uimult, y = -140*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo6_v'] = { target='main', t = c.c..'6', fontFile = fntv, fontSize=ifsv, x = -26*ctrl.uimult, y = -134*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    -- labels
+    ['fsinfo1_t'] = { target='main', t = c.w..'stat', fontFile=fntt, fontSize=ifst, x=fntx, y = -14*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo2_t'] = { target='main', t = c.w..'fps',  fontFile=fntt, fontSize=ifst, x=fntx, y = -38*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo3_t'] = { target='main', t = c.w..'mem',  fontFile=fntt, fontSize=ifst, x=fntx, y = -62*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo4_t'] = { target='main', t = c.w..'ping', fontFile=fntt, fontSize=ifst, x=fntx, y = -86*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo5_t'] = { target='main', t = c.w..'sqw',  fontFile=fntt, fontSize=ifst, x=fntx, y = -110*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+    ['fsinfo6_t'] = { target='main', t = c.w..'loot', fontFile=fntt, fontSize=ifst, x=fntx, y = -134*ctrl.uimult, a=a.tr, pa=a.t, jH=a.r },
+
+    -- values
+    ['fsinfo1_v'] = { target='main', t = ok..'ok', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -11*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo2_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -35*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo3_v'] = { target='main', t = c.c..'32', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -59*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo4_v'] = { target='main', t = c.c..'67', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -83*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo5_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -107*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
+    ['fsinfo6_v'] = { target='main', t = c.c..'6', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20*ctrl.uimult, y = -131*ctrl.uimult, a=a.tr, pa=a.tr, jH=a.l },
 }
 
-local btnsz = 42 *ctrl.uimult
-local btnx = 12 *ctrl.uimult
+local btnsz = 28 * ctrl.uimult
+local btnx = 8 * ctrl.uimult
 
 local buttons = {
-    ['l1'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = 3*ctrl.uimult } }},
-    ['l2'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -24*ctrl.uimult } }},
-    ['l3'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -49*ctrl.uimult } }},
+    ['l1'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -2*ctrl.uimult } }},
+    ['l2'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -26*ctrl.uimult } }},
+    ['l3'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -50*ctrl.uimult } }},
     ['l4'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -74*ctrl.uimult } }},
-    ['l5'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -99*ctrl.uimult } }},
-    ['l6'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -124*ctrl.uimult } }},
+    ['l5'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -98*ctrl.uimult } }},
+    ['l6'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -122*ctrl.uimult } }},
 }
 
 

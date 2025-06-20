@@ -1,9 +1,12 @@
-## Interface: 110200
+## Interface: 110107
 ## Title: ctrl
-## Version: 1.0
-## Notes: |cff24cf19Control system for Singletail's mods.|r
 ## Author: |cffd649fft@wse.nyc|r
+## Version: 1.1.0
+## Notes: |cff24cf19Control system for Singletail's mods.|r
+## Category: Combat
+## Group: ctrl
 ## SavedVariables: ctrlprefs, ctrldata, ctrllog
+## IconTexture: Interface\AddOns\ctrl\assets\ctrl\ctrl.png
 
 embeds.xml
 
@@ -43,7 +46,7 @@ mod\cmd.lua
 mod\info.lua
 # mod\model.lua
 mod\target.lua
-mod\group.lua
+# mod\group.lua
 # mod\pulled.lua
 mod\death.lua
 mod\mobs.lua

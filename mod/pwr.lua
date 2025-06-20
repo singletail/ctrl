@@ -13,7 +13,7 @@ local mod = {
     nFrames = 0,
     options = {
         timers = { 1 },
-        frame = { w=25*ctrl.uimult, h=ctrl.uiheight, x=0, y=0, a=a.tl, pa=a.tl, isMovable = true },
+        frame = { w=20*ctrl.uimult, h=ctrl.uiheight, x=0, y=0, a=a.tl, pa=a.tl, isMovable = true },
     },
 }
 
@@ -26,15 +26,15 @@ local subframes = {
 local textures = {
     --['main'] = { t='decktex512', path=ctrl.p.tx, target='main', l=-7 },
     ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6 },
-    ['ctrl_v'] = {target='main', t='ctrl_v_top', path=ctrl.p.ctrl, l=-5, w=16*ctrl.uimult, h=68*ctrl.uimult, a=a.t, pa=a.t, x=0.5*ctrl.uimult, y=-4*ctrl.uimult },
+    ['ctrl_v'] = {target='main', t='ctrl_sm.png', path=ctrl.p.ctrl, l=-5, w=16*ctrl.uimult, h=32*ctrl.uimult, a=a.b, pa=a.b, x=0, y=6*ctrl.uimult },
 }
 
-local fntsize = 13 *ctrl.uimult
-local fox = 0.5 *ctrl.uimult
-local foy = -0.5 *ctrl.uimult
+local fntsize = 12 *ctrl.uimult
+local fox = 1 *ctrl.uimult
+local foy = -1 *ctrl.uimult
 local fontstrings = {
-    ['fsbpwr'] = { target='bpower', t = c.k..s.power, fontFile = 'Data70-Regular.otf', fontSize=fntsize-(1*ctrl.uimult), x=fox-(0.17*ctrl.uimult), y=foy+(0.5*ctrl.uimult), a=a.c, pa=a.c, jH=a.c },
-    ['fsb1'] = { target='b1', t = c.k..s.ctrl, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize-(1*ctrl.uimult), x=fox+(0.1*ctrl.uimult), y=foy, a=a.c, pa=a.c, jH=a.c },
+    ['fsbpwr'] = { target='bpower', t = c.k..s.power, fontFile = 'Data70-Regular.otf', fontSize=fntsize, x=fox-(1*ctrl.uimult), y=foy+(1*ctrl.uimult), a=a.c, pa=a.c, jH=a.c },
+    ['fsb1'] = { target='b1', t = c.k..s.ctrl, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize-(1*ctrl.uimult), x=fox-(0.65*ctrl.uimult), y=foy+(1*ctrl.uimult), a=a.c, pa=a.c, jH=a.c },
     ['fsb2'] = { target='b2', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize, x=fox, y=foy, a=a.c, pa=a.c, jH=a.c },
     ['fsb3'] = { target='b3', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize, x=fox, y=foy, a=a.c, pa=a.c, jH=a.c },
     ['fsb4'] = { target='b4', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize, x=fox, y=foy, a=a.c, pa=a.c, jH=a.c },
@@ -45,19 +45,19 @@ local fontstrings = {
     ['fsb9'] = { target='b9', t = c.k..s.info, fontFile = 'AnkaCoder-Bold.ttf', fontSize = fntsize, x=fox, y=foy, a=a.c, pa=a.c, jH=a.c },
 }
 
-local btnsize = 27 *ctrl.uimult
-local btnxo = -0.5 *ctrl.uimult
+local btnsize = 21 * ctrl.uimult
+local btnxo = 0 * ctrl.uimult
 local buttons = {
-    ['bpower'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-53*ctrl.uimult), x=btnxo } }},
-    ['b1'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-73*ctrl.uimult), x=btnxo } }},
-    ['b2'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-93*ctrl.uimult), x=btnxo } }},
-    ['b3'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-113*ctrl.uimult), x=btnxo } }},
-    ['b4'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-133*ctrl.uimult), x=btnxo } }},
-    ['b5'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-153*ctrl.uimult), x=btnxo } }},
-    ['b6'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-173*ctrl.uimult), x=btnxo } }},
-    ['b7'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-193*ctrl.uimult), x=btnxo } }},
-    ['b8'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-213*ctrl.uimult), x=btnxo } }},
-    ['b9'] = { target = 'btnframe', template = 'ins', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-233*ctrl.uimult), x=btnxo } }},
+    ['bpower'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-5*ctrl.uimult), x=btnxo } }},
+    ['b1'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-22*ctrl.uimult), x=btnxo } }},
+    ['b2'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-39*ctrl.uimult), x=btnxo } }},
+    ['b3'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-56*ctrl.uimult), x=btnxo } }},
+    ['b4'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-73*ctrl.uimult), x=btnxo } }},
+    ['b5'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-90*ctrl.uimult), x=btnxo } }},
+    ['b6'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-107*ctrl.uimult), x=btnxo } }},
+    ['b7'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-124*ctrl.uimult), x=btnxo } }},
+    ['b8'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-141*ctrl.uimult), x=btnxo } }},
+    ['b9'] = { target = 'btnframe', template = 'gv', btnColor = { 1.0, 1.0, 0.75, 0.25 }, h=btnsize, w=btnsize, anchors = { { a=a.tl, pa=a.tl, y=(-158*ctrl.uimult), x=btnxo } }},
 }
 
 function ctrl.pwr:register(fObj)

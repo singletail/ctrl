@@ -194,9 +194,9 @@ ctrl.templates.btn = {
                 },
                 [1] = {
                     { file = 'retrolamp_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
-                    { file = 'retrolamp_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
-                    { file = 'retrolamp_on', alpha = 0.5, color = nil, layer = -3, path = ctrl.p.btns },
-                    { file = 'retrolamp_glow', alpha = 1, color = nil, layer = -2, path = ctrl.p.btns },
+                    { file = 'retrolamp_on', alpha = 0.5, color = nil, layer = -4, path = ctrl.p.btns },
+                    { file = 'retrolamp_on', alpha = 0.5, color = 1, layer = -3, path = ctrl.p.btns },
+                    { file = 'retrolamp_glow', alpha = 0.5, color = nil, layer = -2, path = ctrl.p.btns },
                 },
             }
         },

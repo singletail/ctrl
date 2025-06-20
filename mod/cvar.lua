@@ -10,7 +10,11 @@ local mod = {
     color = c.v,
     symbol = s.cvar,
     options = {
-        events = { 'CVAR_UPDATE' },
+        events = { 
+            'CVAR_UPDATE',
+            'PLAYER_ENTERING_WORLD',
+            'RAID_INSTANCE_WELCOME',
+        },
     },
 }
 
@@ -18,7 +22,7 @@ ctrl.cvar = ctrl.mod:new(mod)
 
 local default = {
     ['taintLog'] = 2,
-    --['AutoPushSpellToActionBar'] = 0,
+    ['AutoPushSpellToActionBar'] = 0,
     ['autoStand'] = 0,
     ['ConsoleKey'] = '`',
     ['disableServerNagle'] = 1,
@@ -86,6 +90,27 @@ function ctrl.cvar.CVAR_UPDATE(et)
     local msg = "CVAR_UPDATE('" .. tostring(cvarName) .. "', " .. tostring(cvarValue) .. ")"
     --ctrl.alert.add(ctrl.cvar, msg)
     --ctrl.cvar.info(ctrl.cvar, msg)
+end
+
+function ctrl.cvar.combatlog()
+    --local combatlogEnabled, combatlogAdvanced = C_ChatInfo.IsLoggingCombat()
+    local isLogging = LoggingCombat(true)
+    if isLogging == true then
+        ctrl.cvar.notice(ctrl.cvar, c.g..'Combat logging enabled')
+    elseif isLogging == false then
+        ctrl.alert.add(ctrl.cvar, 'Combat logging disabled')
+    else
+        ctrl.cvar.warn(ctrl.cvar, 'Combat logging status unknown')
+        ctrl.alert.add(ctrl.cvar, 'Combat logging status unknown')
+    end
+end
+
+function ctrl.cvar.PLAYER_ENTERING_WORLD()
+    ctrl.cvar.combatlog()
+end
+
+function ctrl.cvar.RAID_INSTANCE_WELCOME()
+    ctrl.cvar.combatlog()
 end
 
 local function setAll()

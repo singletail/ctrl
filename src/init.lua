@@ -26,11 +26,11 @@ ctrl.setting            = {
     debug   = 1,
     verbose = 1,
     log     = 1,
-    scale   = 0.75,
+    scale   = 1,
 }
 
 ctrl.uimult = 1
-ctrl.uiheight = 168 *ctrl.uimult --take this out eventually
+ctrl.uiheight = 154 * ctrl.uimult --take this out eventually
 
 ctrl.is                 = {
     loaded  = nil,
