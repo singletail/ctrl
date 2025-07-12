@@ -28,6 +28,7 @@
         "GetUnitName",
         "SecureHandlerWrapScript",
         "CreateColorFromRGBAHexString",
-        "RAID_INSTANCE_WELCOME"
+        "RAID_INSTANCE_WELCOME",
+        "BASE_MOVEMENT_SPEED"
     ]
 }

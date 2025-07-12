@@ -36,7 +36,6 @@ mod\worldframe.lua
 mod\minimap.lua
 mod\console.lua
 
-# mod\data.lua
 mod\events.lua
 mod\taunt.lua
 mod\pet.lua
@@ -51,6 +50,7 @@ mod\target.lua
 mod\death.lua
 mod\mobs.lua
 mod\mobframe.lua
+mod\speed.lua
 
 # secure\test.lua
 

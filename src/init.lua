@@ -42,6 +42,7 @@ ctrl.p                  = {
     fnt = [[Interface\AddOns\ctrl\assets\fnt\min\]],
     fntf = [[Interface\AddOns\ctrl\assets\fnt\full\]],
     fntorig = [[Interface\AddOns\ctrl\assets\fnt\orig\]],
+    fntold = [[Interface\AddOns\ctrl\assets\fnt\old\]],
     tx = [[Interface\AddOns\ctrl\assets\tx\]],
     btns = [[Interface\AddOns\ctrl\assets\btns\]],
     ux = [[Interface\AddOns\ctrl\assets\ux\]],

@@ -1,0 +1,1 @@
+/run if not xalfr then xalfr=CreateFrame("ModelScene", nil, UIParent) xalfr:SetPoint("TOP") xalfr:SetSize(512, 512) xalac = xalfr:CreateActor() xalac:SetModelByFileID(5159886) end xalac:SetAnimation(1138) xalac:SetPosition(2,0,0)
