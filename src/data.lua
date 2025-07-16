@@ -22,17 +22,16 @@ local function ts(t)
     return string.format('%s',  date('%I:%M:%S', t))
 end
 
-function ctrl.data:status()
+function ctrl.data:login()
     self.prefs.version = self.prefs.version or ctrl.version
     self.prefs.last = self.prefs.last or 0
-    self:debug(ctrl.c.r .. 'version: ' .. self.prefs.version)
-    self:debug(ctrl.c.r .. 'last login: ' .. ts(self.prefs.last))
+    self.prefs.counter = self.prefs.counter or 0
+    self.prefs.counter = self.prefs.counter + 1
+    self:debug(ctrl.c.r .. 'ctrl v' .. self.prefs.version .. last: ' .. ts(self.prefs.last))
 end
 
 function ctrl.data:write()
     self.prefs.last = GetServerTime()
-    self.prefs.guid = UnitGUID('player')
-    self.prefs.name = UnitName('player')
 end
 
 function ctrl.data.PLAYER_LOGOUT()
@@ -41,9 +40,13 @@ end
 
 function ctrl.data.setup(self)
     self:debug('setup()')
-    ctrlprefs = ctrlprefs or {}
-    self.prefs = ctrlprefs
-    self:status()
+    local data = _G.ctrldata
+    ctrl.data.prefs = data.prefs or {}
+    ctrl.data.user = data.user or {}
+    ctrl.data.unit = data.unit or {}
+    ctrl.data.loot = data.loot or {}
+    self:login()
+    self:write()
 end
 
 ctrl.data:init()
