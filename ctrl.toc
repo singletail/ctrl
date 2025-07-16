@@ -51,6 +51,7 @@ mod\death.lua
 mod\mobs.lua
 mod\mobframe.lua
 mod\speed.lua
+mod\loot.lua
 
 # secure\test.lua
 

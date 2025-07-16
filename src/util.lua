@@ -10,6 +10,39 @@ function ctrl.pack(...)
     return { n = select("#", ...), ... }
 end
 
+function ctrl.toStr(t)
+    if t == nil then
+        return 'nil'
+    elseif type(t) == 'string' then
+        return t
+    elseif type(t) == 'table' then
+        local str = ctrl.c.d .. '{'
+        if t.n then
+            for i, value in ipairs(t) do
+                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
+                if i < t.n then
+                    str = str .. ','
+                end
+            end
+        elseif #t > 0 then
+            for i, value in ipairs(t) do
+                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
+                if i < #t then
+                    str = str .. ','
+                end
+            end
+        else
+            for k, v in pairs(t) do
+                str = str .. ' ' .. ctrl.c.y .. k .. ctrl.c.a .. ':' .. ctrl.c.g .. tostring(v)
+            end
+        end
+        str = str .. ctrl.c.d .. ' }'
+        return str
+    else
+        return tostring(t)
+    end
+end
+
 function ctrl.firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
