@@ -199,19 +199,6 @@ function ctrl.loot.START_LOOT_ROLL()
     ctrl.loot:debug('START_LOOT_ROLL')
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function ctrl.loot:update()
     --
 end

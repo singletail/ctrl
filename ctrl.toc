@@ -5,7 +5,7 @@
 ## Notes: |cff24cf19Control system for Singletail's mods.|r
 ## Category: Combat
 ## Group: ctrl
-## SavedVariables: ctrlprefs, ctrldata, ctrllog
+## SavedVariables: ctrlprefs, ctrlunit, ctrlloot
 ## IconTexture: Interface\AddOns\ctrl\assets\ctrl\ctrl.png
 
 embeds.xml
@@ -18,6 +18,7 @@ src\logs.lua
 src\evt.lua
 src\cleu.lua
 src\timer.lua
+src\data.lua
 
 ui\frame.lua
 ui\tx.lua
