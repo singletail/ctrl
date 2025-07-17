@@ -23,15 +23,12 @@ local function ctrlprint(x)
     ctrl.log(ctrl.master, 6, x)
 end
 
-
 function ctrl.master.load()
-    if ctrl.is.loaded then return end
+    ctrl.log(ctrl.master, 6, "ADDON_LOADED called")
     for n = 1, #ctrl.loads do
         ctrl.loads[n]()
     end
     ctrl.master.ready()
-    --ctrl.secure.setup()
     _G.CTRL = {}
     _G.CTRL.print = ctrlprint
-    
 end
