@@ -20,7 +20,7 @@ local mod = {
         },
         frame = {
             name = 'ctrlspeed',
-            w=200*ctrl.uimult,
+            w=200,
             h=60,
             x=0,
             y=-40,
@@ -213,32 +213,12 @@ function ctrl.speed:tick(interval)
     ctrl.speed:update()
 end
 
-
---[[
-function ctrl.speed:bonus()
-    local speed = GetSpeed()
-    self.fs.bonus:SetText(string.format('%s%f%%', c.g, speed))
-end
-
-function ctrl.speed.SPEED_UPDATE()
-    ctrl.speed:debug('SPEED_UPDATE')
-    ctrl.speed:update()
-end
-
-function ctrl.speed.VEHICLE_ANGLE_UPDATE(et)
-    ctrl.speed:debug('VEHICLE_ANGLE_UPDATE')
-    ctrl.speed:updateAngle(et)
-end
-]]
-
-
 function ctrl.speed.setup(self)
     self.f.main = ctrl.frame.new(self, self.options.frame)
     ctrl.frame.generate(self, subframes)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)
     self.fs.fsfake:SetAlpha(0.2)
-    --self:registerCtrlFrame(3, self.f.main)
 end
 
 ctrl.speed:init()

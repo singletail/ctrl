@@ -14,7 +14,7 @@ local mod = {
     isTimerOn = nil,
     options = {
         fontFile = 'Prompt-Bold.ttf',
-        fontSize = 24,
+        fontSize = 32,
         maxLines = 5,
         ttl = 5,
         fade = 4,
@@ -48,21 +48,25 @@ function ctrl.alert:resize(f, w, h)
 end
 
 function ctrl.alert:createFontStrings()
+    local msg = ''
     for i = 1, self.options.maxLines do
         local set = {
             target = self.f.main,
             fontFile = self.options.fontFile,
             fontSize = self.options.fontSize,
-            w=1024,
-            h=30,
+            w = 1024,
+            h = 34,
             x = 24,
-            y = -((i-1) * 30),
+            y = -((i-1) * 34),
             jH = 'CENTER',
             jV = 'MIDDLE',
             n = 'fs' .. i
         }
         self.fs[i] = ctrl.fs:new(set)
-        self.fs[i]:SetText('fs ' .. i)
+        if self.options.debug then
+            msg = 'msg ' .. tostring(i)
+        end
+        self.fs[i]:SetText(msg)
     end
 end
 
@@ -92,7 +96,6 @@ function ctrl.alert:checkBuffer()
         end
     end
     if bufferSize < 1 then
-        self:debug('buffer empty, stopping timer')
         self:stopTimer()
         return
     end
@@ -121,13 +124,6 @@ end
 function ctrl.alert.setup(self)
     self.f.main = ctrl.frame:new(self.options.frame)
     self:createFontStrings()
-
-    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' initialized')
-    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 2')
-    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 3')
-    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 4')
-    ctrl.alert:add(c.r..'ctrl' .. c.o..':' .. c.y .. 'alert' .. c.g.. ' 5')
-    if ctrl.alert.options.debug then self:add(c.y .. s.warn .. ' Debug mode enabled.') end
 end
 
 ctrl.alert:init()

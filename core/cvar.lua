@@ -22,7 +22,6 @@ ctrl.cvar = ctrl.mod:new(mod)
 
 local default = {
     ['taintLog'] = 2,
-    ['AutoPushSpellToActionBar'] = 0,
     ['autoStand'] = 0,
     ['ConsoleKey'] = '`',
     ['disableServerNagle'] = 1,
@@ -38,8 +37,6 @@ local default = {
     ['autoLootRate'] = 6,
     ['advancedCombatLogging'] = 1,
     ['disableAELooting'] = 0,
-    --['enableSourceLocationLookup'] = 1,
-
     ['scriptErrors'] = 1,
     ['showErrors'] = 1,
 }
@@ -75,12 +72,13 @@ local function set(cvarName, cvarValue)
     local oldValue = C_CVar.GetCVar(cvarName)
     if tostring(oldValue) ~= tostring(cvarValue) then
         local ok = C_CVar.SetCVar(cvarName, cvarValue)
-        local msg = 'CVar ' .. tostring(cvarName) .. ' set to ' .. cvarValue
+        --local msg = 'CVar ' .. tostring(cvarName) .. ' set to ' .. cvarValue
         if not ok then
-            msg = c.r .. 'Error: CVar ' .. tostring(cvarName) .. ' NOT set to ' .. cvarValue
+            local msg = c.r .. 'Error: CVar ' .. tostring(cvarName) .. ' NOT set to ' .. cvarValue
+            ctrl.cvar.notice(ctrl.cvar, msg)
         end
-        ctrl.cvar.notice(ctrl.cvar, msg)
-        if ctrl.alert then ctrl.alert.add(ctrl.cvar, msg) end
+        --ctrl.cvar.notice(ctrl.cvar, msg)
+        --if ctrl.alert then ctrl.alert.add(ctrl.cvar, msg) end
     end
 end
 
@@ -96,7 +94,7 @@ function ctrl.cvar.combatlog()
     --local combatlogEnabled, combatlogAdvanced = C_ChatInfo.IsLoggingCombat()
     local isLogging = LoggingCombat(true)
     if isLogging == true then
-        ctrl.cvar.notice(ctrl.cvar, c.g..'Combat logging enabled')
+        --ctrl.cvar.notice(ctrl.cvar, c.g..'Combat logging enabled')
     elseif isLogging == false then
         ctrl.alert.add(ctrl.cvar, 'Combat logging disabled')
     else

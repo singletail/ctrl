@@ -12,49 +12,47 @@ embeds.xml
 
 src\init.lua
 src\libs.lua
+src\colors.lua
+src\symbols.lua
 src\util.lua
+src\prefs.lua
 src\mod.lua
-src\logs.lua
 src\evt.lua
+src\data.lua
+src\logs.lua
 src\cleu.lua
 src\timer.lua
-src\data.lua
 
 ui\frame.lua
 ui\tx.lua
 ui\fs.lua
 ui\btns.lua
 ui\template.lua
-
 templates\btn.lua
 
 core\alert.lua
 core\sfx.lua
+core\cvar.lua
+core\ui.lua
+core\worldframe.lua
+core\minimap.lua
+core\console.lua
+core\events.lua
+core\group.lua
 
-mod\cvar.lua
-mod\ui.lua
-mod\worldframe.lua
-mod\minimap.lua
-mod\console.lua
-
-# src\data.lua
-
-mod\events.lua
 mod\taunt.lua
 mod\pet.lua
-
 mod\pwr.lua
 mod\cmd.lua
 mod\info.lua
-# mod\model.lua
 mod\target.lua
-# mod\group.lua
 # mod\pulled.lua
 mod\death.lua
 mod\mobs.lua
 mod\mobframe.lua
 mod\speed.lua
 mod\loot.lua
+mod\party.lua
 
 DB.lua
 ctrl.lua

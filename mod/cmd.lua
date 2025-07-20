@@ -16,8 +16,8 @@ local mod = {
         },
         frame = {
             name = 'cmd',
-            w=72*ctrl.uimult,
-            h=ctrl.uiheight,
+            w=72,
+            h=154,
             x=0,
             y=0,
             a=a.tl,
@@ -27,7 +27,6 @@ local mod = {
             globalName = 'ctrlcmd',
             target = ctrl.pwr.f.main,
         },
-        uimult = 4
     }
 }
 
@@ -37,9 +36,9 @@ local textures = {
     ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6 },
 }
 
-local btnw = 64 *ctrl.uimult
-local btnh = 28 *ctrl.uimult
-local btnfntsize = 12 *ctrl.uimult
+local btnw = 64 
+local btnh = 28 
+local btnfntsize = 12 
 
 local buttons = {
     [1] = { name = 'b1', t = c.w..'reload', btnColor = { 1.0, 0, 0, 1 }, },
@@ -61,9 +60,9 @@ function ctrl.cmd:buttons()
             name = buttons[i].name,
         }
         button.btnColor = buttons[i].btnColor
-        button.anchors = { { a = a.t, pa = a.t, x = 0, y = ((i-1) * - (24 * ctrl.uimult)) - 2 * ctrl.uimult } }
+        button.anchors = { { a = a.t, pa = a.t, x = 0, y = ((i-1) * - (24)) - 2 } }
         ctrl.cmd.btn[buttons[i].name] = ctrl.btns.new(ctrl.cmd, button)
-        local fs = { target = ctrl.cmd.btn[buttons[i].name], t = buttons[i].t, fontFile = 'Prompt-Medium.ttf', fontSize=btnfntsize, x=(-0.5*ctrl.uimult), y=(-1*ctrl.uimult), a = a.c, pa = a.c, jH = a.c }
+        local fs = { target = ctrl.cmd.btn[buttons[i].name], t = buttons[i].t, fontFile = 'Prompt-Medium.ttf', fontSize=btnfntsize, x=(-0.5), y=(-1), a = a.c, pa = a.c, jH = a.c }
         ctrl.cmd.fs[buttons[i].name] = ctrl.fs.new(ctrl.cmd, fs)
         ctrl.cmd.btn[buttons[i].name]:setValue(0)
         ctrl.cmd.btn[buttons[i].name]:refresh()

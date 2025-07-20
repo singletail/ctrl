@@ -15,20 +15,17 @@ ctrl.master = {
 function ctrl.master.ready()
     ctrl.is.loaded = 1
     ctrl.logs.dumpBuffer()
+    ctrl.log(ctrl.master, 5, 'Ready.')
     ctrl.log(ctrl.master, 8, ctrl.logmem('ctrl'))
-    ctrl.log(ctrl.master, 6, ctrl.name .. ' is ready.')
-end
-
-local function ctrlprint(x)
-    ctrl.log(ctrl.master, 6, x)
 end
 
 function ctrl.master.load()
-    ctrl.log(ctrl.master, 6, "ADDON_LOADED called")
+    ctrl.log(ctrl.master, 5, 'ctrl.load()')
+    ctrl.data:login() -- initialize SavedVariables
+    ctrl.loadprefs() -- load user preferences
     for n = 1, #ctrl.loads do
         ctrl.loads[n]()
     end
+    ctrl.loads = nil
     ctrl.master.ready()
-    _G.CTRL = {}
-    _G.CTRL.print = ctrlprint
 end

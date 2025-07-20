@@ -48,7 +48,7 @@ function ctrl.cleu.register(module, cleuEvent)
     addCleuEventToRegistry(cleuEvent)
     tinsert(ctrl.cleu.registry[cleuEvent], moduleName)
     ctrl.cleu.index[cleuEvent] = ctrl.cleu.index[cleuEvent] + 1
-    ctrl.cleu:debug('Registered ' .. moduleName .. ' for ' .. cleuEvent)
+    --ctrl.cleu:debug('Registered ' .. moduleName .. ' for ' .. cleuEvent)
 end
 
 function ctrl.cleu.unregister(module, cleuEvent)
@@ -56,7 +56,7 @@ function ctrl.cleu.unregister(module, cleuEvent)
     local eventIndex = findCleuModuleIndex(moduleName, cleuEvent)
     tremove(ctrl.cleu.registry[cleuEvent], eventIndex)
     ctrl.cleu.index[cleuEvent] = ctrl.cleu.index[cleuEvent] - 1
-    ctrl.cleu:debug('Unegistered ' .. moduleName .. ' for ' .. cleuEvent)
+    --ctrl.cleu:debug('Unegistered ' .. moduleName .. ' for ' .. cleuEvent)
 end
 
 function ctrl.cleu:init() --overwriting module default, to run on load
@@ -65,7 +65,6 @@ function ctrl.cleu:init() --overwriting module default, to run on load
     self.f.main:SetFrameStrata('BACKGROUND')
     self.f.main:SetSize(1, 1)
     self.f.main:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 0, 0)
-    --self:register('COMBAT_LOG_EVENT_UNFILTERED')
     self.f.main:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
     self:start()
 end

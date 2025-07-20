@@ -29,6 +29,10 @@
         "SecureHandlerWrapScript",
         "CreateColorFromRGBAHexString",
         "RAID_INSTANCE_WELCOME",
-        "BASE_MOVEMENT_SPEED"
+        "BASE_MOVEMENT_SPEED",
+        "class"
+    ],
+    "Lua.diagnostics.disable": [
+        "assign-type-mismatch"
     ]
 }

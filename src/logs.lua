@@ -2,8 +2,12 @@
 
 ---@class ctrl
 local ctrl = select(2, ...)
-
 local c, s = ctrl.c, ctrl.s
+
+local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
+local date = date
+local tostring = tostring
+local GetServerTime = GetServerTime
 
 local lvl = {
     [1] = { 'emerg', c.c, s.emerg },
@@ -53,21 +57,25 @@ local function prnt(msgObj)
     end
 end
 
-local function writeToLog(msgObj) --TODO: Test this, maybe move to data module
-    if not ctrl.is.loaded then return end
-    ctrl.ctrllog = ctrl.ctrllog or {}
-    tinsert(ctrl.ctrllog, msgObj)
-    if ctrl.count(ctrl.ctrllog) > ctrl.maxLog then tremove(ctrl.ctrllog, 1) end
+local function writeToLog(msgObj)
+    if msgObj.level > ctrl.prefs.log.level then return end
+    ctrl.prefs.log.index = ctrl.prefs.log.index + 1
+    local logMsg = ''
+    for i = 1, msgObj.msgTbl.n do
+        if i > 1 then logMsg = logMsg .. ', ' end
+        logMsg = logMsg .. tostring(msgObj.msgTbl[i])
+    end
+    local logObj = {ctrl.prefs.log.index, msgObj.ts, msgObj.name, logMsg}
+    tinsert(ctrl.data.logs, logObj)
+    if ctrl.count(ctrl.data.logs) > ctrl.prefs.log.max then tremove(ctrl.data.logs, 1) end
 end
 
 local function dispatch(msgObj)
-    if not ctrl.is.loaded then
-        tinsert(ctrl.buffer, msgObj)
-    else
-        if ctrl.setting.log then writeToLog(msgObj) end
-        if msgObj.level > 7 and ctrl.setting.debug == nil then return end
-        if msgObj.level > 6 and ctrl.setting.verbose == nil then return end
+    if ctrl.is.loaded then
+        if ctrl.prefs.log.enable then writeToLog(msgObj) end
         prnt(msgObj)
+    else
+        tinsert(ctrl.buffer, msgObj)
     end
 end
 
@@ -104,12 +112,14 @@ local function dumpBuffer()
     local n = ctrl.count(ctrl.buffer)
     for i = 1, n do
         prnt(ctrl.buffer[i])
+        if ctrl.prefs.log.enable then writeToLog(ctrl.buffer[i]) end
     end
     wipe(ctrl.buffer)
+    ctrl.buffer = nil
 end
 
 local function setup(self)
-    self:debug('Logs loaded')
+    --self:debug('setup()')
 end
 
 local mod = {

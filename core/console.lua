@@ -139,36 +139,12 @@ end
 ]]
 
 function ctrl.console.setup(self)
-    --ctrl.power.f = {}
-    --ctrl.power.tx = {}
-
     ctrl.console.f.main = ctrl.frame.new(self, self.options.frame)
     ctrl.frame.generate(self, subframes)
     ctrl.tx.generate(self, textures)
-    --ctrl.fs.generate(self, fontstrings)
-
-    --[[
-    for fname, fopts in pairs(subframes) do
-        if type(fopts.target) == 'string' then fopts.target = self.f[fopts.target] end
-        self.f[fname] = ctrl.frame:new(fopts)
-    end
-    ]]
-
     ctrl.sf = ctrl.console.f.sf
     ConfigureScrollFrame(self, ctrl.sf)
-
---[[
-    for tname, topts in pairs(textures) do
-        if type(topts.target) == 'string' then topts.target = self.f[topts.target] end
-        ctrl.power.tx[tname] = ctrl.tx:new(topts) 
-    end
-]]
-
-    --ctrl.btns:generate(buttons, self)
-    --ctrl.fs:generate(fontstrings, self)
-
-    self:debug(string.format('%sConsole Initialized %s', ctrl.c.b, date('%I:%M:%S', GetTime())))
-    --_G.ctrl = ctrl.external
+    --self:debug(string.format('%sConsole Initialized %s', ctrl.c.b, date('%I:%M:%S', GetTime())))
 end
 
 ctrl.console:init()

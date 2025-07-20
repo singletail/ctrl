@@ -31,10 +31,10 @@ local last = 0
 
 local function doSet()
     if GetServerTime() - last < 60 then
-        ctrl.worldframe:info('WorldFrame Throttled.')
+        --ctrl.worldframe:info('WorldFrame Throttled.')
         return
     end
-    ctrl.worldframe:info('Resetting WorldFrame anchors.')
+    --ctrl.worldframe:info('Resetting WorldFrame anchors.')
     wf:ClearAllPoints()
     wf:SetPoint("TOPLEFT", set.l, set.t)
     wf:SetPoint("BOTTOMRIGHT", set.r, set.b)

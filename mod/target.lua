@@ -20,8 +20,8 @@ local mod = {
         },
         frame = {
             name = 'ctrltgt',
-            w=200*ctrl.uimult,
-            h=ctrl.uiheight,
+            w=200,
+            h=154,
             x=354,
             y=-32,
             a=a.tl,
@@ -58,25 +58,25 @@ local fs_default = {
     t='',
     target='main',
     fontFile = 'Prompt-Regular.ttf',
-    fontSize = 12*ctrl.uimult,
+    fontSize = 12,
     x = 0,
     y = 0,
-    w = 200*ctrl.uimult,
-    h = 14*ctrl.uimult,
+    w = 200,
+    h = 14,
     a = a.tl,
     pa = a.tl,
     jH = a.c,
 }
 
 local fontstrings = {
-    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14*ctrl.uimult,},
+    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14,},
 }
 
-local tgtStrX = 12 * ctrl.uimult
-local tgtStrY = -20 * ctrl.uimult
-local tgtStrTop = -18 * ctrl.uimult
-local tgtStrLH = 10 * ctrl.uimult
-local tgtStrFS = 36 * ctrl.uimult
+local tgtStrX = 12
+local tgtStrY = -20
+local tgtStrTop = -18
+local tgtStrLH = 10
+local tgtStrFS = 36
 
 function ctrl.tgt:createFontStrings()
     local io = {}
@@ -109,9 +109,9 @@ function ctrl.tgt:createFontStrings()
 end
 
 function ctrl.tgt:makeRoomForIcon()
-    local iconSize = 36*ctrl.uimult
-    local ymod = 11*ctrl.uimult
-    local origY = -18*ctrl.uimult
+    local iconSize = 36
+    local ymod = 11
+    local origY = -18
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
         local y = origY - (ymod * (i-1))
@@ -122,14 +122,14 @@ function ctrl.tgt:makeRoomForIcon()
 end
 
 function ctrl.tgt:noIcon()
-    local ymod = 11*ctrl.uimult
-    local origY = -18*ctrl.uimult
+    local ymod = 11
+    local origY = -18
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
         local y = origY - (ymod * (i-1))
         fs:ClearAllPoints()
-        fs:SetWidth(ctrl.tgt.options.frame.w - 8*ctrl.uimult)
-        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8*ctrl.uimult, y)
+        fs:SetWidth(ctrl.tgt.options.frame.w - 8)
+        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8, y)
     end
 end
 

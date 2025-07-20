@@ -60,13 +60,22 @@ local mod = {
             1/15
         },
         events = {
-            'PLAYER_LOOT_SPEC_UPDATED',
-            'ENCOUNTER_LOOT_RECEIVED',
             'CHAT_MSG_LOOT',
+            'ENCOUNTER_LOOT_RECEIVED',
+            'ITEM_PUSH',
+            'LOOT_CLOSED',
+            'LOOT_ITEM_AVAILABLE',
+            'LOOT_ITEM_ROLL_WON',
+            'LOOT_OPENED',
+            'LOOT_READY',
+            'LOOT_ROLLS_COMPLETE',
+            'MAIN_SPEC_NEED_ROLL',
+            'PLAYER_LOOT_SPEC_UPDATED',
+            'START_LOOT_ROLL',
         },
         frame = {
             name = 'ctrlloot',
-            w=300*ctrl.uimult,
+            w=300,
             h=100,
             x=0,
             y=-140,
@@ -79,7 +88,7 @@ local mod = {
             isClipsChildren = nil,
         },
         fontFile = 'MartianMono-sWdMd.otf',
-        fontSize = 12,
+        fontSize = 10,
     }
 }
 
@@ -129,21 +138,31 @@ function ctrl.loot:add(msg, sf)
     sf:AddMessage(msg)
 end
 
+function ctrl.loot:getLootInfo()
+    local info = GetLootInfo()
+    if not info then
+        self:add(c.r .. 'No loot info available')
+        return
+    end
+    local msg = c.g .. 'getLootInfo(): ' .. ctrl.toStr(info)
+    self:add(msg)
+end
+
 function ctrl.loot.CHAT_MSG_LOOT(evt)
     --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
     local debugStr = ctrl.toStr(evt)
     ctrl.loot:add(c.r .. '[CHAT_MSG_LOOT] ' .. c.a .. debugStr .. c.d)
 end
 
-function ctrl.loot.ENCOUNTER_LOOT_RECEIVED()
+function ctrl.loot.ENCOUNTER_LOOT_RECEIVED(evt)
     --encounterID, itemID, itemLink, quantity, playerName, classFileName
-    ctrl.loot:add(c.r .. 'ENCOUNTER_LOOT_RECEIVED')
+    ctrl.loot:add(c.r .. 'ENCOUNTER_LOOT_RECEIVED ' .. 'encounterID: ' .. tostring(evt[1]) .. ', itemID: ' .. tostring(evt[2]) .. ', itemLink: ' .. evt[3] .. ', quantity: ' .. tostring(evt[4]) .. ', playerName: ' .. evt[5] .. ', classFileName: ' .. evt[6])
     ctrl.loot:debug('ENCOUNTER_LOOT_RECEIVED')
 end
 
-function ctrl.loot.ITEM_PUSH()
+function ctrl.loot.ITEM_PUSH(evt)
     --bagSlot, iconFileID
-    ctrl.loot:add(c.r .. 'ITEM_PUSH')
+    ctrl.loot:add(c.r .. 'ITEM_PUSH ' .. 'bagSlot: ' .. tostring(evt[1]) .. ', iconFileID: ' .. tostring(evt[2]))
     ctrl.loot:debug('ITEM_PUSH')
 end
 
@@ -152,21 +171,21 @@ function ctrl.loot.LOOT_CLOSED()
     ctrl.loot:debug('LOOT_CLOSED')
 end
 
-function ctrl.loot.LOOT_ITEM_AVAILABLE()
+function ctrl.loot.LOOT_ITEM_AVAILABLE(evt)
     --itemTooltip, lootHandle
-    ctrl.loot:add(c.r .. 'LOOT_ITEM_AVAILABLE')
+    ctrl.loot:add(c.r .. 'LOOT_ITEM_AVAILABLE ' .. 'itemTooltip: ' .. tostring(evt[1]) .. ', lootHandle: ' .. tostring(evt[2]))
     ctrl.loot:debug('LOOT_ITEM_AVAILABLE')
 end
 
-function ctrl.loot.LOOT_ITEM_ROLL_WON()
+function ctrl.loot.LOOT_ITEM_ROLL_WON(evt)
     --itemLink, rollQuantity, rollType, roll, upgraded
-    ctrl.loot:add(c.r .. 'LOOT_ITEM_ROLL_WON')
+    ctrl.loot:add(c.r .. 'LOOT_ITEM_ROLL_WON ' .. 'itemLink: ' .. evt[1] .. ', rollQuantity: ' .. evt[2] .. ', rollType: ' .. evt[3] .. ', roll: ' .. evt[4] .. ', upgraded: ' .. tostring(evt[5]))
     ctrl.loot:debug('LOOT_ITEM_ROLL_WON')
 end
 
-function ctrl.loot.LOOT_OPENED()
+function ctrl.loot.LOOT_OPENED(evt)
     --autoLoot, isFromItem
-    ctrl.loot:add(c.r .. 'LOOT_OPENED')
+    ctrl.loot:add(c.r .. 'LOOT_OPENED ' .. 'autoLoot: ' .. tostring(evt[1]) .. ', isFromItem: ' .. tostring(evt[2]))
     ctrl.loot:debug('LOOT_OPENED')
 end
 
@@ -174,17 +193,18 @@ function ctrl.loot.LOOT_READY()
     -- follow up with GetLootInfo()
     ctrl.loot:add(c.r .. 'LOOT_READY')
     ctrl.loot:debug('LOOT_READY')
+    ctrl.loot:getLootInfo()
 end
 
-function ctrl.loot.LOOT_ROLLS_COMPLETE()
+function ctrl.loot.LOOT_ROLLS_COMPLETE(evt)
     --lootHandle
-    ctrl.loot:add(c.r .. 'LOOT_ROLLS_COMPLETE')
+    ctrl.loot:add(c.r .. 'LOOT_ROLLS_COMPLETE ' .. 'lootHandle: ' .. tostring(evt[1]))
     ctrl.loot:debug('LOOT_ROLLS_COMPLETE')
 end
 
-function ctrl.loot.MAIN_SPEC_NEED_ROLL()
+function ctrl.loot.MAIN_SPEC_NEED_ROLL(evt)
     --rollID, roll, isWinning
-    ctrl.loot:add(c.r .. 'MAIN_SPEC_NEED_ROLL')
+    ctrl.loot:add(c.r .. 'MAIN_SPEC_NEED_ROLL ' .. 'rollID: ' .. evt[1] .. ', roll: ' .. evt[2] .. ', isWinning: ' .. tostring(evt[3]))
     ctrl.loot:debug('MAIN_SPEC_NEED_ROLL')
 end
 
@@ -193,9 +213,9 @@ function ctrl.loot.PLAYER_LOOT_SPEC_UPDATED()
     ctrl.loot:debug('PLAYER_LOOT_SPEC_UPDATED')
 end
 
-function ctrl.loot.START_LOOT_ROLL()
+function ctrl.loot.START_LOOT_ROLL(evt)
     -- rollID, rollTime, lootHandle
-    ctrl.loot:add(c.r .. 'START_LOOT_ROLL')
+    ctrl.loot:add(c.r .. 'START_LOOT_ROLL ' .. 'rollID: ' .. evt[1] .. ', rollTime: ' .. evt[2] .. ', lootHandle: ' .. tostring(evt[3]))
     ctrl.loot:debug('START_LOOT_ROLL')
 end
 
