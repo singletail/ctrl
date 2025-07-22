@@ -42,14 +42,14 @@ core\group.lua
 
 mod\taunt.lua
 mod\pet.lua
-mod\pwr.lua
+mod\power.lua
 mod\cmd.lua
 mod\info.lua
-mod\target.lua
+# mod\target.lua
 # mod\pulled.lua
 mod\death.lua
 mod\mobs.lua
-mod\mobframe.lua
+# mod\mobframe.lua
 mod\speed.lua
 mod\loot.lua
 mod\party.lua

@@ -2,7 +2,6 @@
 
 ---@class ctrl
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -10,8 +9,6 @@ local mod = {
     color = c.o,
     symbol = '%',
     options = {
-        fontSize = 12,
-        fontFile = 'Prompt-Regular.ttf',
         numRows = 20,
         numCols = 5,
         border = 8,
@@ -25,12 +22,9 @@ local mod = {
         },
         frame = {
             name = 'ctrlmobframe',
-            w=276,
-            h=154,
             isResizable = 1,
-            target = ctrl.pwr.f.main,
+            target = ctrl.power.f.main,
             isClipsChildren = 1,
-            scale = 1,
         },
         debug = 1,
     }
@@ -41,8 +35,8 @@ ctrl.mobframe = ctrl.mod:new(mod)
 ctrl.mobframe.displayTable = {}
 
 local textures = {
-    ['bk'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6, al=1 },
-    ['fsbk']= { target='main', t='LCDbig.png', path=ctrl.p.tx, l=-5, al=1, x=0, y=0, w=mod.options.frame.w - 8, h=mod.options.frame.h - mod.options.statusRowSize, a=a.b, pa=a.b },
+    ['bk'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6, al=0.6 },
+    --['fsbk']= { target='main', t='LCDbig.png', path=ctrl.p.tx, l=-5, al=1, x=0, y=0, w=mod.options.frame.w - 8, h=mod.options.frame.h - mod.options.statusRowSize, a=a.b, pa=a.b },
     ['tr1'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-186, y=-2 },
     ['tr2'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-96, y=-2 },
     ['tr3'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-6, y=-2 },
@@ -50,8 +44,6 @@ local textures = {
 
 local fs_default = {
     target='main',
-    fontFile = ctrl.mobframe.options.fontFile,
-    fontSize = ctrl.mobframe.options.fontSize,
     a = a.tl,
     pa = a.tl,
     jH = a.l,
@@ -75,6 +67,8 @@ function ctrl.mobframe:createFontStrings()
         for j=1,self.options.numCols do
             local o = {}
             for k,v in pairs(fs_default) do o[k] = v end
+            o.fontFile = ctrl.prefs.mod.mobframe.font.file
+            o.fontSize = ctrl.prefs.mod.mobframe.font.size
             o.w = self.options.rowWidths[j]
             o.h = self.options.rowHeight
             o.x = curX
@@ -144,7 +138,13 @@ function ctrl.mobframe:tick(interval)
     ctrl.mobframe:update()
 end
 
+function ctrl.mobframe:prefs()
+    self.options.frame.w = ctrl.prefs.mod[self.name].frame.width
+    self.options.frame.h = ctrl.prefs.ui.height
+end
+
 function ctrl.mobframe.setup(self)
+    self:prefs()
     self.f.main = ctrl.frame.new(self, self.options.frame)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)

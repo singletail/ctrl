@@ -38,9 +38,6 @@ local function mouseUp(self, btn, ...)
             ctrl.log(ctrl, 5, 'Warning: button subclass not found: ', self.info.subclass)
         end
     end
-    --[[ctrl.log(ctrl, 8,
-        ctrl.c.b .. 'button ' .. tostring(btn.name) .. ' enabled:' ..
-        tostring(btn.enabled) .. ' value:' .. tostring(btn.value))]]
     self:refresh(btn)
 end
 
@@ -160,10 +157,6 @@ end
 function ctrl.btns.new(module, o)
     o = o or {}
     if o.template then ctrl.template:loadTemplateItem('btn', o) end
-
-    --local meta = { __index = self }
-    --setmetatable(o, meta)
-    --setmetatable(self, { __index = ctrl.ux })
 
     local btn = CreateFrame('Frame', nil, o.target)
     btn:SetFrameStrata('DIALOG')

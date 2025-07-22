@@ -84,7 +84,7 @@ local mod = {
             isResizable = 1,
             isMovable = 1,
             --globalName = 'ctrlloot',
-            --target = ctrl.pwr.f.main,
+            --target = ctrl.power.f.main,
             isClipsChildren = nil,
         },
         fontFile = 'MartianMono-sWdMd.otf',

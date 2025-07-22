@@ -135,8 +135,8 @@ local function _registerCtrlFrame(self, index, f)
         symbol = self.symbol,
         colorObj = ctrl.hexMarkupToRGBA(self.color),
     }
-    if not ctrl.pwr then return end
-    ctrl.pwr.register(self, frameObj)
+    if not ctrl.power then return end
+    ctrl.power.register(self, frameObj)
 end
 
 local mod = {

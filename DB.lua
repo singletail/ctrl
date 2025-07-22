@@ -5,12 +5,13 @@ local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local rgba = {
-    red = { 0.5, 0.0, 0.0, 0.75, },
-    orange = { 1.0, 0.5, 0.0, 0.75, },
+    boss = { 1, 0.0, 0.0, 1},
+    red = { 0.5, 0.0, 0.0, 0.5, },
+    orange = { 0.5, 0.25, 0.0, 0.5, },
     yellow = { 0.5, 0.5, 0.0, 0.75, },
     yelloworange = { 0.75, 0.5, 0.0, 0.75, },
-    green = { 0.0, 0.5, 0.0, 0.75, },
-    blue = { 0.0, 0.0, 0.5, 0.75, },
+    green = { 0.0, 0.25, 0.0, 0.5, },
+    blue = { 0.0, 0.0, 0.25, 0.5, },
     violet = { 0.5, 0.0, 0.5, 0.75, },
     cyan = { 0.0, 0.5, 0.5, 0.75, },
     pink = { 1.0, 0.0, 0.5, 0.75, },
@@ -37,12 +38,16 @@ local i = {
     boss = '䅴',
     rotate = '䂈',
     penis = '㏤',
+    dodge = '䅧',
+    collapse = 'ㄫ',
+    stack = '㐅',
     ['nil'] = '␀',
 }
 
 local h = {
     reset       = [[|r]],
     white       = [[|cffffffff]],
+    boss        = [[|cffff0000]],
     red         = [[|cffff2e38]],
     orange      = [[|cffffb836]],
     yellow      = [[|cfffff000]],
@@ -58,23 +63,48 @@ local h = {
 }
 
 local p = {
+    boss = { i.boss, rgba.red, h.pink, 'Boss '},
+    poison = { i.poison, rgba.green, h.green, 'Poison '},
+    disease = { i.disease, rgba.green, h.green, 'Disease '},
     kick = { i.kick, rgba.yellow, h.yellow, i.warn..' Prio Kick '},
-    caster = { i.caster, rgba.green, h.green, 'Kick '},
-    stop = { i.stop, rgba.yelloworange, h.yelloworange, 'Stop '},
     frontal = { i.rotate, rgba.orange, h.orange, 'Frontal '},
     dispel = { i.dispel, rgba.blue, h.blue, 'Dispel '},
-    poison = { i.poison, rgba.blue, h.blue, 'Poison '},
-    disease = { i.disease, rgba.blue, h.blue, 'Disease '},
+    warn = { i.warn, rgba.red, h.yellow, 'Warn: '},
+    dodge = { i.dodge, rgba.yellow, h.yellow, 'Dodge '},
+    collapse = { i.collapse, rgba.orange, h.orange, 'Collapse '},
+    stack = { i.stack, rgba.orange, h.orange, 'Collapse '},
+
+    caster = { i.caster, rgba.green, h.green, 'Kick '},
+    stop = { i.stop, rgba.orange, h.orange, 'Stop '},
     purge = { i.purge, rgba.violet, h.violet, 'Purge '},
     avoid = { i.avoid, rgba.gray, h.gray, 'Avoid '},
-    boss = { i.boss, rgba.red, h.red, 'Boss '},
-    warn = { i.warn, rgba.orange, h.orange, 'Warn: '},
     tankbuster = { i.tankbuster, rgba.orange, h.orange, 'Tankbuster '},
     tanking = { i.tanking, rgba.cyan, h.cyan, 'Tanking '},
     cc = { i.cc, rgba.red, h.red, 'CC '},
 }
 
 _G.CtrlDB = {
+    -- Ara'Kara
+    [216336] = { p = p.collapse, t='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
+    [214840] = { p = p.poison, t="Dispel 8s DoT"}, --Engorged Crawler
+    [216341] = { p = p.dispel, t="Dispel 12s Bleed"}, --Jabbing Flyer
+    [216293] = { p = p.kick, t=h.yellow..i.warn.." Prio Kick Barrage"}, --Trilling Attendant
+    [217531] = { p = p.kick, t =h.yellow..i.warn..' Prio Kick Horrifying Shrill', t2=h.green.."て Targeted Frontal Spray"}, --Ixin
+    [218324] = { p = p.warn, t=h.cyan..'㍊ Mitigate Call of the Brood'}, --Nakt
+    [217533] = { p = p.dodge, t=h.green..i.dodge..'Dodge Poisonous Cloud'}, --Atik
+    [216337] = { p = p.collapse, t="Collapse", t2='Charges if > 8yds'}, --Bloodworker
+    [216333] = { p = p.warn, t="Leech DoT on Tank", t2="(Physical)"}, --Bloodstained Assistant
+    [223253] = {p = p.kick, t = h.green..i.poison..' Prio Kick Revolting Volley', t2='AoE/Poison DoT' }, --Bloodstained Webmage
+    [228015] = {p=p.collapse, t=h.pink..i.collapse..' Stack for 50% DR', t2='㍊ Mitigate Locust Swarm'}, --Hulking Bloodguard
+    [216340] = {p=p.kick, t=h.yellow..i.warn..' Prio Kick Alarm Shrill'}, --Sentry Stagshell
+    [216364] = {p=p.boss, t=h.yellow..i.kick..'Prio Kick Venom Volley', t2=i.dodge..'Dodge Webs'},
+    [216363] = {p=p.poison, t=h.green..i.poison..'Drops Black Blood', t2=h.yellow..i.warn..'Melee gives slow DoT'}, --Reinforced Drone
+    [216365] = {p=p.poison, t=h.green..i.poison..'Drops Black Blood', t2=i.dodge..'Dodge Charge'}, --Winged Carrier
+    [213179] = {p=p.boss, t=h.yellow..i.warn..'Onslaught 5s, leaves pools', t2='Tank dmg DoT x3'}, --Avanoxx
+    [220599] = {p=p.boss, t=h.green..i.kick..'Prio Kick Silken Restraints', t2='Dodge Everything'}, --Anub'zekt
+    [215407] = {p=p.boss, t='Kick/kill bloods, free team', t2='Dodge All'},
+
+
     -- Beledar
     [207802] = {p.warn, t="Beledar's Spawn"},
 
@@ -127,13 +157,6 @@ _G.CtrlDB = {
     [212764] = { p = p.boss, t=h.blue..i.dispel..' Dispel Concussive Smash', t2=h.orange..i.tankbuster..' Tankbuster Concussive Smash'}, --Engine Speaker
     [210108] = { p = p.boss, t=h.orange..i.tankbuster..' Tankbusters Seismic Reverbe, Smash'},
 
-    -- Ara'Kara
-
-    [217531] = { p = p.kick, t = p.kick[4]..' Horrifying Shrill (fear)'}, --Ixin
-    [223253] = {p = p.kick, t = p.kick[4]..' Revolting Volley', t2='Kick Web Bolt' }, --Bloodstained Webmage
-    [217533] = {p = p.kick, t = p.kick[4]..' Poison Bolt'}, --Atik
-    [216364] = {p = p.kick, t = p.kick[4]..' Venom Volley'}, --Blood Overseer
-    [216293] = { p = p.kick, t = p.kick[4]..' Resonant Barrage'}, --Trilling Attendant
 
     -- City of Threads
 

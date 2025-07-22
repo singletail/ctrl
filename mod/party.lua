@@ -30,7 +30,7 @@ local mod = {
             y=-154,
             isResizable = 1,
             isMovable = 1,
-            --target = ctrl.pwr.f.main,
+            --target = ctrl.power.f.main,
             isClipsChildren = 1,
             scale = 1,
         },

@@ -6,7 +6,7 @@ function (self, unitId, unitFrame, envTable, modTable)
     
     -- frames
     for fk, fv in pairs(modTable.elements.frame) do
-        fv.target = envTable.f[fv.target] or unitFrame
+        fv.target = envTable.f[fv.target] or unitFrame.healthBar
         fv.w = fv.w or modTable.prefs.w
         fv.h = fv.h or modTable.prefs.h
         fv.a = fv.a or 'TOPLEFT'
@@ -18,7 +18,7 @@ function (self, unitId, unitFrame, envTable, modTable)
         envTable.f[fk]:SetPoint(fv.a, fv.target, fv.pa, fv.x, fv.y)
     end
     
-    --[[ bars
+    -- bars
     for bk, bv in ipairs(modTable.elements.bar) do
         bv.target = bv.target or 'base'
         bv.file = modTable.prefs.path .. (bv.file or 'sbar')
@@ -38,7 +38,6 @@ function (self, unitId, unitFrame, envTable, modTable)
         envTable.bar[bk]:SetMinMaxValues(0, 100)
         envTable.bar[bk]:SetValue(100)
     end
-    ]]
     
     -- textures
     for tk, tv in pairs(modTable.elements.texture) do
@@ -66,13 +65,9 @@ function (self, unitId, unitFrame, envTable, modTable)
         fv.pa = fv.pa or 'TOPLEFT'
         fv.x = fv.x or 0
         fv.y = fv.y or 0
-        fv.alpha = fv.alpha or 1
         fv.jh = fv.jh or 'LEFT'
         fv.jv = fv.jv or 'MIDDLE'
-
-        --envTable.fs[fk] = envTable.fs[fk] or Plater:CreateLabel(envTable.f[fv.target], nil, nil, 'white')
-        envTable.fs[fk] = envTable.fs[fk] or envTable.f[fv.target]:CreateFontString()
-        
+        envTable.fs[fk] = envTable.fs[fk] or Plater:CreateLabel(envTable.f[fv.target], nil, nil, 'white')
         if tonumber(fv.w) and tonumber(fv.h) then
             envTable.fs[fk]:SetSize(fv.w, fv.h)
             envTable.fs[fk]:SetPoint(fv.a, envTable.f[fv.target], fv.pa, fv.x, fv.y)
@@ -84,7 +79,6 @@ function (self, unitId, unitFrame, envTable, modTable)
         envTable.fs[fk]:SetJustifyH(fv.jh)
         envTable.fs[fk]:SetJustifyV(fv.jv)
         envTable.fs[fk]:SetText(fv.t)
-        envTable.fs[fk]:SetAlpha(fv.alpha)
     end
 end
 

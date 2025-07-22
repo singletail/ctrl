@@ -1,9 +1,7 @@
 --[[ ctrl - tgt.lua - t@wse.nyc - 8/7/24 ]]
 
 ---@class ctrl
-
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -20,17 +18,8 @@ local mod = {
         },
         frame = {
             name = 'ctrltgt',
-            w=200,
-            h=154,
-            x=354,
-            y=-32,
-            a=a.tl,
-            pa=a.bl,
-            isResizable = nil,
-            isMovable = nil,
-            globalName = 'ctrltgt',
-            target = ctrl.pwr.f.main,
-            isClipsChildren = nil,
+            target = ctrl.power.f.main,
+            isClipsChildren = 1,
         },
     }
 }
@@ -40,96 +29,44 @@ ctrl.tgt = ctrl.mod:new(mod)
 ctrl.tgt.db = {
     player = {},
     mob = {},
-    --group = {},
     target = {},
     targetType = nil,
 }
-local db = ctrl.tgt.cache
 
-local playerTable = {} --ctrl.newTable('')
-local mobTable = {} -- ctrl.newTable('')
+local playerTable = {}
+local mobTable = {}
 
 local textures = {
-    --['txinfo'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6 },
     ['tbluebk'] = { target='main', t='blu_256', path=ctrl.p.tx, l=-5, al=0.6 },
 }
 
-local fs_default = {
-    t='',
-    target='main',
-    fontFile = 'Prompt-Regular.ttf',
-    fontSize = 12,
-    x = 0,
-    y = 0,
-    w = 200,
-    h = 14,
-    a = a.tl,
-    pa = a.tl,
-    jH = a.c,
-}
-
-local fontstrings = {
-    ['fs1'] = { fontFile = 'Prompt-Bold.ttf', fontSize = 14,},
-}
-
-local tgtStrX = 12
-local tgtStrY = -20
-local tgtStrTop = -18
-local tgtStrLH = 10
-local tgtStrFS = 36
-
 function ctrl.tgt:createFontStrings()
-    local io = {}
-    for k,v in pairs(fs_default) do io[k] = v end
-    io.w = nil
-    io.h = nil
-    io.x = tgtStrX
-    io.y = tgtStrY
-    io.a = a.tl
-    io.pa = a.tl
-    io.fontSize = tgtStrFS
-    ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, io)
-
+    local iconSettings = {t='', target='main', fontFile=ctrl.prefs.mod.tgt.font.file, fontSize=ctrl.prefs.mod.tgt.icon.size, x=12, y=-20, a=a.tl, pa=a.tl,}
+    ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, iconSettings)
+    local defaultfs = {t='', target='main', fontFile=ctrl.prefs.mod.tgt.font.file, fontSize=ctrl.prefs.mod.tgt.font.size, x=0, y=0, a=a.t, pa=a.t, jH=a.c}
     for i=1,12 do
-        local o = {}
-        for k,v in pairs(fs_default) do o[k] = v end
-        if fontstrings['fs'..i] then
-            for k,v in pairs(fontstrings['fs'..i]) do o[k] = v end
-        end
-        o.t = ''
-        local ymod = tgtStrLH
-        if fontstrings['fs'..i] and fontstrings['fs'..i].y then
-            ymod = fontstrings['fs'..i].y
-        else
-            ymod = tgtStrLH
-        end
-        o.y = tgtStrTop - (ymod * (i-1))
+        local o = ctrl.cp(defaultfs)
+        o.y = ctrl.prefs.mod.tgt.font.top - ((ctrl.prefs.mod.tgt.font.spacing + ctrl.prefs.mod.tgt.font.size) * (i-1))
         ctrl.tgt.fs['fs'..i] = ctrl.fs.new(ctrl.tgt, o)
     end
 end
 
 function ctrl.tgt:makeRoomForIcon()
-    local iconSize = 36
-    local ymod = 11
-    local origY = -18
+    local newX = (ctrl.prefs.mod.tgt.icon.size / 2)
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
-        local y = origY - (ymod * (i-1))
+        local y = fs:GetTop()
         fs:ClearAllPoints()
-        fs:SetWidth(ctrl.tgt.options.frame.w  - iconSize)
-        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT',  iconSize, y)
+        fs:SetPoint(a.t, ctrl.tgt.f.main, a.t, newX, y)
     end
 end
 
 function ctrl.tgt:noIcon()
-    local ymod = 11
-    local origY = -18
     for i=1,3 do
         local fs = ctrl.tgt.fs['fs'..i]
-        local y = origY - (ymod * (i-1))
+        local y = fs:GetTop()
         fs:ClearAllPoints()
-        fs:SetWidth(ctrl.tgt.options.frame.w - 8)
-        fs:SetPoint('TOPLEFT', ctrl.tgt.f.main, 'TOPLEFT', 8, y)
+        fs:SetPoint(a.t, ctrl.tgt.f.main, a.t, 0, y)
     end
 end
 
@@ -478,17 +415,21 @@ function ctrl.tgt:tick(interval)
     ctrl.tgt:update()
 end
 
-
-
 function ctrl.tgt.PLAYER_TARGET_CHANGED()
     ctrl.tgt:update()
 end
 
+function ctrl.tgt:prefs()
+    self.options.frame.w = ctrl.prefs.mod.tgt.frame.width
+    self.options.frame.h = ctrl.prefs.ui.height
+end
 
-function ctrl.tgt.setup(self)
-    ctrl.tgt.f.main = ctrl.frame.new(ctrl.tgt, ctrl.tgt.options.frame)
-    ctrl.tx.generate(ctrl.tgt, textures)
-    ctrl.tgt:createFontStrings()
+function ctrl.tgt:setup()
+    self:prefs()
+    self.f.main = ctrl.frame:new(self.options.frame)
+    self.f.main:SetScale(ctrl.prefs.ui.scale)
+    --ctrl.tx:generate(textures)
+    self:createFontStrings()
     self:registerCtrlFrame(3, self.f.main)
 end
 

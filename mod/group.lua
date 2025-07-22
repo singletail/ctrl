@@ -78,7 +78,7 @@ local mod = {
             isResizable = nil,
             isMovable = nil,
             globalName = 'ctrlgroup',
-            target = ctrl.pwr.f.main,
+            target = ctrl.power.f.main,
             isClipsChildren = nil,
         },
     }

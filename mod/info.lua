@@ -33,7 +33,7 @@ local mod = {
             isResizable = nil,
             isMovable = nil,
             globalName = 'ctrlinfo',
-            target = ctrl.pwr.f.main,
+            target = ctrl.power.f.main,
         },
     }
 }

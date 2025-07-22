@@ -29,7 +29,7 @@ local mod = {
             isResizable = nil,
             isMovable = 1,
             --globalName = 'ctrlspeed',
-            --target = ctrl.pwr.f.main,
+            --target = ctrl.power.f.main,
             isClipsChildren = nil,
         },
     }

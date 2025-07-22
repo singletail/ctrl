@@ -32,7 +32,6 @@ local mod = {
             'UPDATE_ALL_UI_WIDGETS',
             'OBJECT_ENTERED_AOI',
             'OBJECT_LEFT_AOI',
-            'UNIT_FLAGS',
             'GX_RESTARTED',
         },
     }

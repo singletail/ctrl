@@ -1,9 +1,7 @@
 --[[ ctrl - cmd.lua - t@wse.nyc - 8/7/24 ]]
---
 
 ---@class ctrl
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -15,17 +13,7 @@ local mod = {
             'UI_SCALE_CHANGED',
         },
         frame = {
-            name = 'cmd',
-            w=72,
-            h=154,
-            x=0,
-            y=0,
-            a=a.tl,
-            pa=a.tl,
-            isResizable = nil,
-            isMovable = nil,
-            globalName = 'ctrlcmd',
-            target = ctrl.pwr.f.main,
+            name = 'cmd', w=0, h=0, x=0, y=0, a=a.tl, pa=a.tl, isResizable = nil, isMovable = nil, target = ctrl.power.f.main,
         },
     }
 }
@@ -33,12 +21,8 @@ local mod = {
 ctrl.cmd = ctrl.mod:new(mod)
 
 local textures = {
-    ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6 },
+    ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6, al=0.8 },
 }
-
-local btnw = 64 
-local btnh = 28 
-local btnfntsize = 12 
 
 local buttons = {
     [1] = { name = 'b1', t = c.w..'reload', btnColor = { 1.0, 0, 0, 1 }, },
@@ -54,15 +38,15 @@ function ctrl.cmd:buttons()
         local button = {
             target = ctrl.cmd.f.main,
             template = 'beeg',
-            w = btnw,
-            h = btnh,
-            x = 0,
+            w = self.options.buttons.width,
+            h = self.options.buttons.height,
             name = buttons[i].name,
         }
         button.btnColor = buttons[i].btnColor
-        button.anchors = { { a = a.t, pa = a.t, x = 0, y = ((i-1) * - (24)) - 2 } }
+        button.anchors = {{a=a.t, pa=a.t, x=0, y=((i-1) * - (self.options.buttons.height + self.options.buttons.spacing)) - self.options.buttons.top }}
         ctrl.cmd.btn[buttons[i].name] = ctrl.btns.new(ctrl.cmd, button)
-        local fs = { target = ctrl.cmd.btn[buttons[i].name], t = buttons[i].t, fontFile = 'Prompt-Medium.ttf', fontSize=btnfntsize, x=(-0.5), y=(-1), a = a.c, pa = a.c, jH = a.c }
+
+        local fs = {target = ctrl.cmd.btn[buttons[i].name], t=buttons[i].t, fontFile=self.options.font.file, fontSize=self.options.font.size, x=self.options.font.offset.x, y=self.options.font.offset.y, a = a.c, pa = a.c, jH = a.c }
         ctrl.cmd.fs[buttons[i].name] = ctrl.fs.new(ctrl.cmd, fs)
         ctrl.cmd.btn[buttons[i].name]:setValue(0)
         ctrl.cmd.btn[buttons[i].name]:refresh()
@@ -97,7 +81,7 @@ function ctrl.cmd:inspector(btn)
     if btn:getValue() == 1 then
         ctrl.cmd.inspectorwindow = DisplayTableInspectorWindow(UIParent)
     else
-        if ctrl.cmd.inspectorwindow then 
+        if ctrl.cmd.inspectorwindow then
             ctrl.cmd.inspectorwindow:Hide()
             ctrl.cmd.inspectorwindow = nil
         end
@@ -140,17 +124,33 @@ end
 function ctrl.cmd:redraw()
 end
 
-
 function ctrl.cmd.UI_SCALE_CHANGED()
-    --ctrl.cmd:debug('UI_SCALE_CHANGED - setting window scale to ' .. '1')
-    ctrl.cmd.f.main:SetScale(1)
-    ctrl.cmd.btn.b1:SetScale(1)
-    ctrl.cmd.fs.b1:SetScale(1)
+    ctrl.cmd.f.main:SetScale(ctrl.prefs.ui.scale)
+end
+
+function ctrl.cmd:prefs()
+    self.options.frame.w = ctrl.prefs.mod[self.name].frame.width
+    self.options.frame.h = ctrl.prefs.ui.height
+    self.options.buttons = {
+        width = ctrl.prefs.mod[self.name].buttons.width,
+        height = ctrl.prefs.mod[self.name].buttons.height,
+        spacing = ctrl.prefs.mod[self.name].buttons.spacing,
+        top = ctrl.prefs.mod[self.name].buttons.top,
+    }
+    self.options.font = {
+        file = ctrl.prefs.mod[self.name].font.file,
+        size = ctrl.prefs.mod[self.name].font.size,
+        offset = {
+            x = ctrl.prefs.mod[self.name].font.offset.x,
+            y = ctrl.prefs.mod[self.name].font.offset.y,
+        },
+    }
 end
 
 function ctrl.cmd.setup(self)
+    self:prefs()
     self.f.main = ctrl.frame:new(self.options.frame)
-    self.f.main:SetScale(1)
+    self.f.main:SetScale(ctrl.prefs.ui.scale)
     ctrl.tx.generate(ctrl.cmd, textures)
     self:buttons()
     self:registerCtrlFrame(1, self.f.main)

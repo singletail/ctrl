@@ -1,19 +1,19 @@
 function (modTable)
     modTable.cache = {}
     modTable.prefs = {
-        w = 180,
-        h = 26,
-        barw = 1.39,
+        w = 192,
+        h = 48,
         scale = 1.0,
-        path = [[Interface\AddOns\ctrl\assets\plater\]],
+        path = [[Interface\AddOns\ctrl\assets\bar\]],
         fnt = {
-            bold = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Bold.ttf]],
-            med = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Medium.ttf]],
-            reg = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Regular.ttf]],
-            mono = [[Interface\AddOns\ctrl\assets\fnt\full\ProFontWindows-Regular.ttf]],
+            med = [[Interface\AddOns\SharedMedia_Singletail\font\Prompt-Bold.ttf]],
+            reg = [[Interface\AddOns\SharedMedia_Singletail\font\Prompt-Medium.ttf]],
+            mono = [[Interface\AddOns\SharedMedia_Singletail\font\Hack-Medium.ttf]],
+            pro = [[Interface\AddOns\SharedMedia_Singletail\font\ProFontWindows-Regular.ttf]],
+            term = [[Interface\AddOns\SharedMedia_Singletail\font\Terminus(TTF)-Bold.ttf]],
         },
         rgba = {
-            red = { 0.5, 0.0, 0.0, 0.5, },
+            red = { 0.75, 0.0, 0.0, 1, },
             green = { 0.0, 0.5, 0.0, 1, },
             blue = { 0.0, 0.0, 0.5, 1, },
             yellow = { 0.5, 0.5, 0.0, 1, },
@@ -23,18 +23,6 @@ function (modTable)
             white = { 0.5, 0.5, 0.5, 1, },
             gray = { 0.5, 0.5, 0.5, 1, },
             pink = { 1, 0.0, 0.85, 1, },
-            DEATHKNIGHT = { 0.38, 0.06, 0.11, 1, },
-            DEMONHUNTER = { 0.32, 0.9, 0.4, 1, },
-            DRUID = { 0.5, 0.25, 0.02, 1, },
-            HUNTER = { 0.33, 0.41, 0.22, 1, },
-            MAGE = { 0.2, 0.4, 0.46, 1, },
-            MONK = { 0.0, 0.5, 0.28, 1, },
-            PALADIN = { 0.46, 0.27, 0.36, 1, },
-            PRIEST = { 0.5, 0.5, 0.5, 1, },
-            ROGUE = { 0.5, 0.48, 0.2, 1, },
-            SHAMAN = { 0.0, 0.22, 0.43, 1, },
-            WARLOCK = { 0.27, 0.25, 0.4, 1, },
-            WARRIOR = { 0.39, 0.3, 0.21, 1, },
         },
         hex = {
             w = [[|cffffffff]],
@@ -63,16 +51,6 @@ function (modTable)
             [6] = { 0.0, 1.0, 0.33, 0.5, },
             [7] = { 0.0, 1.0, 0.66, 0.5, },
             [8] = { 0.0, 1.0, 1.0, 0.5, }, --exalted
-        },
-        enemy = {
-            ['boss'] = { 0.5, 0, 0, 0.5, },
-            ['worldboss'] = { 0.5, 0.0, 0.0, 0.5, },
-            ['rareelite'] = { 0.45, 0.0, 0.0, 0.5, },
-            ['elite'] = { 0.4, 0.0, 0.0, 0.5, },
-            ['rare'] = { 0.35, 0.0, 0.0, 0.5, },
-            ['normal'] = { 0.3, 0.0, 0.0, 0.5, },
-            ['trivial'] = { 0.25, 0.0, 0.0, 0.5, },
-            ['minus'] = { 0.2, 0.0, 0.0, 0.5, },
         },
         alpha = {
             ['boss']      = 1.0,
@@ -139,33 +117,30 @@ function (modTable)
             [3] = 'AGGRO',
         }
     }
-
+    
     modTable.elements = {
         frame = {
-            ['base'] = {fl=0, w=modTable.prefs.w, h=modTable.prefs.h, x=0, y=0, a='TOPLEFT', pa='TOPLEFT'},
-            ['top'] = {target='base', fl=300, w=modTable.prefs.w, h=modTable.prefs.h, x=0, y=0, a='TOPLEFT', pa='TOPLEFT'},
+            ['base'] = {fl = 0, w = modTable.prefs.w, h = modTable.prefs.h, x=-10, y=14, pa='BOTTOMLEFT'},
+            ['top'] = {target = 'base', fl = 300, w=modTable.prefs.w, h = modTable.prefs.h, x=0, y=0},
         },
-        --bar = {
-        --    ['threat'] = {target = 'base'},
-        --},
+        bar = {
+            ['threat'] = {target = 'base'},
+        },
         texture = {
-            ['bk'] = {file='np_bk.png', target='base', alpha=1, layer=-6,},
-            ['cap'] = {file='cap64.png', x=0, y=0, w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.5, target='base', layer=-5,},
-            ['hbar'] = {file='bar.png', x=modTable.prefs.h, y=0, target='base', w=modTable.prefs.w-modTable.prefs.h, h=modTable.prefs.h, alpha=0.5, layer=-5,},
-            ['shadow'] = {file='np_s.png', target='base', alpha=1, layer=-4,},
-            ['box'] = {file='np.box.png', t='base', alpha=1, layer=-3},
-            ['box2'] = {file='np.box.png', t='base', alpha=1, layer=-2},
+            ['shadow'] = {file = 'blacc', x = -3, y = 6, target = 'base', alpha= 1, layer = -6,},
+            ['frame'] = {file = 'thinn', x = -3, y = 6, target = 'base', layer = 0,},
+            ['cback'] = {file = 'cback', x = 3, y = 3, target = 'base', w = 44, h = 44, a = 'TOPRIGHT', alpha = 1, layer = -6,},
+            ['circle'] = {file = 'cirque', x = 3, y = 3, target = 'base', w = 44, h = 44, a = 'TOPRIGHT', layer = 0,},
+            ['error'] = {file = 'checkengine40', x = 1, y = 1, w = 36, h = 36, a = 'TOPRIGHT', t = 'base', l = -3},
         },
         fontString = {
-            ['icon'] = { t='ォ', x=2, y=0, fnt=modTable.prefs.fnt.med, fs=12, jh='CENTER', jv ='MIDDLE', w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.8},
-            ['name'] = { x=modTable.prefs.h, y=-1, fnt=modTable.prefs.fnt.med, fs=7, jh='LEFT', jv='TOP', alpha=1, a='TOPLEFT', pa='TOPLEFT'},
-            ['note'] = { x=modTable.prefs.h, y=-7, fnt=modTable.prefs.fnt.reg, fs=7, jh='LEFT', jv='TOP', alpha=0.8},
-            ['info'] = { x=modTable.prefs.h, y=-13, fnt=modTable.prefs.fnt.reg, fs=7, jh='LEFT', jv='TOP', alpha=0.8},
-            ['health'] = { t='100%', x=-2, y=-1, fnt=modTable.prefs.fnt.med, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['hpm'] = { t='', x=-3, y=-7, fnt=modTable.prefs.fnt.reg, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['target'] = { t='target', x=-3, y=-13, fnt=modTable.prefs.fnt.reg, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['debug'] = { x = 10, y = -21, fnt = modTable.prefs.fnt.mono, fs=7, jh = 'LEFT', jv = 'TOP', alpha=0.8},
-            ['debug2'] = { x = 10, y = -28, fnt = modTable.prefs.fnt.mono, fs=7, jh = 'LEFT', jv = 'TOP', alpha=0.8},
+            ['icon'] = { t = 'ォ', x=-52, y=15, fnt = modTable.prefs.fnt.med, fs = 24, jh = 'CENTER', jv = 'MIDDLE', w=48, h=48},
+            ['note'] = { x = 2, y = -2, fnt = modTable.prefs.fnt.reg, fs = 10, jh = 'LEFT', jv = 'MIDDLE'},
+            ['info'] = { x = 2, y = -12, fnt = modTable.prefs.fnt.reg, fs = 10, jh = 'LEFT', jv = 'MIDDLE'},
+            ['debug'] = { x = 2, y = -24, fnt = modTable.prefs.fnt.mono, fs = 10, jh = 'LEFT', jv = 'MIDDLE'},
+            ['debug2'] = { x = 2, y = -36, fnt = modTable.prefs.fnt.mono, fs = 10, jh = 'LEFT', jv = 'MIDDLE'},
+            ['id'] = { x = -52, y = 14, w = 48, h = 12, fnt = modTable.prefs.fnt.pro, fs = 12, jh = 'CENTER', jv = 'TOP'},        
+            ['npcId'] = { x = -52, y = -27, w = 48, h = 12, fnt = modTable.prefs.fnt.med, fs = 9, jh = 'CENTER', jv = 'TOP'},
         },
     }
     

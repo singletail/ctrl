@@ -24,7 +24,7 @@ local mod = {
             isResizable = nil,
             isMovable = nil,
             globalName = 'ctrlmodel',
-            target = ctrl.pwr.f.main,
+            target = ctrl.power.f.main,
             --isClipsChildren = 1,
         },
     }

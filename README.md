@@ -1,6 +1,6 @@
 # ctrl
 
-A quality-of-life addon suite for World of Warcraft 11.0.2+.
+A quality-of-life addon suite for World of Warcraft 11.x.x+.
 
 ## Pre-release
 
@@ -16,6 +16,10 @@ If you are just learning how to write addons, these are the only resources you n
 - https://www.lua.org/manual/5.1/
 
 The vast majority of web sites are hopelessly outdated. Stick to these and you'll be fine.
+
+## Plater
+
+This includes a Plater mod. The three files need to be pasted in to their respective functions manually. The mod adds color-coding and notes to mobs by npcId, as defined in DB.lua.
 
 ## Fonts
 

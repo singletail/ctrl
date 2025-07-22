@@ -1,14 +1,13 @@
 function(self, unitId, unitFrame, envTable, modTable)
     envTable.data = envTable.data or {}
     modTable.cache = modTable.cache or {}
-
     if UnitGUID(unitId) and UnitGUID(unitId) ~= envTable.data.guid then
         envTable.tx.error:SetAlpha(1)
         envTable.fs.id:SetText(modTable.prefs.hex.y .. string.sub(unitId, 10))
         envTable.data = {
             guid = UnitGUID(unitId),
             reaction = UnitReaction('player', unitId) or 0,
-            rgba = modTable.prefs.reaction[envTable.data.reaction],
+            rgba = modTable.prefs.reaction[envTable.data.reaction] or {1, 1, 1, 1},
         }
         if UnitIsPlayer(unitId) then
             envTable.data.name = UnitPVPName(unitId) or UnitName(unitId) or ''
@@ -29,7 +28,7 @@ function(self, unitId, unitFrame, envTable, modTable)
         else
             local unitType, _, _, _, _, uId, spawnId = strsplit('-', envTable.data.guid)
             envTable.data.npcId = tonumber(uId)
-
+            
             if modTable.cache[envTable.data.npcId] == nil then
                 modTable.cache[envTable.data.npcId] = {
                     name = UnitName(unitId),
@@ -57,7 +56,7 @@ function(self, unitId, unitFrame, envTable, modTable)
                     end
                 end
             end
-
+            
             envTable.data.name = modTable.cache[envTable.data.npcId].name or 'error'
             envTable.data.classification = modTable.cache[envTable.data.npcId].classification or ''
             envTable.data.icon = modTable.cache[envTable.data.npcId].icon or ''
@@ -68,7 +67,7 @@ function(self, unitId, unitFrame, envTable, modTable)
             envTable.data.note3 = modTable.cache[envTable.data.npcId].note3 or ''
             envTable.data.alpha = modTable.cache[envTable.data.npcId].alpha
             envTable.data.scale = modTable.cache[envTable.data.npcId].scale or 0.75
-
+            
             if unitType == 'Creature' or unitType == 'Vehicle' then
                 envTable.data.unitType = unitType --temp
                 envTable.data.spawnId = tonumber(bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3))
@@ -78,7 +77,7 @@ function(self, unitId, unitFrame, envTable, modTable)
             end
         end
     end
-
+    
     envTable.data.target = ''
     if UnitExists(unitId..'target') and not UnitIsDead(unitId..'target') then
         if UnitIsUnit('player', unitId..'target') then
@@ -90,7 +89,7 @@ function(self, unitId, unitFrame, envTable, modTable)
     elseif UnitIsPlayer(unitId) then
         envTable.data.target = tostring(envTable.data.guildRank or '')
     end
-
+    
     if not UnitIsPlayer(unitId) then
         local _, threatStatus, threatPct, _, _ = UnitDetailedThreatSituation('player', unitId)
         if threatStatus then
@@ -112,25 +111,24 @@ function(self, unitId, unitFrame, envTable, modTable)
             envTable.data.hex = modTable.prefs.hex.a
         end
     end
-
+    
     if envTable.data.hex then
         envTable.data.icon = envTable.data.hex .. envTable.data.icon
         envTable.data.name = envTable.data.hex .. envTable.data.name
     end
-
+    
     unitFrame.healthBar.unitName:SetText(envTable.data.name)
     envTable.fs.icon:SetText(tostring(envTable.data.icon))
     envTable.fs.note:SetText(tostring(envTable.data.note))
     envTable.fs.debug:SetText(tostring(envTable.data.note2 or ''))
     envTable.fs.debug2:SetText(tostring(envTable.data.note3 or ''))
     envTable.fs.info:SetText(tostring(envTable.data.target))
-
+    
     envTable.tx.frame:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.alpha)
     envTable.tx.circle:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.alpha)
     envTable.fs.npcId:SetText(modTable.prefs.hex.v..tostring(envTable.data.npcId))
-    envTable.tx.frame:SetAlpha(envTable.data.alpha)
-    envTable.tx.circle:SetAlpha(envTable.data.alpha)
-    unitFrame.healthBar:SetScale(envTable.data.scale)
+    --envTable.tx.circle:SetAlpha(envTable.data.alpha)
+    --unitFrame.healthBar:SetScale(envTable.data.scale)
     envTable.tx.error:SetAlpha(0) -- no errors
 end
 
