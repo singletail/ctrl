@@ -83,12 +83,10 @@ local mod = {
             pa=a.t,
             isResizable = 1,
             isMovable = 1,
-            --globalName = 'ctrlloot',
-            --target = ctrl.power.f.main,
             isClipsChildren = nil,
         },
-        fontFile = 'MartianMono-sWdMd.otf',
-        fontSize = 10,
+        fontFile = 'AnkaCoder-Bold',
+        fontSize = 11,
     }
 }
 
@@ -110,9 +108,11 @@ local fontstrings = {
 }
 
 local function ConfigureScrollFrame(self, f)
-    local font = ctrl.loot.options.fontFile or 'GlassTTYVT220-Medium.ttf'
-    local fontSize = ctrl.loot.options.fontSize or 24
-    f:SetFont(ctrl.p.fnt .. font, fontSize, "")
+    local font = ctrl.loot.options.fontFile
+    local fontSize = ctrl.loot.options.fontSize
+    local fontObject = ctrl.font(font, fontSize, '')
+    f:SetFontObject(fontObject)
+    --f:SetFont(ctrl.p.fnt .. font, fontSize, "")
     f:SetSpacing(3)
     f:SetFading(false)
     f:SetMaxLines(2000)

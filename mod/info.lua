@@ -1,9 +1,7 @@
 --[[ ctrl - info.lua - t@wse.nyc - 8/7/24 ]]
---
 
 ---@class ctrl
-local ctrl = select(2, ...)
-
+local addon, ctrl = ...
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -13,8 +11,9 @@ local mod = {
     taint = nil,
     error = nil,
     options = {
+        numRows = 6,
         timers = {
-            1
+            1, 15
         },
         events = {
             'PLAYER_ENTERING_WORLD',
@@ -24,15 +23,8 @@ local mod = {
         },
         frame = {
             name = 'info',
-            w=96,
-            h=154,
-            x=84,
-            y=-32,
-            a=a.tl,
-            pa=a.bl,
             isResizable = nil,
             isMovable = nil,
-            globalName = 'ctrlinfo',
             target = ctrl.power.f.main,
         },
     }
@@ -40,116 +32,151 @@ local mod = {
 
 ctrl.info = ctrl.mod:new(mod)
 
-local ok = [[|cff60f0f9]]
+local textures = {['bk'] = { target='main', t='dark1', l=-6, al=0.6 },}
+local label_text = {'fps', 'ping', 'mem', '', '', ''}
 
+function ctrl.info:boxes()
+    local box_default = { t='LCDsm27.png', target='main', l=-5, a=a.tr, pa=a.tr}
+    for i=1, self.options.numRows do
+        local box = ctrl.cp(box_default)
+        box.name = 'box'..i
+        box.x = ctrl.prefs.mod.info.box.x
+        box.w = ctrl.prefs.mod.info.box.width
+        box.h = ctrl.prefs.mod.info.box.height
+        box.y = ctrl.prefs.mod.info.box.y - ((i-1) * (ctrl.prefs.mod.info.box.height + ctrl.prefs.mod.info.box.spacing))
+        self.tx['box'..i] = ctrl.tx.new(self, box)
+    end
+end
 
-local tboxw = 48
-local tboxh = 20
-local tboxx = -14
+function ctrl.info:labels()
+    ctrl.info.label = ctrl.info.label or {}
+    local label_default = { t='label', target='main', a=a.tr, pa=a.t, jH=a.r}
+    for i=1, self.options.numRows do
+        local fs = ctrl.cp(label_default)
+        fs.name = 'label'..i
+        fs.fontFile = ctrl.prefs.mod.info.font.file
+        fs.fontSize = ctrl.prefs.mod.info.font.size
+        fs.x = ctrl.prefs.mod.info.font.x
+        fs.y = ctrl.prefs.mod.info.font.y - ((i-1) * (ctrl.prefs.mod.info.font.spacing))
+        fs.t = label_text[i] or ('label'..i)
+        ctrl.info.label[i] = ctrl.fs.new(self, fs)
+    end
+end
 
-local textures = {
-    ['txinfo'] = { target = 'main', t = 'dark1', path = ctrl.p.tx, l=-6, al=0.6 },
-    ['tblue1'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-6 },
-    ['tblue2'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-30 },
-    ['tblue3'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-54 },
-    ['tblue4'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-78 },
-    ['tblue5'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-102 },
-    ['tblue6'] = { target = 'main', t = 'blu_256', path = ctrl.p.tx, l = -4, w=tboxw, h=tboxh, a=a.tl, pa=a.t, x=tboxx, y=-126 },
-}
+function ctrl.info:fs()
+    ctrl.info.text = ctrl.info.text or {}
+    local fs_default = { t=c.r..'', target='main', a=a.tr, pa=a.tr, jH=a.r}
+    for i=1, self.options.numRows do
+        local fs = ctrl.cp(fs_default)
+        fs.name = 'text'..i
+        fs.fontFile = ctrl.prefs.mod.info.box.font.file
+        fs.fontSize = ctrl.prefs.mod.info.box.font.size
+        fs.x = ctrl.prefs.mod.info.box.x + ctrl.prefs.mod.info.box.font.offset.x
+        fs.y = ctrl.prefs.mod.info.box.y - ((i-1) * (ctrl.prefs.mod.info.box.height + ctrl.prefs.mod.info.box.spacing)) + ctrl.prefs.mod.info.box.font.offset.y
+        ctrl.info.text[i] = ctrl.fs.new(self, fs)
+    end
+end
 
-local ifst = 9 
-local ifsv = 13 
-local fntt = 'AnkaCoder-Regular.ttf'
-local fntv = 'LEDBoard.ttf'
-local fntx = -18
+function ctrl.info:lamps()
+    ctrl.info.lamp = ctrl.info.lamp or {}
+    local lamp_default = { btnColor= {0,1.0,0,0.25}, target='main'}
+    for i=1, self.options.numRows do
+        local lamp = ctrl.cp(lamp_default)
+        lamp.name = 'lamp'..i
+        lamp.template = ctrl.prefs.mod.info.lamp.template
+        lamp.w = ctrl.prefs.mod.info.lamp.width
+        lamp.h = ctrl.prefs.mod.info.lamp.height
+        lamp.anchors = {{ a=a.tr, pa=a.tr, x=ctrl.prefs.mod.info.lamp.x, y=ctrl.prefs.mod.info.lamp.y - ((i-1) * ctrl.prefs.mod.info.lamp.spacing)}}
+        ctrl.info.lamp[i] = ctrl.btns.new(self, lamp)
+        ctrl.info.lamp[i]:off()
+    end
+end
 
-local fontstrings = {
-    -- labels
-    ['fsinfo1_t'] = { target='main', t = c.w..'stat', fontFile=fntt, fontSize=ifst, x=fntx, y = -14, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo2_t'] = { target='main', t = c.w..'fps',  fontFile=fntt, fontSize=ifst, x=fntx, y = -38, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo3_t'] = { target='main', t = c.w..'mem',  fontFile=fntt, fontSize=ifst, x=fntx, y = -62, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo4_t'] = { target='main', t = c.w..'ping', fontFile=fntt, fontSize=ifst, x=fntx, y = -86, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo5_t'] = { target='main', t = c.w..'sqw',  fontFile=fntt, fontSize=ifst, x=fntx, y = -110, a=a.tr, pa=a.t, jH=a.r },
-    ['fsinfo6_t'] = { target='main', t = c.w..'loot', fontFile=fntt, fontSize=ifst, x=fntx, y = -134, a=a.tr, pa=a.t, jH=a.r },
-
-    -- values
-    ['fsinfo1_v'] = { target='main', t = ok..'ok', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -11, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo2_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -35, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo3_v'] = { target='main', t = c.c..'32', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -59, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo4_v'] = { target='main', t = c.c..'67', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -83, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo5_v'] = { target='main', t = c.c..'100', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -107, a=a.tr, pa=a.tr, jH=a.l },
-    ['fsinfo6_v'] = { target='main', t = c.c..'6', fontFile = fntv, fontSize=ifsv, fontPath=ctrl.p.fntorig, x = -20, y = -131, a=a.tr, pa=a.tr, jH=a.l },
-}
-
-local btnsz = 28
-local btnx = 8
-
-local buttons = {
-    ['l1'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -2 } }},
-    ['l2'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -26 } }},
-    ['l3'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -50 } }},
-    ['l4'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -74 } }},
-    ['l5'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -98 } }},
-    ['l6'] = { target = 'main', template = 'retrolamp', btnColor = { 0, 1.0, 0, 0.25 }, h=btnsz, w=btnsz, anchors = { { a = a.tr, pa = a.tr, x = btnx, y = -122 } }},
-}
 
 
 function ctrl.info:fps()
+    local line = 1
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
     local fps = math.floor(GetFramerate()) or 0
-    local col = ok
+    local col = c.b
+    local rgba = c.rgba.b
+    local lamp_value = 0
     if fps > 90 then
-        col = ok
-        ctrl.info.btn.l2:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l2:off()
+        col = c.c
+        rgba = c.rgba.g
     elseif fps > 60 then
         col = c.y
-        ctrl.info.btn.l2:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l2:on()
+        rgba = c.rgba.y
+        lamp_value = 1
     else
         col = c.r
-        ctrl.info.btn.l2:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l2:on()
+        rgba = c.rgba.r
+        lamp_value = 1
     end
-    ctrl.info.fs.fsinfo2_v:SetText(col..tostring(fps))
+    text:SetText(string.format('%s%d', col, fps))
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
 end
 
 function ctrl.info:net()
+    local line = 2
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
     local _, _, latencyHome, latencyWorld = GetNetStats()
-    local col2 = ok
-    if latencyWorld < 70 then
-        col2= ok
-        ctrl.info.btn.l4:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l4:off()
-    elseif latencyWorld < 90 then
-        col2 = c.y
-        ctrl.info.btn.l4:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l4:on()
+    local col = c.o
+    local rgba = c.rgba.o
+    local lamp_value = 0
+    if latencyWorld > 70 then
+        col=c.r
+        rgba = c.rgba.r
+    elseif latencyWorld > 30 then
+        col = c.y
+        rgba = c.rgba.y
+        lamp_value = 1
     else
-        col2 = c.r
-        ctrl.info.btn.l4:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l4:on()
+        col = c.r
+        rgba = c.rgba.r
+        lamp_value = 1
     end
-    ctrl.info.fs.fsinfo4_v:SetText(col2..tostring(latencyWorld))
+    text:SetText(string.format('%s%d', col, latencyWorld))
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
 end
 
 function ctrl.info:mem()
-    local kb = (math.floor(collectgarbage('count') / 1000)) --/ 10
-    local col = ok
-    if kb < 300 then
-        col = ok
-        ctrl.info.btn.l3:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l3:off()
-    elseif kb > 500 then
-        col = c.r
-        ctrl.info.btn.l3:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l3:on()
+    local line = 3
+    local memStr = string.format('%s%s', c.r, 'err')
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
+    local col = c.o
+    local rgba = c.rgba.o
+    local lamp_value = 0
+    UpdateAddOnMemoryUsage()
+    local mem = GetAddOnMemoryUsage('ctrl')
+    if mem > 1000 then
+        col=c.r
+        rgba = c.rgba.r
+        memStr = string.format('%s%.2f', col, (mem/1000))
+        lamp_value = 1
+    elseif mem > 500 then
+        col=c.y
+        rgba = c.rgba.y
+        memStr = string.format('%s%d', col, mem)
+        lamp_value = 1
     else
-        col = c.y
-        ctrl.info.btn.l3:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l3:on()
+        col=c.g
+        rgba = c.rgba.g
+        memStr = string.format('%s%d', col, mem)
     end
-    ctrl.info.fs.fsinfo3_v:SetText(col..tostring(kb))
+    text:SetText(memStr)
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
 end
+
+--[[
+
+
 
 function ctrl.info:sqw()
     local sqw = tonumber(GetCVar('SpellQueueWindow')) or 0
@@ -216,9 +243,7 @@ function ctrl.info:update()
     self:loot()
 end
 
-function ctrl.info:tick(interval)
-    self:update()
-end
+
 
 function ctrl.info:on()
     self:registerTimers()
@@ -259,7 +284,9 @@ function ctrl.info.PLAYER_ENTERING_WORLD()
 end
 
 
-function ctrl.info.setup(self)
+
+function ctrl.info:setup()
+    self:prefs()
     self.f.main = ctrl.frame:new(self.options.frame)
     ctrl.tx.generate(ctrl.info, textures)
     ctrl.btns.generate(ctrl.info, buttons)
@@ -272,5 +299,37 @@ function ctrl.info.setup(self)
     ctrl.info.btn.l6:off()
     self:registerCtrlFrame(2, self.f.main)
 end
+
+]]
+
+function ctrl.info:update(int)
+    --self:status()
+    self:fps()
+    self:net()
+    if int > 10 then self:mem() end
+    --self:sqw()
+    --self:loot()
+end
+
+function ctrl.info:tick(int)
+    self:update(int)
+end
+
+function ctrl.info:prefs()
+    self.options.frame.w = ctrl.prefs.mod[self.name].frame.width
+    self.options.frame.h = ctrl.prefs.ui.height
+end
+
+function ctrl.info:setup()
+    self:prefs()
+    self.f.main = ctrl.frame:new(self.options.frame)
+    ctrl.tx.generate(ctrl.info, textures)
+    self:boxes()
+    self:fs()
+    self:labels()
+    self:lamps()
+    self:registerCtrlFrame(2, self.f.main)
+end
+
 
 ctrl.info:init()

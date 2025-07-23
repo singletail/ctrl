@@ -427,8 +427,7 @@ end
 function ctrl.tgt:setup()
     self:prefs()
     self.f.main = ctrl.frame:new(self.options.frame)
-    self.f.main:SetScale(ctrl.prefs.ui.scale)
-    --ctrl.tx:generate(textures)
+    ctrl.tx.generate(ctrl.tgt, textures)
     self:createFontStrings()
     self:registerCtrlFrame(3, self.f.main)
 end

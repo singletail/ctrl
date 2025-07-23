@@ -7,6 +7,11 @@ local ctrl = select(2, ...)
 
 ctrl.prefs = {
     reset = true,
+    font = {
+        file = 'Prompt-Medium',
+        size = 11,
+        flags = '',
+    },
     log = {
         enable = 1,
         level = 8,
@@ -29,11 +34,11 @@ ctrl.prefs = {
                 top = -36,
             },
             font = {
-                size = 12,
-                file = 'AnkaCoder-Bold.ttf',
+                size = 11,
+                file = 'Prompt-Medium',
                 offset = {
-                    x = 1,
-                    y = -0.25,
+                    x = 0,
+                    y = -1,
                 },
             },
         },
@@ -49,7 +54,7 @@ ctrl.prefs = {
             },
             font = {
                 size = 11,
-                file = 'Prompt-Medium.ttf',
+                file = 'Prompt-Medium',
                 offset = {
                     x = -0.5,
                     y = -1,
@@ -61,8 +66,8 @@ ctrl.prefs = {
                 width = 144,
             },
             font = {
-                size = 12,
-                file = 'Prompt-Medium.ttf',
+                size = 11,
+                file = 'Prompt-Medium',
                 top = -2,
                 spacing = 2,
             },
@@ -70,13 +75,49 @@ ctrl.prefs = {
                 size = 36,
             },
         },
+        info = {
+            frame = {
+                width = 96,
+            },
+            box = {
+                x = -10,
+                y = -4,
+                width = 40,
+                height = 18,
+                spacing = 2,
+                font = {
+                    size = 11,
+                    file = 'DSEG7',
+                    offset = {
+                        x = -4,
+                        y = -2,
+                    },
+                },
+                
+            },
+            font = {
+                size = 11,
+                file = 'Prompt-Medium',
+                x = -8,
+                y = -10,
+                spacing = 20,
+            },
+            lamp = {
+                template='retrolamp',
+                width = 24,
+                height = 24,
+                x = 6,
+                y = -1,
+                spacing = 20,
+            },
+        },
         mobframe = {
             frame = {
                 width = 276,
             },
             font = {
-                size = 12,
-                file = 'Prompt-Regular.ttf',
+                size = 11,
+                file = 'Prompt-Medium',
             },
         },
     },

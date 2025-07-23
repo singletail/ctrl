@@ -157,6 +157,7 @@ end
 function ctrl.btns.new(module, o)
     o = o or {}
     if o.template then ctrl.template:loadTemplateItem('btn', o) end
+    if type(o.target) == 'string' then o.target = module.f[o.target] or module.f.main end
 
     local btn = CreateFrame('Frame', nil, o.target)
     btn:SetFrameStrata('DIALOG')

@@ -54,9 +54,9 @@ local fontstrings = {
     ['h1'] = { t='total:', a=a.tr, pa=a.tr, x=-225, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11),},
     ['h2'] = { t='combat:', a=a.tr, pa=a.tr, x=-135, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11),},
     ['h3'] = { t='aggro:', a=a.tr, pa=a.tr, x=-45, y=-6, target='main', fontFile='Prompt-Regular.ttf', fontSize=(11),},
-    ['v1'] = { t='0', a=a.tr, pa=a.tr, x=-188, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13),},
-    ['v2'] = { t='0', a=a.tr, pa=a.tr, x=-98, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13),},
-    ['v3'] = { t='0', a=a.tr, pa=a.tr, x=-8, y=-5, target='main', fontFile='LEDBoard.ttf', fontPath=ctrl.p.fntorig, fontSize=(13),},
+    ['v1'] = { t='0', a=a.tr, pa=a.tr, x=-188, y=-5, target='main', fontFile='LEDBoard.ttf', fontSize=(13),},
+    ['v2'] = { t='0', a=a.tr, pa=a.tr, x=-98, y=-5, target='main', fontFile='LEDBoard.ttf', fontSize=(13),},
+    ['v3'] = { t='0', a=a.tr, pa=a.tr, x=-8, y=-5, target='main', fontFile='LEDBoard.ttf', fontSize=(13),},
 }
 
 function ctrl.mobframe:createFontStrings()

@@ -2,7 +2,6 @@
 
 ---@class ctrl
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -13,8 +12,8 @@ local mod = {
     buffer = {},
     isTimerOn = nil,
     options = {
-        fontFile = 'Prompt-Bold.ttf',
-        fontSize = 32,
+        fontFile = 'Prompt-Medium',
+        fontSize = 28,
         maxLines = 5,
         ttl = 5,
         fade = 4,
@@ -43,10 +42,6 @@ function ctrl.alert:add(msg)
     ctrl.alert:debug(msg)
 end
 
-function ctrl.alert:resize(f, w, h)
---
-end
-
 function ctrl.alert:createFontStrings()
     local msg = ''
     for i = 1, self.options.maxLines do
@@ -63,9 +58,6 @@ function ctrl.alert:createFontStrings()
             n = 'fs' .. i
         }
         self.fs[i] = ctrl.fs:new(set)
-        if self.options.debug then
-            msg = 'msg ' .. tostring(i)
-        end
         self.fs[i]:SetText(msg)
     end
 end

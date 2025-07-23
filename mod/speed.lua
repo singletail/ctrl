@@ -14,23 +14,10 @@ local mod = {
         timers = {
             1/15
         },
-        events = {
-            --'SPEED_UPDATE',
-            --'VEHICLE_ANGLE_UPDATE',
-        },
         frame = {
             name = 'ctrlspeed',
-            w=200,
-            h=60,
-            x=0,
-            y=-40,
-            a=a.t,
-            pa=a.t,
-            isResizable = nil,
-            isMovable = 1,
-            --globalName = 'ctrlspeed',
-            --target = ctrl.power.f.main,
-            isClipsChildren = nil,
+            w=200, h=60, x=0, y=-40, a=a.t, pa=a.t,
+            isResizable = 1, isMovable = 1, isClipsChildren = nil,
         },
     }
 }
@@ -38,21 +25,19 @@ local mod = {
 ctrl.speed = ctrl.mod:new(mod)
 
 
-
 local subframes = {
-    --['bk'] = { anchors = { { a = a.tl, pa = a.tl, x = 12, y = -36 }, { a = a.br, pa = a.br, x = -12, y = 8, isClipsChildren = 1, } } },
-    ['fcompass'] = { target = 'main', w = 1024, h = 64, a=a.c, pa=a.c, x=0, y=0 },
+    --['fcompass'] = { target = 'main', w = 1024, h = 64, a=a.c, pa=a.c, x=0, y=0 },
 }
 
 local textures = {
-    ['txbk'] = { target='main', t='mon2_188', path = ctrl.p.tx, l=-6 },
-    ['txcompass'] = { target='comp', t='numbers.png', path = ctrl.p.tx, l=-5 },
+    ['bk'] = { t='dark1', target='main', l=-6, al=0.6 },
+    --['txcompass'] = { target='comp', t='numbers.png', path = ctrl.p.tx, l=-5 },
 }
 
 local fontstrings = {
     ['fssym'] = { t="䃿", a=a.tl, pa=a.tl, x=50, y=-10, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=24,},
-    ['fsfake'] = { jH='RIGHT', t=c.r..'888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontPath=ctrl.p.fntold, fontSize=24,},
-    ['fsspeed'] = { jH='RIGHT', t='888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontPath=ctrl.p.fntold, fontSize=24,},
+    ['fsfake'] = { jH='RIGHT', t=c.r..'888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontSize=24,},
+    ['fsspeed'] = { jH='RIGHT', t='888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontSize=24,},
     ['fsmax'] = { t='000', a=a.t, pa=a.t, x=-40, y=-40, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=14,},
     ['fsbonus'] = { t="+000", a=a.t, pa=a.t, x=40, y=-40, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=14,},
 }
@@ -185,11 +170,11 @@ function ctrl.speed:status()
             if IsResting() then
                 self.data.symbol = c.a..''
             elseif IsInInstance() then
-                self.data.symbol = c.y..ss.instance..'inst'
+                self.data.symbol = c.y..ss.instance
             elseif IsIndoors() then
-                self.data.symbol = c.a..ss.indoors..'ind'
+                self.data.symbol = c.a..ss.indoors
             else
-                self.data.symbol = c.a..ss.outdoors..'out'
+                self.data.symbol = c.a..ss.outdoors
             end
             self.data.color = c.r
         end

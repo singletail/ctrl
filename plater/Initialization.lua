@@ -1,16 +1,10 @@
 function (modTable)
     modTable.cache = {}
     modTable.prefs = {
-        w = 224,
-        h = 32,
+        w = 192,
+        h = 28,
         scale = 1.0,
         path = [[Interface\AddOns\ctrl\assets\plater\]],
-        fnt = {
-            bold = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Bold.ttf]],
-            med = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Medium.ttf]],
-            reg = [[Interface\AddOns\ctrl\assets\fnt\full\Prompt-Regular.ttf]],
-            mono = [[Interface\AddOns\ctrl\assets\fnt\full\ProFontWindows-Regular.ttf]],
-        },
         rgba = {
             red = { 0.5, 0.0, 0.0, 0.5, },
             green = { 0.0, 0.5, 0.0, 1, },
@@ -158,15 +152,15 @@ function (modTable)
             ['box2'] = {file='np.box.png', t='base', alpha=1, layer=-2},
         },
         fontString = {
-            ['icon'] = { t='ォ', x=2, y=-2, fnt=modTable.prefs.fnt.med, fs=21, jh='CENTER', jv ='MIDDLE', w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.8},
-            ['name'] = { x=modTable.prefs.h, y=-3, fnt=modTable.prefs.fnt.med, fs=10, jh='LEFT', jv='TOP', alpha=1, a='TOPLEFT', pa='TOPLEFT'},
-            ['note'] = { x=modTable.prefs.h, y=-12, fnt=modTable.prefs.fnt.reg, fs=10, jh='LEFT', jv='TOP', alpha=0.8},
-            ['info'] = { x=modTable.prefs.h, y=-21, fnt=modTable.prefs.fnt.reg, fs=10, jh='LEFT', jv='TOP', alpha=0.8},
-            ['health'] = { t='100%', x=-3, y=-1, fnt=modTable.prefs.fnt.med, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['hpm'] = { t='', x=-3, y=-12, fnt=modTable.prefs.fnt.reg, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['target'] = { t='target', x=-3, y=-21, fnt=modTable.prefs.fnt.reg, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['debug'] = { x = 10, y = -30, fnt = modTable.prefs.fnt.mono, fs=10, jh = 'LEFT', jv = 'TOP', alpha=0.8},
-            ['debug2'] = { x = 10, y = -40, fnt = modTable.prefs.fnt.mono, fs=10, jh = 'LEFT', jv = 'TOP', alpha=0.8},
+            ['icon'] = { t='ォ', x=2, y=-2, jh='CENTER', jv ='MIDDLE', w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.8},
+            ['name'] = { x=modTable.prefs.h, y=-2, jh='LEFT', jv='TOP', alpha=1, a='TOPLEFT', pa='TOPLEFT'},
+            ['note'] = { x=modTable.prefs.h, y=-10, jh='LEFT', jv='TOP', alpha=0.8},
+            ['info'] = { x=modTable.prefs.h, y=-18, jh='LEFT', jv='TOP', alpha=0.8},
+            ['health'] = { t='100%', x=-2, y=-1, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['hpm'] = { t='', x=-3, y=-10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['target'] = { t='target', x=-3, y=-18, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['debug'] = { x = 10, y = -30, jh = 'LEFT', jv = 'TOP', alpha=0.8},
+            ['debug2'] = { x = 10, y = -40, jh = 'LEFT', jv = 'TOP', alpha=0.8},
         },
     }
     

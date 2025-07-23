@@ -57,7 +57,30 @@ function (self, unitId, unitFrame, envTable, modTable)
         envTable.tx[tk]:SetPoint(tv.a, envTable.f[tv.target], tv.pa, tv.x, tv.y)
         envTable.tx[tk]:SetAlpha(tv.alpha)
     end
-    
+
+    --fontObjects
+    local fontPath = 'Interface\\AddOns\\ctrl\\assets\\fnt\\'
+    local fontName = 'Prompt-Medium'
+    local fontSize = 9
+    local iconFontSize = 18
+    local globalFont = 'ctrlfnt'..fontName..tostring(fontSize)
+    local globalIconFont = 'ctrlfnt'..fontName..tostring(iconFontSize)
+
+    if not _G[globalFont] then
+        local fontObject = CreateFont(globalFont)
+        fontObject:SetFont(fontPath..fontName..'.ttf', fontSize, '')
+        _G[globalFont] = fontObject
+    end
+
+    if not _G[globalIconFont] then
+        local fontObject = CreateFont(globalIconFont)
+        fontObject:SetFont(fontPath..fontName..'.ttf', iconFontSize, '')
+        _G[globalIconFont] = fontObject
+    end
+
+    envTable.font = _G[globalFont]
+    envTable.iconfont = _G[globalIconFont]
+
     -- fontStrings
     for fk, fv in pairs(modTable.elements.fontString) do
         fv.t = fv.t or tostring(fk)
@@ -70,7 +93,6 @@ function (self, unitId, unitFrame, envTable, modTable)
         fv.jh = fv.jh or 'LEFT'
         fv.jv = fv.jv or 'MIDDLE'
 
-        --envTable.fs[fk] = envTable.fs[fk] or Plater:CreateLabel(envTable.f[fv.target], nil, nil, 'white')
         envTable.fs[fk] = envTable.fs[fk] or envTable.f[fv.target]:CreateFontString()
         
         if tonumber(fv.w) and tonumber(fv.h) then
@@ -80,7 +102,11 @@ function (self, unitId, unitFrame, envTable, modTable)
         else
             envTable.fs[fk]:SetPoint(fv.a, envTable.f[fv.target], fv.pa, fv.x, fv.y)
         end
-        envTable.fs[fk]:SetFont(fv.fnt, fv.fs, '')
+        if fk == 'icon' then
+            envTable.fs[fk]:SetFontObject(envTable.iconfont)
+        else
+            envTable.fs[fk]:SetFontObject(envTable.font)
+        end
         envTable.fs[fk]:SetJustifyH(fv.jh)
         envTable.fs[fk]:SetJustifyV(fv.jv)
         envTable.fs[fk]:SetText(fv.t)

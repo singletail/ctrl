@@ -26,17 +26,12 @@ ctrl.is = {
 }
 
 ctrl.p = {
-    fnt = [[Interface\AddOns\ctrl\assets\fnt\min\]],
-    fntf = [[Interface\AddOns\ctrl\assets\fnt\full\]],
-    fntorig = [[Interface\AddOns\ctrl\assets\fnt\orig\]],
-    fntold = [[Interface\AddOns\ctrl\assets\fnt\old\]],
+    fnt = [[Interface\AddOns\ctrl\assets\fnt\]],
     tx = [[Interface\AddOns\ctrl\assets\tx\]],
     btns = [[Interface\AddOns\ctrl\assets\btns\]],
     ux = [[Interface\AddOns\ctrl\assets\ux\]],
     sfx = [[Interface\AddOns\ctrl\assets\sfx\]],
     ctrl = [[Interface\AddOns\ctrl\assets\ctrl\]],
-    s1999 = [[Interface\AddOns\ctrl\assets\1999\]],
-    test = [[Interface\AddOns\ctrl\assets\test\]],
 }
 
 -- UIParentLoadAddOn("Blizzard_DebugTools")

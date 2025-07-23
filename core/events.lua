@@ -16,7 +16,7 @@ local mod = {
             'DUEL_REQUESTED',
             'PLAYER_REGEN_DISABLED',
             'PLAYER_REGEN_ENABLED',
-            'PLAYER_GUILD_UPDATE',
+            --'PLAYER_GUILD_UPDATE',
             'ADDON_ACTION_BLOCKED',
             'ADDON_ACTION_FORBIDDEN',
             'MACRO_ACTION_BLOCKED',
@@ -65,11 +65,13 @@ function ctrl.events.DUEL_REQUESTED(evt)
 end
 
 function ctrl.events.PLAYER_REGEN_DISABLED()
-    ctrl.events.alert('Aggro', nil, c.r)
+    --ctrl.events.alert('Aggro', nil, c.r)
+    ctrl.sfx:play('alert23')
 end
 
 function ctrl.events.PLAYER_REGEN_ENABLED()
-    ctrl.events.alert('Combat ended')
+    --ctrl.events.alert('Combat ended')
+    ctrl.sfx:play('pop')
 end
 
 function ctrl.events.PLAYER_GUILD_UPDATE(evt)
@@ -86,7 +88,10 @@ function ctrl.events.ADDON_ACTION_BLOCKED(evt)
     local msg = 'ADDON_ACTION_BLOCKED('..tostring(isTainted)..')'
     ctrl.events.alert(msg, 'consolewarning', c.r)
     ctrl.events:error(msg)
-    if isTainted then ctrl.events:error('Tainted') end
+    if isTainted then
+        ctrl.events:error('Tainted')
+        ctrl.sfx:play('redalert')
+    end
     if fn then ctrl.events:error(tostring(fn)) end
 end
 
@@ -95,7 +100,10 @@ function ctrl.events.ADDON_ACTION_FORBIDDEN(evt)
     local msg = 'ADDON_ACTION_FORBIDDEN('..tostring(isTainted)..')'
     ctrl.events.alert(msg, 'consolewarning', c.r)
     ctrl.events:error(msg)
-    if isTainted then ctrl.events:error('Tainted') end
+    if isTainted then
+        ctrl.events:error('Tainted')
+        ctrl.sfx:play('redalert')
+    end
     if fn then ctrl.events:error(tostring(fn)) end
 end
 
@@ -174,7 +182,7 @@ function ctrl.events.UNIT_FLAGS(evt)
 end
 
 function ctrl.events.GX_RESTARTED()
-    ctrl.events.alert('GX_RESTARTED', 'pop', c.y)
+    ctrl.events.alert('GX_RESTARTED', 'redalert', c.y)
 end
 
 ctrl.events:init()

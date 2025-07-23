@@ -11,8 +11,8 @@ local mod = {
     symbol = ctrl.s.console,
     zoom = 1,
     options = {
-        fontFile = 'MartianMono-sWdMd.otf',
-        fontSize = 12,
+        fontFile = 'AnkaCoder-Bold',
+        fontSize = 11,
         frame = {
             name = 'ctrl',
             w = 480,
@@ -35,8 +35,7 @@ local subframes = {
 }
 
 local textures = {
-    ['tx'] = { t = 'dark1', target='main', path = ctrl.p.tx, l = -7 },
-    ['bktx'] = { target='main', t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
+    ['bk'] = { t='LCDbig.png', target='main', l=-7, al=0.6 },
 }
 
 local fontstrings = {
@@ -55,9 +54,10 @@ local buttons = {
 }
 
 local function ConfigureScrollFrame(self, f)
-    local font = ctrl.console.options.fontFile or 'GlassTTYVT220-Medium.ttf'
-    local fontSize = ctrl.console.options.fontSize or 24
-    f:SetFont(ctrl.p.fnt .. font, fontSize, "")
+    local font = ctrl.console.options.fontFile
+    local fontSize = ctrl.console.options.fontSize
+    local fontObject = ctrl.font(font, fontSize, '')
+    f:SetFontObject(fontObject)
     f:SetSpacing(3)
     f:SetFading(false)
     f:SetMaxLines(2000)
