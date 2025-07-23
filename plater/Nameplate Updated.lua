@@ -15,7 +15,7 @@ function(self, unitId, unitFrame, envTable, modTable)
             --envTable.data.note = tostring(envTable.data.guild or '')
             --envTable.data.info = tostring(envTable.data.guildRank or '')
             envTable.data.class = select(2, UnitClass(unitId)) or 'nil'
-            envTable.data.debug = tostring(UnitGUID(unitId))
+            envTable.data.debug = '' --tostring(UnitGUID(unitId))
             envTable.data.debug2 = ''
             if envTable.data.class ~= 'nil' and modTable.prefs.rgba[envTable.data.class] then
                 envTable.data.rgba = modTable.prefs.rgba[envTable.data.class]

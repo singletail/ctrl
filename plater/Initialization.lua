@@ -1,9 +1,8 @@
 function (modTable)
     modTable.cache = {}
     modTable.prefs = {
-        w = 180,
-        h = 26,
-        barw = 1.39,
+        w = 224,
+        h = 32,
         scale = 1.0,
         path = [[Interface\AddOns\ctrl\assets\plater\]],
         fnt = {
@@ -140,6 +139,8 @@ function (modTable)
         }
     }
 
+    modTable.prefs.barw = (modTable.prefs.w - modTable.prefs.h) / 100
+
     modTable.elements = {
         frame = {
             ['base'] = {fl=0, w=modTable.prefs.w, h=modTable.prefs.h, x=0, y=0, a='TOPLEFT', pa='TOPLEFT'},
@@ -157,15 +158,15 @@ function (modTable)
             ['box2'] = {file='np.box.png', t='base', alpha=1, layer=-2},
         },
         fontString = {
-            ['icon'] = { t='ォ', x=2, y=0, fnt=modTable.prefs.fnt.med, fs=12, jh='CENTER', jv ='MIDDLE', w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.8},
-            ['name'] = { x=modTable.prefs.h, y=-1, fnt=modTable.prefs.fnt.med, fs=7, jh='LEFT', jv='TOP', alpha=1, a='TOPLEFT', pa='TOPLEFT'},
-            ['note'] = { x=modTable.prefs.h, y=-7, fnt=modTable.prefs.fnt.reg, fs=7, jh='LEFT', jv='TOP', alpha=0.8},
-            ['info'] = { x=modTable.prefs.h, y=-13, fnt=modTable.prefs.fnt.reg, fs=7, jh='LEFT', jv='TOP', alpha=0.8},
-            ['health'] = { t='100%', x=-2, y=-1, fnt=modTable.prefs.fnt.med, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['hpm'] = { t='', x=-3, y=-7, fnt=modTable.prefs.fnt.reg, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['target'] = { t='target', x=-3, y=-13, fnt=modTable.prefs.fnt.reg, fs=7, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
-            ['debug'] = { x = 10, y = -21, fnt = modTable.prefs.fnt.mono, fs=7, jh = 'LEFT', jv = 'TOP', alpha=0.8},
-            ['debug2'] = { x = 10, y = -28, fnt = modTable.prefs.fnt.mono, fs=7, jh = 'LEFT', jv = 'TOP', alpha=0.8},
+            ['icon'] = { t='ォ', x=2, y=-2, fnt=modTable.prefs.fnt.med, fs=21, jh='CENTER', jv ='MIDDLE', w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.8},
+            ['name'] = { x=modTable.prefs.h, y=-3, fnt=modTable.prefs.fnt.med, fs=10, jh='LEFT', jv='TOP', alpha=1, a='TOPLEFT', pa='TOPLEFT'},
+            ['note'] = { x=modTable.prefs.h, y=-12, fnt=modTable.prefs.fnt.reg, fs=10, jh='LEFT', jv='TOP', alpha=0.8},
+            ['info'] = { x=modTable.prefs.h, y=-21, fnt=modTable.prefs.fnt.reg, fs=10, jh='LEFT', jv='TOP', alpha=0.8},
+            ['health'] = { t='100%', x=-3, y=-1, fnt=modTable.prefs.fnt.med, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['hpm'] = { t='', x=-3, y=-12, fnt=modTable.prefs.fnt.reg, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['target'] = { t='target', x=-3, y=-21, fnt=modTable.prefs.fnt.reg, fs=10, jh='RIGHT', jv='TOP', a='TOPRIGHT', pa='TOPRIGHT', alpha=0.8},
+            ['debug'] = { x = 10, y = -30, fnt = modTable.prefs.fnt.mono, fs=10, jh = 'LEFT', jv = 'TOP', alpha=0.8},
+            ['debug2'] = { x = 10, y = -40, fnt = modTable.prefs.fnt.mono, fs=10, jh = 'LEFT', jv = 'TOP', alpha=0.8},
         },
     }
     
