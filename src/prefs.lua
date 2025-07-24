@@ -63,7 +63,7 @@ ctrl.prefs = {
         },
         tgt = {
             frame = {
-                width = 144,
+                width = 168,
             },
             font = {
                 size = 11,
@@ -72,7 +72,7 @@ ctrl.prefs = {
                 spacing = 2,
             },
             icon = {
-                size = 36,
+                size = 28,
             },
         },
         info = {

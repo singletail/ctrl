@@ -37,15 +37,16 @@ local playerTable = {}
 local mobTable = {}
 
 local textures = {
-    ['tbluebk'] = { target='main', t='blu_256', path=ctrl.p.tx, l=-5, al=0.6 },
+    ['tbluebk'] = { target='main', t='LCDbig.png', l=-8, al=0.6 },
 }
 
 function ctrl.tgt:createFontStrings()
     local iconSettings = {t='', target='main', fontFile=ctrl.prefs.mod.tgt.font.file, fontSize=ctrl.prefs.mod.tgt.icon.size, x=12, y=-20, a=a.tl, pa=a.tl,}
     ctrl.tgt.fs['fsicon'] = ctrl.fs.new(ctrl.tgt, iconSettings)
     local defaultfs = {t='', target='main', fontFile=ctrl.prefs.mod.tgt.font.file, fontSize=ctrl.prefs.mod.tgt.font.size, x=0, y=0, a=a.t, pa=a.t, jH=a.c}
-    for i=1,12 do
+    for i=1, self.options.numFontStrings do
         local o = ctrl.cp(defaultfs)
+        o.t="fs"..i
         o.y = ctrl.prefs.mod.tgt.font.top - ((ctrl.prefs.mod.tgt.font.spacing + ctrl.prefs.mod.tgt.font.size) * (i-1))
         ctrl.tgt.fs['fs'..i] = ctrl.fs.new(ctrl.tgt, o)
     end
@@ -309,7 +310,7 @@ function ctrl.tgt:drawPlayer(guid)
     playerTable[11] = ''
     playerTable[12] = tostring(guid)
     for i=1, ctrl.tgt.options.numFontStrings do
-        if ctrl.tgt.fs['fs'..i] then ctrl.tgt.fs['fs'..i]:SetText(playerTable[i]) end
+        ctrl.tgt.fs['fs'..i]:SetText(playerTable[i] or '?')
     end
     if ctrl.tgt.db.player[guid].icon then
         self:makeRoomForIcon()
@@ -380,7 +381,7 @@ end
 
 function ctrl.tgt:drawEmpty()
     for i=1,ctrl.tgt.options.numFontStrings do
-        if ctrl.tgt.fs['fs'..i] then ctrl.tgt.fs['fs'..i]:SetText('') end
+        if ctrl.tgt.fs['fs'..i] then ctrl.tgt.fs['fs'..i]:SetText('-') end
     end
 end
 

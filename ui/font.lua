@@ -8,9 +8,6 @@ local mod = {
     name = 'fnt',
     color = c.w,
     symbol = "A",
-    options = {
-        default = 'Prompt-Regular',
-    }
 }
 
 ctrl.fnt = ctrl.mod:new(mod)

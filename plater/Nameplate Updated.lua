@@ -12,8 +12,8 @@ function(self, unitId, unitFrame, envTable, modTable)
         if UnitIsPlayer(unitId) then
             envTable.data.name = UnitPVPName(unitId) or UnitName(unitId) or ''
             envTable.data.guild, envTable.data.guildRank = GetGuildInfo(unitId)
-            --envTable.data.note = tostring(envTable.data.guild or '')
-            --envTable.data.info = tostring(envTable.data.guildRank or '')
+            envTable.data.note = tostring(envTable.data.guild or '')
+            envTable.data.info = tostring(envTable.data.guildRank or '')
             envTable.data.class = select(2, UnitClass(unitId)) or 'nil'
             envTable.data.debug = '' --tostring(UnitGUID(unitId))
             envTable.data.debug2 = ''
@@ -33,7 +33,7 @@ function(self, unitId, unitFrame, envTable, modTable)
         else
             local unitType, _, _, _, _, uId, spawnId = strsplit('-', envTable.data.guid)
             envTable.data.npcId = tonumber(uId)
-            
+
             if modTable.cache[envTable.data.npcId] == nil then
                 modTable.cache[envTable.data.npcId] = {
                     name = UnitName(unitId),
@@ -41,11 +41,10 @@ function(self, unitId, unitFrame, envTable, modTable)
                     family = UnitCreatureFamily(unitId) or '',
                     creatureType = UnitCreatureType(unitId) or '',
                 }
-                modTable.cache[envTable.data.npcId].icon = modTable.prefs.icon[modTable.cache[envTable.data.npcId].classification] or modTable.prefs.icon['nil']
+                modTable.cache[envTable.data.npcId].icon = modTable.prefs.icon[modTable.cache[envTable.data.npcId].classification] or 'よ'
                 if modTable.cache[envTable.data.npcId].creatureType == modTable.cache[envTable.data.npcId].family then
                     modTable.cache[envTable.data.npcId].family = nil end
                 modTable.cache[envTable.data.npcId].mobinfo = tostring(modTable.cache[envTable.data.npcId].creatureType) .. ' ' .. tostring(modTable.cache[envTable.data.npcId].family)
-            
 
                 if _G['CtrlDB'] and _G['CtrlDB'][envTable.data.npcId] then
                     local ent = _G['CtrlDB'][envTable.data.npcId]
@@ -91,7 +90,7 @@ function(self, unitId, unitFrame, envTable, modTable)
     else
         envTable.data.target = ''
     end
-    
+
     if not UnitIsPlayer(unitId) then
         local _, threatStatus, threatPct, _, _ = UnitDetailedThreatSituation('player', unitId)
         if threatStatus then
@@ -113,7 +112,7 @@ function(self, unitId, unitFrame, envTable, modTable)
             envTable.data.hex = modTable.prefs.hex.a
         end
     end
-    
+
     if envTable.data.hex then
         envTable.data.icon = envTable.data.hex .. envTable.data.icon
         envTable.data.name = envTable.data.hex .. envTable.data.name
@@ -128,14 +127,12 @@ function(self, unitId, unitFrame, envTable, modTable)
     -- Combat modifiers
     if UnitAffectingCombat(unitId) then
         envTable.data.alpha = 0.8
-        envTable.f.base:SetScale(1)
-        envTable.f.top:SetScale(1)
-        envTable.fs.health:SetAlpha(0.8)
+        --envTable.f.base:SetScale(1)
+        --envTable.f.top:SetScale(1)
     else
         envTable.data.alpha = 0.4
-        envTable.f.base:SetScale(0.75)
-        envTable.f.top:SetScale(0.75)
-        envTable.fs.health:SetAlpha(0)
+        --envTable.f.base:SetScale(0.75)
+        --envTable.f.top:SetScale(0.75)
     end
 
     -- border
@@ -147,8 +144,8 @@ function(self, unitId, unitFrame, envTable, modTable)
     else
         envTable.tx.box:SetVertexColor(0, 0, 0, 0)
         envTable.tx.box2:SetVertexColor(0, 0, 0, 0)
-        envTable.tx.box:SetAlpha(0)
-        envTable.tx.box2:SetAlpha(0)
+        envTable.tx.box:SetAlpha(1)
+        envTable.tx.box2:SetAlpha(1)
     end
 
     -- Health
@@ -164,7 +161,11 @@ function(self, unitId, unitFrame, envTable, modTable)
     end
 
     -- health bar
-    if envTable.tx.hbar then envTable.tx.hbar:SetWidth(envTable.data.healthPct * modTable.prefs.barw) end
+    local healthBarWidth = envTable.data.healthPct * modTable.prefs.barw
+    if healthBarWidth > (modTable.prefs.barw * 100) then
+        healthBarWidth = (modTable.prefs.barw * 100)
+    end
+    if envTable.tx.hbar then envTable.tx.hbar:SetWidth(healthBarWidth) end
 
     -- text
     if envTable.fs.name then envTable.fs.name:SetText(tostring(envTable.data.name or 'Unknown')) end
@@ -198,11 +199,11 @@ function(self, unitId, unitFrame, envTable, modTable)
     envTable.fs.hpm:SetText(tostring(envTable.data.healthText2 or ''))
     
     -- bar color
-    if envTable.tx.cap then envTable.tx.cap:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.alpha) end
-    if envTable.tx.hbar then envTable.tx.hbar:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.alpha) end
+    if envTable.tx.cap then envTable.tx.cap:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4]) end
+    if envTable.tx.hbar then envTable.tx.hbar:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4]) end
     
     -- alpha
-    envTable.tx.bk:SetAlpha(envTable.data.alpha)
+    envTable.tx.bk:SetAlpha(0.6)
     envTable.tx.cap:SetAlpha(envTable.data.alpha)
     envTable.tx.hbar:SetAlpha(envTable.data.alpha)
     envTable.tx.box:SetAlpha(envTable.data.alpha)
@@ -210,6 +211,5 @@ function(self, unitId, unitFrame, envTable, modTable)
     --envTable.fs.note:SetAlpha(envTable.data.alpha)
     --envTable.fs.info:SetAlpha(envTable.data.alpha)
     --envTable.fs.target:SetAlpha(envTable.data.alpha)
-
 end
 

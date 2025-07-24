@@ -41,13 +41,13 @@ core\console.lua
 core\events.lua
 core\group.lua
 
-#mod\taunt.lua
-#mod\pet.lua
+mod\taunt.lua
+mod\pet.lua
 mod\power.lua
 mod\cmd.lua
 mod\info.lua
-#mod\death.lua
-#mod\mobs.lua
+# mod\death.lua
+# mod\mobs.lua
 mod\speed.lua
 #mod\loot.lua
 #mod\party.lua

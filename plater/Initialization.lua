@@ -6,10 +6,10 @@ function (modTable)
         scale = 1.0,
         path = [[Interface\AddOns\ctrl\assets\plater\]],
         rgba = {
-            red = { 0.5, 0.0, 0.0, 0.5, },
+            red = { 0.5, 0.0, 0.0, 1, },
             green = { 0.0, 0.5, 0.0, 1, },
             blue = { 0.0, 0.0, 0.5, 1, },
-            yellow = { 0.5, 0.5, 0.0, 1, },
+            yellow = { 0.25, 0.25, 0.0, 1, },
             purple = { 0.5, 0.0, 0.5, 1, },
             cyan = { 0.0, 0.5, 0.5, 1, },
             orange = { 1.0, 0.5, 0.0, 1, },
@@ -140,9 +140,6 @@ function (modTable)
             ['base'] = {fl=0, w=modTable.prefs.w, h=modTable.prefs.h, x=0, y=0, a='TOPLEFT', pa='TOPLEFT'},
             ['top'] = {target='base', fl=300, w=modTable.prefs.w, h=modTable.prefs.h, x=0, y=0, a='TOPLEFT', pa='TOPLEFT'},
         },
-        --bar = {
-        --    ['threat'] = {target = 'base'},
-        --},
         texture = {
             ['bk'] = {file='np_bk.png', target='base', alpha=1, layer=-6,},
             ['cap'] = {file='cap64.png', x=0, y=0, w=modTable.prefs.h, h=modTable.prefs.h, alpha=0.5, target='base', layer=-5,},

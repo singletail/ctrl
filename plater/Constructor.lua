@@ -17,29 +17,7 @@ function (self, unitId, unitFrame, envTable, modTable)
         envTable.f[fk]:SetSize(fv.w, fv.h)
         envTable.f[fk]:SetPoint(fv.a, fv.target, fv.pa, fv.x, fv.y)
     end
-    
-    --[[ bars
-    for bk, bv in ipairs(modTable.elements.bar) do
-        bv.target = bv.target or 'base'
-        bv.file = modTable.prefs.path .. (bv.file or 'sbar')
-        bv.framelevel = bv.framelevel or 200
-        bv.w = bv.w or modTable.prefs.w
-        bv.h = bv.h or 14
-        bv.x = bv.x or 0
-        bv.y = bv.y or 0
-        bv.a = bv.a or 'TOPLEFT'
-        bv.pa = bv.pa or 'TOPLEFT'
-        envTable.bar[bk] = envTable.bar[bk] or Plater:CreateBar(envTable.f[bv.target], bv.file)
-        envTable.bar[bk]:SetFrameStrata("BACKGROUND")
-        envTable.bar[bk]:SetFrameLevel(bv.framelevel)
-        envTable.bar[bk].color = 'red' -- modTable.prefs.rgba.red
-        envTable.bar[bk]:SetSize(bv.w, bv.h)
-        envTable.bar[bk]:SetPoint(bv.a, envTable.f[bv.target], bv.pa, bv.x, bv.y)
-        envTable.bar[bk]:SetMinMaxValues(0, 100)
-        envTable.bar[bk]:SetValue(100)
-    end
-    ]]
-    
+
     -- textures
     for tk, tv in pairs(modTable.elements.texture) do
         tv.target = tv.target or 'base'
