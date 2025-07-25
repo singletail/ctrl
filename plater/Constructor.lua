@@ -3,7 +3,9 @@ function (self, unitId, unitFrame, envTable, modTable)
     envTable.bar = envTable.bar or {}
     envTable.tx = envTable.tx or {}
     envTable.fs = envTable.fs or {}
-    
+
+    unitFrame:SetScale(1)
+
     -- frames
     for fk, fv in pairs(modTable.elements.frame) do
         fv.target = envTable.f[fv.target] or unitFrame
@@ -39,8 +41,8 @@ function (self, unitId, unitFrame, envTable, modTable)
     --fontObjects
     local fontPath = 'Interface\\AddOns\\ctrl\\assets\\fnt\\'
     local fontName = 'Prompt-Medium'
-    local fontSize = 9
-    local iconFontSize = 18
+    local fontSize = modTable.prefs.fs
+    local iconFontSize = 15
     local globalFont = 'ctrlfnt'..fontName..tostring(fontSize)
     local globalIconFont = 'ctrlfnt'..fontName..tostring(iconFontSize)
 

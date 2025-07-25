@@ -63,21 +63,23 @@ ctrl.prefs = {
         },
         tgt = {
             frame = {
-                width = 168,
+                width = 188,
             },
             font = {
                 size = 11,
                 file = 'Prompt-Medium',
-                top = -2,
-                spacing = 2,
+                top = -8,
+                spacing = 0,
             },
             icon = {
-                size = 28,
+                size = 22,
+                x = 6,
+                y = -20,
             },
         },
         info = {
             frame = {
-                width = 96,
+                width = 90,
             },
             box = {
                 x = -10,

@@ -1,9 +1,8 @@
 function(self, unitId, unitFrame, envTable, modTable)
     envTable.data = envTable.data or {}
     modTable.cache = modTable.cache or {}
-    
+
     if UnitGUID(unitId) and UnitGUID(unitId) ~= envTable.data.guid then
-        --envTable.fs.id:SetText(modTable.prefs.hex.y .. string.sub(unitId, 10))
         envTable.data = {
             guid = UnitGUID(unitId),
             reaction = UnitReaction('player', unitId) or 0,
@@ -130,7 +129,7 @@ function(self, unitId, unitFrame, envTable, modTable)
         --envTable.f.base:SetScale(1)
         --envTable.f.top:SetScale(1)
     else
-        envTable.data.alpha = 0.4
+        envTable.data.alpha = 0.6
         --envTable.f.base:SetScale(0.75)
         --envTable.f.top:SetScale(0.75)
     end
@@ -161,9 +160,9 @@ function(self, unitId, unitFrame, envTable, modTable)
     end
 
     -- health bar
-    local healthBarWidth = envTable.data.healthPct * modTable.prefs.barw
-    if healthBarWidth > (modTable.prefs.barw * 100) then
-        healthBarWidth = (modTable.prefs.barw * 100)
+    local healthBarWidth = envTable.data.healthPct * modTable.prefs.multi
+    if healthBarWidth > (modTable.prefs.multi * 100) then
+        healthBarWidth = (modTable.prefs.multi * 100)
     end
     if envTable.tx.hbar then envTable.tx.hbar:SetWidth(healthBarWidth) end
 
@@ -203,7 +202,7 @@ function(self, unitId, unitFrame, envTable, modTable)
     if envTable.tx.hbar then envTable.tx.hbar:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4]) end
     
     -- alpha
-    envTable.tx.bk:SetAlpha(0.6)
+    --envTable.tx.bk:SetAlpha(0.6)
     envTable.tx.cap:SetAlpha(envTable.data.alpha)
     envTable.tx.hbar:SetAlpha(envTable.data.alpha)
     envTable.tx.box:SetAlpha(envTable.data.alpha)

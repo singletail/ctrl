@@ -153,6 +153,7 @@ function ctrl.group:addGuid(guid, unit)
         ctrl.group.guid[guid] = ctrl.cp(defaultUnit)
         ctrl.group.guid[guid].name = UnitName(unit) or 'Unknown'
         ctrl.group.guid[guid].class = select(2, UnitClass(unit)) or 'Unknown'
+        ctrl.group.guid[guid].pvpName = UnitPVPName(unit) or ctrl.group.guid[guid].name
     end
     ctrl.group.guid[guid].unit = unit
     local tempRole = UnitGroupRolesAssigned(unit)

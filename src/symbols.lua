@@ -254,7 +254,43 @@ ctrl.s = {
     ['strength']       = '󱅝',
     ['ok']             = 'い',
     ['infinite']       = '󰚾',
+
+    ['horde']          = '㌡',
+    ['alliance']       = '㏦',
+
+    ['PALADIN']     = '㌰',
+    ['PRIEST']      = '㌲',
+    ['HUNTER']      = '㌴',
+    ['MAGE']        = '㌶',
+    ['DRIUD']       = '㌸',
+    ['DEMONHUNTER'] = '㌺',
+    ['WARRIOR']     = '㍀',
+    ['ROGUE']       = '㍂',
+    ['SHAMAN']      = '㍄',
+    ['WARLOCK']     = '㍆',
+    ['EVOKER']      = '䂛',
+    ['MONK']        = '䃱',
+    ['DEATHKNIGHT'] = '㌢',
+
+    ["The Immortal Taint"]  = '䀈',
+    ["Tainted Angels"]      = '㌦',
+    ["Taintcraft"]          = '䂭',
+    ["Power Word Taint"]    = '㍋',
+    ["War Taint"]           = '㎆',
+    ["Taint of the Titans"] = '㏛',
+    ["Taint"]               = '㏠',
+    ["Bear Taint"]          = '󱙵',
+    ["Tainter Tots"]        = '󱜚',
+    ["Tainted Love"]        = '㎡',
+    ["Taint of Madness"]    = '䅡',
+    ["Taint No Thang"]      = '〡',
+    ["Spreading Taint"]     = '㐃',
+
+    ["Player-5-0AA78045"] = '㐪', --Singltail
 }
+
+-- 㐪 ㌡ ㌢ 䖿 䃿 䄃 ㏦ ㏧ ㍉ ㍊ 〧 〨 〖 ㏘ ㎛ 䃜 䄚 䣯 䣰
+
 
 ctrl.s.ghosts = ctrl.c.d
 for i = 1, 4 do

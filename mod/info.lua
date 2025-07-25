@@ -33,7 +33,7 @@ local mod = {
 ctrl.info = ctrl.mod:new(mod)
 
 local textures = {['bk'] = { target='main', t='dark1', l=-6, al=0.6 },}
-local label_text = {'fps', 'ping', 'mem', '', '', ''}
+local label_text = {'taint', 'fps', 'ping', 'mem', 'sqw', 'loot'}
 
 function ctrl.info:boxes()
     local box_default = { t='LCDsm27.png', target='main', l=-5, a=a.tr, pa=a.tr}
@@ -92,10 +92,30 @@ function ctrl.info:lamps()
     end
 end
 
-
+function ctrl.info:status()
+    local line = 1
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
+    local col = c.g
+    local rgba = c.rgba.g
+    local lamp_value = 0
+    local status = 'ok'
+    if ctrl.info.taint then
+        col = c.r
+        rgba = c.rgba.r
+        status = 'taint'
+    elseif ctrl.info.error then
+        col = c.y
+        rgba = c.rgba.y
+        status = 'err'
+    end
+    text:SetText(string.format('%s%s', col, status))
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
+end
 
 function ctrl.info:fps()
-    local line = 1
+    local line = 2
     local lamp = ctrl.info.lamp[line]
     local text = ctrl.info.text[line]
     local fps = math.floor(GetFramerate()) or 0
@@ -106,9 +126,11 @@ function ctrl.info:fps()
         col = c.c
         rgba = c.rgba.g
     elseif fps > 60 then
+        col = c.g
+        rgba = c.rgba.g
+    elseif fps > 30 then
         col = c.y
         rgba = c.rgba.y
-        lamp_value = 1
     else
         col = c.r
         rgba = c.rgba.r
@@ -120,7 +142,7 @@ function ctrl.info:fps()
 end
 
 function ctrl.info:net()
-    local line = 2
+    local line = 3
     local lamp = ctrl.info.lamp[line]
     local text = ctrl.info.text[line]
     local _, _, latencyHome, latencyWorld = GetNetStats()
@@ -133,7 +155,6 @@ function ctrl.info:net()
     elseif latencyWorld > 30 then
         col = c.y
         rgba = c.rgba.y
-        lamp_value = 1
     else
         col = c.r
         rgba = c.rgba.r
@@ -145,7 +166,7 @@ function ctrl.info:net()
 end
 
 function ctrl.info:mem()
-    local line = 3
+    local line = 4
     local memStr = string.format('%s%s', c.r, 'err')
     local lamp = ctrl.info.lamp[line]
     local text = ctrl.info.text[line]
@@ -154,16 +175,20 @@ function ctrl.info:mem()
     local lamp_value = 0
     UpdateAddOnMemoryUsage()
     local mem = GetAddOnMemoryUsage('ctrl')
-    if mem > 1000 then
+    if mem > 10000 then
         col=c.r
         rgba = c.rgba.r
+        memStr = string.format('%s%.1f', col, (mem/1000))
+        lamp_value = 1
+    elseif mem > 1000 then
+        col=c.o
+        rgba = c.rgba.o
         memStr = string.format('%s%.2f', col, (mem/1000))
         lamp_value = 1
     elseif mem > 500 then
         col=c.y
         rgba = c.rgba.y
         memStr = string.format('%s%d', col, mem)
-        lamp_value = 1
     else
         col=c.g
         rgba = c.rgba.g
@@ -174,74 +199,71 @@ function ctrl.info:mem()
     lamp:setValue(lamp_value)
 end
 
+function ctrl.info:sqw()
+    local line = 5
+    local sqwStr = string.format('%s%s', c.r, 'err')
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
+    local col = c.o
+    local rgba = c.rgba.o
+    local lamp_value = 0
+    local sqw = tonumber(GetCVar('SpellQueueWindow')) or 0
+    if sqw > 350 then
+        col=c.r
+        rgba = c.rgba.r
+        lamp_value = 1
+    elseif sqw > 300 then
+        col=c.y
+        rgba = c.rgba.o
+        lamp_value = 1
+    elseif sqw > 200 then
+        col=c.g
+        rgba = c.rgba.g
+    elseif sqw > 150 then
+        col=c.b
+        rgba = c.rgba.b
+    else
+        col=c.v
+        rgba = c.rgba.v
+        lamp_value = 1
+    end
+    sqwStr = string.format('%s%d', col, sqw)
+    text:SetText(sqwStr)
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
+end
+
+function ctrl.info:loot()
+    local line = 6
+    local lStr = string.format('%s%s', c.r, 'err')
+    local lamp = ctrl.info.lamp[line]
+    local text = ctrl.info.text[line]
+    local col = c.o
+    local rgba = c.rgba.o
+    local lamp_value = 0
+    local l = tonumber(GetCVar('autoLootRate')) or 0
+    if l > 70 then
+        col=c.r
+        rgba = c.rgba.r
+        lamp_value = 1
+    elseif l > 20 then
+        col=c.y
+        rgba = c.rgba.y
+        lamp_value = 1
+    else
+        col=c.g
+        rgba = c.rgba.g
+    end
+    lStr = string.format('%s%d', col, l)
+    text:SetText(lStr)
+    lamp:setColor(rgba[1], rgba[2], rgba[3], rgba[4])
+    lamp:setValue(lamp_value)
+end
+
 --[[
 
 
 
-function ctrl.info:sqw()
-    local sqw = tonumber(GetCVar('SpellQueueWindow')) or 0
-    local col = ok
-    if sqw > 350 then
-        col = c.r
-        ctrl.info.btn.l5:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l5:on()
-    elseif sqw > 200 then
-        col = c.y
-        ctrl.info.btn.l5:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l5:on()
-    else
-        col = ok
-        ctrl.info.btn.l5:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l5:off()
-    end
-    ctrl.info.fs.fsinfo5_v:SetText(col..tostring(sqw))
-end
-
-function ctrl.info:loot()
-    local l = tonumber(GetCVar('autoLootRate')) or 0
-    local col = ok
-    if l > 70 then
-        col = c.r
-        ctrl.info.btn.l6:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l6:on()
-    elseif l > 20 then
-        col = c.y
-        ctrl.info.btn.l6:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l6:on()
-    else
-        col = ok
-        ctrl.info.btn.l6:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l6:off()
-    end
-    ctrl.info.fs.fsinfo6_v:SetText(col..tostring(l))
-end
-
-
-function ctrl.info:status()
-    local status = ok..'ok'
-    if ctrl.info.taint then
-        ctrl.info.btn.l1:setColor( 1.0, 0, 0, 0.5 )
-        ctrl.info.btn.l1:on()
-        status = c.r..'taint'
-    elseif ctrl.info.error then
-        ctrl.info.btn.l1:setColor( 1.0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l1:on()
-        status = c.y..'err'
-    else
-        ctrl.info.btn.l1:setColor( 0, 1.0, 0, 0.5 )
-        ctrl.info.btn.l1:off()
-    end
-    ctrl.info.fs.fsinfo1_v:SetText(status)
-end
-
-function ctrl.info:update()
-    self:status()
-    self:fps()
-    self:net()
-    self:mem()
-    self:sqw()
-    self:loot()
-end
 
 
 
@@ -258,6 +280,8 @@ function ctrl.info:off()
     self:unregisterEvents()
     if self.f.main then self.f.main:Hide() end
 end
+
+]]
 
 function ctrl.info.ADDON_ACTION_BLOCKED(isTainted, fn)
     if isTainted then
@@ -283,32 +307,13 @@ function ctrl.info.PLAYER_ENTERING_WORLD()
     ctrl.info.taint = nil
 end
 
-
-
-function ctrl.info:setup()
-    self:prefs()
-    self.f.main = ctrl.frame:new(self.options.frame)
-    ctrl.tx.generate(ctrl.info, textures)
-    ctrl.btns.generate(ctrl.info, buttons)
-    ctrl.fs.generate(ctrl.info, fontstrings)
-    ctrl.info.btn.l1:off()
-    ctrl.info.btn.l2:off()
-    ctrl.info.btn.l3:off()
-    ctrl.info.btn.l4:off()
-    ctrl.info.btn.l5:off()
-    ctrl.info.btn.l6:off()
-    self:registerCtrlFrame(2, self.f.main)
-end
-
-]]
-
 function ctrl.info:update(int)
-    --self:status()
+    self:status()
     self:fps()
     self:net()
     if int > 10 then self:mem() end
-    --self:sqw()
-    --self:loot()
+    self:sqw()
+    self:loot()
 end
 
 function ctrl.info:tick(int)

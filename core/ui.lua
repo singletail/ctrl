@@ -18,7 +18,7 @@ local mod = {
 
 ctrl.ui = ctrl.mod:new(mod)
 
-ctrl.ui.scale = 1.5
+ctrl.ui.scale = 1
 ctrl.ui.uiParentScale = 1
 
 --
