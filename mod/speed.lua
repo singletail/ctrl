@@ -11,13 +11,20 @@ local mod = {
     color = c.g,
     symbol = s.target,
     options = {
-        timers = {
-            1/15
+        timers = { 1 },
+        events = {
+            'SPEED_UPDATE',
+            'PLAYER_STARTED_MOVING',
+            'PLAYER_STOPPED_MOVING',
+            'PLAYER_STARTED_LOOKING',
+            'PLAYER_STOPPED_LOOKING',
+            'PLAYER_STARTED_TURNING',
+            'PLAYER_STOPPED_TURNING',
+            'VEHICLE_UPDATE',
         },
         frame = {
-            name = 'ctrlspeed',
-            w=200, h=60, x=0, y=-40, a=a.t, pa=a.t,
-            isResizable = 1, isMovable = 1, isClipsChildren = nil,
+            name = 'ctrlspeed', target = ctrl.power.f.main,
+            isResizable = nil, isMovable = nil, isClipsChildren = 1,
         },
     }
 }
@@ -26,23 +33,31 @@ ctrl.speed = ctrl.mod:new(mod)
 
 
 local subframes = {
-    --['fcompass'] = { target = 'main', w = 1024, h = 64, a=a.c, pa=a.c, x=0, y=0 },
+    ['fcomp'] = { target='main', w=66, h = 28, a=a.b, pa=a.b, x=0, y=3, isClipsChildren=1 },
 }
 
 local textures = {
-    ['bk'] = { t='dark1', target='main', l=-6, al=0.6 },
-    --['txcompass'] = { target='comp', t='numbers.png', path = ctrl.p.tx, l=-5 },
+    ['bk'] = { t='dark1', target='main', l=-8, al=0.6 },
+    ['txicon'] = { t='LCDsm27.png', target='main', l=-7, a=a.t, pa=a.t, w=32, h=26, x=0, y=-2, al=0.8 },
+    ['txdisp'] = { t='LCDsm27.png', target='main', l=-7, a=a.t, pa=a.t, w=56, h=28, x=0, y=-29, al=0.8 },
+    ['txstat1'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=52, al=0.8 },
+    ['txstat2'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=33, al=0.8 },
+    ['compbk'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=68, h=30, x=0, y=2, al=0.8 },
+    ['comp'] = { target='fcomp', t='numbers.png', w=512, h=32, x=-16, y=-2, l=-6, a=a.bl, pa=a.bl, al=0.7 },
 }
 
 local fontstrings = {
-    ['fssym'] = { t="䃿", a=a.tl, pa=a.tl, x=50, y=-10, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=24,},
-    ['fsfake'] = { jH='RIGHT', t=c.r..'888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontSize=24,},
-    ['fsspeed'] = { jH='RIGHT', t='888', a=a.tr, pa=a.tr, x=-65, y=-10, target='main', fontFile='DSEG7.ttf', fontSize=24,},
-    ['fsmax'] = { t='000', a=a.t, pa=a.t, x=-40, y=-40, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=14,},
-    ['fsbonus'] = { t="+000", a=a.t, pa=a.t, x=40, y=-40, target='main', fontFile='ProFontWindows-Regular.ttf', fontSize=14,},
+    ['fsicon'] = { t="䃿", a=a.t, pa=a.t, target='main'},
+    ['fsfake'] = { jH='RIGHT', t=c.r..'888', a=a.t, pa=a.t, target='main'},
+    ['fsspeed'] = { jH='RIGHT', t=c.r..'888', a=a.t, pa=a.t, target='main'},
+    ['fsmax'] = { t=c.c..'000', a=a.b, pa=a.b, x=-7, y=53, w=52, h=18, target='main', jH='RIGHT'},
+    ['fsmaxplus'] = { t=c.c..'^', a=a.b, pa=a.b, x=-6, y=52, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
+    ['fsbonus'] = { t=c.g.."000", a=a.b, pa=a.b, x=-7, y=34, w=52, h=18, target='main', jH='RIGHT'},
+    ['fsbonusplus'] = { t=c.g..'+', a=a.b, pa=a.b, x=-6, y=33, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
 }
 
 ctrl.speed.data = {
+    raw = 0,
     speed = 0,
     max = 0,
     isMounted = false,
@@ -52,6 +67,7 @@ ctrl.speed.data = {
     isFalling = false,
     bonus = 0,
     color = c.r,
+    symbol = '䃿'
 }
 
 --[[
@@ -66,6 +82,8 @@ ctrl.speed.data = {
 ]]
 
 local ss = {
+    ac = '〰',
+    engine = '〲',
     walk = '぀',
     run = 'ぁ',
     sprint='㎃',
@@ -79,7 +97,7 @@ local ss = {
     ghost='〠',
     limit='ㄪ',
     slow='󰵿',
-    still='',
+    still='䅯',
     look='',
     rest='󰋣',
     indoors='󰩈',
@@ -88,8 +106,35 @@ local ss = {
     outdoors='ㄠ',
 }
 
+--[[
+〰 〱 〴 〵 〶 〻 ぀ ぁ ㄨ ㄩ 䗾 䘋 䖤       󰑣 󰔫 󰔬 󰡳 󰡴 󰡵 󰮯
+ㄔ 䇫 䆦 䆓 䅯 䅭 䅧 䅦 䅬 䉶 䐾
+
+
+]]
+
+-- GetPlayerFacing() --radians
+
+function ctrl.speed:getIcon()
+    if self.data.speed == 0 then
+        if IsResting() then
+            return ss.rest
+        elseif IsSwimming('player') then
+            return ss.fish
+        elseif IsFlying('player') then
+            return ss.fly
+        elseif IsMounted() then
+            return ss.engine
+        else
+            return ss.still
+        end
+    end
+end
+
 function ctrl.speed:compute()
     local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed('player')
+    self.data.raw = currentSpeed
+
     self.data.isMounted = IsMounted()
     self.data.isFlying = IsFlying('player')
     self.data.isSwimming = IsSwimming('player')
@@ -182,10 +227,10 @@ function ctrl.speed:status()
 end
 
 function ctrl.speed:draw()
-    self.fs.fssym:SetText(self.data.symbol)
+    self.fs.fsicon:SetText(self.data.symbol)
     self.fs.fsspeed:SetText(string.format('%s%d', self.data.color, self.data.speed))
-    self.fs.fsmax:SetText(string.format('%sㄪ %.2f', c.w, self.data.max))
-    self.fs.fsbonus:SetText(string.format('%s+%.2f%%', c.w, self.data.bonus))
+    self.fs.fsmax:SetText(string.format('%s%.1f', c.c, self.data.max))
+    self.fs.fsbonus:SetText(string.format('%s%.1f', c.g, self.data.bonus))
 end
 
 function ctrl.speed:update()
@@ -198,12 +243,24 @@ function ctrl.speed:tick(interval)
     ctrl.speed:update()
 end
 
+function ctrl.speed:prefs()
+    self.options.frame.w = ctrl.prefs.mod[self.name].frame.width
+    self.options.frame.h = ctrl.prefs.ui.height
+    ctrl.merge(fontstrings['fsicon'], ctrl.prefs.mod[self.name].icon)
+    ctrl.merge(fontstrings['fsfake'], ctrl.prefs.mod[self.name].display)
+    ctrl.merge(fontstrings['fsspeed'], ctrl.prefs.mod[self.name].display)
+    ctrl.merge(fontstrings['fsmax'], ctrl.prefs.mod[self.name].stats)
+    ctrl.merge(fontstrings['fsbonus'], ctrl.prefs.mod[self.name].stats)
+end
+
 function ctrl.speed.setup(self)
+    self:prefs()
     self.f.main = ctrl.frame.new(self, self.options.frame)
     ctrl.frame.generate(self, subframes)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)
     self.fs.fsfake:SetAlpha(0.2)
+    self:registerCtrlFrame(4, self.f.main)
 end
 
 ctrl.speed:init()

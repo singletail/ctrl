@@ -61,22 +61,6 @@ ctrl.prefs = {
                 },
             },
         },
-        tgt = {
-            frame = {
-                width = 188,
-            },
-            font = {
-                size = 11,
-                file = 'Prompt-Medium',
-                top = -8,
-                spacing = 0,
-            },
-            icon = {
-                size = 22,
-                x = 6,
-                y = -20,
-            },
-        },
         info = {
             frame = {
                 width = 90,
@@ -111,6 +95,45 @@ ctrl.prefs = {
                 x = 6,
                 y = -1,
                 spacing = 20,
+            },
+        },
+        tgt = {
+            frame = {
+                width = 188,
+            },
+            font = {
+                size = 11,
+                file = 'Prompt-Medium',
+                top = -8,
+                spacing = 0,
+            },
+            icon = {
+                size = 22,
+                x = 6,
+                y = -20,
+            },
+        },
+        speed = {
+            frame = {
+                width = 72,
+            },
+            icon = {
+                fontSize = 21,
+                fontFile = 'Prompt-Medium',
+                x = 0,
+                y = -6,
+            },
+            display = {
+                fontSize = 18,
+                fontFile = 'DSEG7',
+                w = 64,
+                h = 32,
+                x = -9,
+                y = -26,
+            },
+            stats = {
+                fontSize = 11,
+                fontFile = 'DSEG7',
             },
         },
         mobframe = {

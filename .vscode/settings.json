@@ -31,7 +31,8 @@
         "RAID_INSTANCE_WELCOME",
         "BASE_MOVEMENT_SPEED",
         "class",
-        "Commentator"
+        "Commentator",
+        "PLAYER"
     ],
     "Lua.diagnostics.disable": [
         "assign-type-mismatch"
