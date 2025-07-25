@@ -32,6 +32,7 @@ local mod = {
 ctrl.speed = ctrl.mod:new(mod)
 
 
+
 local subframes = {
     ['fcomp'] = { target='main', w=66, h = 28, a=a.b, pa=a.b, x=0, y=3, isClipsChildren=1 },
 }
@@ -56,19 +57,7 @@ local fontstrings = {
     ['fsbonusplus'] = { t=c.g..'+', a=a.b, pa=a.b, x=-6, y=33, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
 }
 
-ctrl.speed.data = {
-    raw = 0,
-    speed = 0,
-    max = 0,
-    isMounted = false,
-    isDragonriding = false,
-    isSwimming = false,
-    isSubmerged = false,
-    isFalling = false,
-    bonus = 0,
-    color = c.r,
-    symbol = '䃿'
-}
+
 
 --[[
 ぀ぁ㎃あ󰖃󰵿㎖㎖䅦䂹䅧󰩈
@@ -131,6 +120,7 @@ function ctrl.speed:getIcon()
     end
 end
 
+--[[
 function ctrl.speed:compute()
     local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed('player')
     self.data.raw = currentSpeed
@@ -232,6 +222,102 @@ function ctrl.speed:draw()
     self.fs.fsmax:SetText(string.format('%s%.1f', c.c, self.data.max))
     self.fs.fsbonus:SetText(string.format('%s%.1f', c.g, self.data.bonus))
 end
+
+]]
+
+ctrl.speed.data = {
+    currentSpeed = 0,
+    runSpeed = 0,
+    flightSpeed = 0,
+    swimSpeed = 0,
+    bonusSpeed = 0,
+
+    isMoving = nil,
+    isLooking = nil,
+    isTurning = nil,
+    isMounted = nil,
+    isSwimming = nil,
+    isSubmerged = nil,
+    isFalling = nil,
+    --isDragonriding = nil,
+    color = c.r,
+    symbol = '䃿'
+}
+
+function ctrl.speed.SPEED_UPDATE()
+    ctrl.speed.data.bonus = GetSpeed()
+end
+
+function ctrl.speed.PLAYER_STARTED_MOVING()
+    ctrl.speed.data.isMoving = 1
+end
+
+function ctrl.speed.PLAYER_STOPPED_MOVING()
+    ctrl.speed.data.isMoving = nil
+end
+
+function ctrl.speed.PLAYER_STARTED_LOOKING()
+    ctrl.speed.data.isLooking = 1
+end
+
+function ctrl.speed.PLAYER_STOPPED_LOOKING()
+    ctrl.speed.data.isLooking = nil
+end
+
+function ctrl.speed.PLAYER_STARTED_TURNING()
+    ctrl.speed.data.isTurning = 1
+end
+
+function ctrl.speed.PLAYER_STOPPED_TURNING()
+    ctrl.speed.data.isTurning = nil
+end
+
+function ctrl.speed.VEHICLE_UPDATE()
+    ctrl.speed.data.isMounted = IsMounted()
+end
+
+local base = BASE_MOVEMENT_SPEED
+
+function ctrl.speed:compute()
+    if self.data.isMounted then
+        self.data.max = ((self.data.flightSpeed / base) * 100) or 0
+    elseif self.data.isSwimming then
+        self.data.max = ((self.data.swimSpeed / base) * 100) or 0
+    else
+        self.data.max = ((self.data.runSpeed / base) * 100) or 0
+    end
+
+    
+
+    self.data.isDragonriding = canGlide
+
+    if isGliding then
+        self.data.speed = (forwardSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
+    else
+        self.data.speed = (currentSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
+    end
+end
+
+function ctrl.speed:getAll()
+    local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed('player')
+    self.data.currentSpeed = currentSpeed
+    self.data.runSpeed = runSpeed
+    self.data.flightSpeed = flightSpeed
+    self.data.swimSpeed = swimSpeed
+
+    local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
+    self.data.isGliding = isGliding
+    self.data.canGlide = canGlide
+    self.data.forwardSpeed = forwardSpeed
+
+    self.data.bonus = GetSpeed()
+    self.data.isMounted = IsMounted()
+    self.data.isFlying = IsFlying('player')
+    self.data.isSwimming = IsSwimming('player')
+    self.data.isSubmerged = IsSubmerged('player')
+    self.data.isFalling = IsFalling('player')
+end
+
 
 function ctrl.speed:update()
     self:compute()
