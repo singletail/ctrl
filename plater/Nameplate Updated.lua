@@ -78,6 +78,8 @@ function(self, unitId, unitFrame, envTable, modTable)
         end
     end
     
+    -- Target
+
     envTable.data.target = ''
     if UnitExists(unitId..'target') and not UnitIsDead(unitId..'target') then
         if UnitIsUnit('player', unitId..'target') then
@@ -89,6 +91,8 @@ function(self, unitId, unitFrame, envTable, modTable)
     else
         envTable.data.target = ''
     end
+
+    -- Threat
 
     if not UnitIsPlayer(unitId) then
         local _, threatStatus, threatPct, _, _ = UnitDetailedThreatSituation('player', unitId)
@@ -124,50 +128,60 @@ function(self, unitId, unitFrame, envTable, modTable)
     unitFrame.healthBar.background:SetAlpha(0)
 
     -- Combat modifiers
+
     if UnitAffectingCombat(unitId) then
         envTable.data.alpha = 0.8
-        --envTable.f.base:SetScale(1)
-        --envTable.f.top:SetScale(1)
+        envTable.f.base:SetScale(1)
+        envTable.f.top:SetScale(1)
     else
-        envTable.data.alpha = 0.6
-        --envTable.f.base:SetScale(0.75)
-        --envTable.f.top:SetScale(0.75)
+        envTable.data.alpha = 0.5
+        envTable.f.base:SetScale(0.75)
+        envTable.f.top:SetScale(0.75)
     end
 
     -- border
+
     if UnitIsUnit('target', unitId) then
         envTable.tx.box:SetVertexColor(1.0, 1.0, 0.0, 1.0)
         envTable.tx.box2:SetVertexColor(1.0, 1.0, 0.0, 1.0)
         envTable.tx.box:SetAlpha(1)
         envTable.tx.box2:SetAlpha(1)
     else
-        envTable.tx.box:SetVertexColor(0, 0, 0, 0)
-        envTable.tx.box2:SetVertexColor(0, 0, 0, 0)
-        envTable.tx.box:SetAlpha(1)
-        envTable.tx.box2:SetAlpha(1)
+        envTable.tx.box:SetVertexColor(1, 1, 1, 1)
+        envTable.tx.box2:SetVertexColor(1, 1, 1, 1)
+        envTable.tx.box:SetAlpha(0.5)
+        envTable.tx.box2:SetAlpha(0.5)
     end
 
     -- Health
     if UnitIsDeadOrGhost(unitId) then
         envTable.data.healthText = 'dead'
         envTable.data.healthText2 = ''
+        envTable.data.healthPct = 0
+        envTable.data.health = 0
+        envTable.tx.hbar:SetAlpha(0)
+        envTable.tx.cap:SetAlpha(0)
     else
         envTable.data.health = UnitHealth(unitId) or 0
         envTable.data.maxHealth = UnitHealthMax(unitId) or 1
-        envTable.data.healthPct = math.floor(envTable.data.health / envTable.data.maxHealth * 100)
+        envTable.data.healthPct = math.floor((envTable.data.health / envTable.data.maxHealth) * 100)
         envTable.data.healthText = string.format('%d%%', envTable.data.healthPct)
         envTable.data.healthText2 = string.format('%s', Plater.FormatNumber(envTable.data.health, 1))
-    end
+        envTable.fs.target:SetText(tostring(envTable.data.target or ''))
+        envTable.fs.health:SetText(tostring(envTable.data.healthText or ''))
+        envTable.fs.hpm:SetText(tostring(envTable.data.healthText2 or ''))
 
-    -- health bar
-    local healthBarWidth = envTable.data.healthPct * modTable.prefs.multi
-    if healthBarWidth > (modTable.prefs.multi * 100) then
-        healthBarWidth = (modTable.prefs.multi * 100)
+        envTable.tx.cap:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4])
+        envTable.tx.hbar:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4])
+        local healthBarWidth = envTable.data.healthPct * modTable.prefs.bar.mult
+        if healthBarWidth > modTable.prefs.bar.max then healthBarWidth = modTable.prefs.bar.max end
+        envTable.tx.hbar:SetWidth(healthBarWidth)
+        envTable.tx.hbar:SetAlpha(envTable.data.alpha)
+        envTable.tx.cap:SetAlpha(envTable.data.alpha)
     end
-    if envTable.tx.hbar then envTable.tx.hbar:SetWidth(healthBarWidth) end
 
     -- text
-    if envTable.fs.name then envTable.fs.name:SetText(tostring(envTable.data.name or 'Unknown')) end
+    envTable.fs.name:SetText(tostring(envTable.data.name or 'Unknown'))
     envTable.fs.icon:SetText(tostring(envTable.data.icon or ''))
 
     if envTable.data.note1 and envTable.data.note2 then
@@ -192,20 +206,13 @@ function(self, unitId, unitFrame, envTable, modTable)
         envTable.fs.debug2:SetText(envTable.data.debug2 or '')
     end
 
-    --health
-    envTable.fs.target:SetText(tostring(envTable.data.target or ''))
-    envTable.fs.health:SetText(tostring(envTable.data.healthText or ''))
-    envTable.fs.hpm:SetText(tostring(envTable.data.healthText2 or ''))
     
-    -- bar color
-    if envTable.tx.cap then envTable.tx.cap:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4]) end
-    if envTable.tx.hbar then envTable.tx.hbar:SetVertexColor(envTable.data.rgba[1], envTable.data.rgba[2], envTable.data.rgba[3], envTable.data.rgba[4]) end
-    
+
     -- alpha
     --envTable.tx.bk:SetAlpha(0.6)
-    envTable.tx.cap:SetAlpha(envTable.data.alpha)
-    envTable.tx.hbar:SetAlpha(envTable.data.alpha)
-    envTable.tx.box:SetAlpha(envTable.data.alpha)
+    --envTable.tx.cap:SetAlpha(envTable.data.alpha)
+    --envTable.tx.hbar:SetAlpha(envTable.data.alpha)
+    --envTable.tx.box:SetAlpha(envTable.data.alpha)
     --envTable.fs.name:SetAlpha(envTable.data.alpha)
     --envTable.fs.note:SetAlpha(envTable.data.alpha)
     --envTable.fs.info:SetAlpha(envTable.data.alpha)

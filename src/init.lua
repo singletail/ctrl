@@ -34,7 +34,7 @@ ctrl.p = {
     ctrl = [[Interface\AddOns\ctrl\assets\ctrl\]],
 }
 
--- UIParentLoadAddOn("Blizzard_DebugTools")
+UIParentLoadAddOn("Blizzard_DebugTools")
 
 local _, _, _, toc = GetBuildInfo()
 ctrl.toc = toc

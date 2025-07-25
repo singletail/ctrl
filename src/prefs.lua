@@ -79,7 +79,6 @@ ctrl.prefs = {
                         y = -2,
                     },
                 },
-                
             },
             font = {
                 size = 11,
@@ -114,6 +113,7 @@ ctrl.prefs = {
             },
         },
         speed = {
+            compass = 1,
             frame = {
                 width = 72,
             },

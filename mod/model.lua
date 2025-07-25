@@ -2,7 +2,6 @@
 
 ---@class ctrl
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {

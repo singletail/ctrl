@@ -1,9 +1,7 @@
 --[[ ctrl - speed.lua - t@wse.nyc - 11 July 25 ]]
 
 ---@class ctrl
-
 local ctrl = select(2, ...)
-
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local mod = {
@@ -20,7 +18,6 @@ local mod = {
             'PLAYER_STOPPED_LOOKING',
             'PLAYER_STARTED_TURNING',
             'PLAYER_STOPPED_TURNING',
-            'VEHICLE_UPDATE',
         },
         frame = {
             name = 'ctrlspeed', target = ctrl.power.f.main,
@@ -31,10 +28,9 @@ local mod = {
 
 ctrl.speed = ctrl.mod:new(mod)
 
-
-
 local subframes = {
-    ['fcomp'] = { target='main', w=66, h = 28, a=a.b, pa=a.b, x=0, y=3, isClipsChildren=1 },
+    --['fclip'] = { target='main', w=64, h=26, a=a.b, pa=a.b, x=0, y=4, isClipsChildren=1 },
+    --['fcomp'] = { target='fclip', w=484, h=30, a=a.br, pa=a.br, x=0, y=0, isClipsChildren=1 },
 }
 
 local textures = {
@@ -43,8 +39,8 @@ local textures = {
     ['txdisp'] = { t='LCDsm27.png', target='main', l=-7, a=a.t, pa=a.t, w=56, h=28, x=0, y=-29, al=0.8 },
     ['txstat1'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=52, al=0.8 },
     ['txstat2'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=33, al=0.8 },
-    ['compbk'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=68, h=30, x=0, y=2, al=0.8 },
-    ['comp'] = { target='fcomp', t='numbers.png', w=512, h=32, x=-16, y=-2, l=-6, a=a.bl, pa=a.bl, al=0.7 },
+    --['compbk'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=68, h=30, x=0, y=2, al=0.8 },
+    --['comp'] = { target='fcomp', t='numbers.png', l=0 },
 }
 
 local fontstrings = {
@@ -53,195 +49,32 @@ local fontstrings = {
     ['fsspeed'] = { jH='RIGHT', t=c.r..'888', a=a.t, pa=a.t, target='main'},
     ['fsmax'] = { t=c.c..'000', a=a.b, pa=a.b, x=-7, y=53, w=52, h=18, target='main', jH='RIGHT'},
     ['fsmaxplus'] = { t=c.c..'^', a=a.b, pa=a.b, x=-6, y=52, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
-    ['fsbonus'] = { t=c.g.."000", a=a.b, pa=a.b, x=-7, y=34, w=52, h=18, target='main', jH='RIGHT'},
-    ['fsbonusplus'] = { t=c.g..'+', a=a.b, pa=a.b, x=-6, y=33, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
+    ['fsbonus'] = { t=c.p.."000", a=a.b, pa=a.b, x=-7, y=34, w=52, h=18, target='main', jH='RIGHT'},
+    ['fsbonusplus'] = { t=c.p..'+', a=a.b, pa=a.b, x=-6, y=33, w=24, h=18, target='main', jH='LEFT', fontFile='ProFontWindows-Regular', fontSize=18},
 }
-
-
-
---[[
-぀ぁ㎃あ󰖃󰵿㎖㎖䅦䂹䅧󰩈
-䝚󰂣󰖤󱌇󱗂󱗃󱗀󰞬䐹󰞈󰵤
-䜍󰀝󰀞䆗䆷䆸䒖󰗔󰗕䀚䐾䗁󰀜
-䆓䈔䕚䕳󰀱䀆󰈓󱙳󱢴󱢺󱢻󰼁䐻󰠳󰢯
-䇫䀛䂼䗤䔿䓛󱙝〠󰩇〱󰶦󰀛〵〷䆔ㄪ
-ㄓㄑㄢ䡂䣤󰔫󰵎䃒【ぢ䀈䀇䀔䇋䒝
-ㄥㄦㄧㄤㄣㄠ㎘󰲖󰲗󰲘䚽󰲾󰲿󰵑䕔䣯
-䃿䇛󰇥㏠ど
-]]
-
-local ss = {
-    ac = '〰',
-    engine = '〲',
-    walk = '぀',
-    run = 'ぁ',
-    sprint='㎃',
-    mount='󱗀',
-    fall='䂹',
-    fly = '䀚',
-    dragon='䀛',
-    fish='󱢺',
-    submarine='䕳',
-    dead='ぢ',
-    ghost='〠',
-    limit='ㄪ',
-    slow='󰵿',
-    still='䅯',
-    look='',
-    rest='󰋣',
-    indoors='󰩈',
-    instance='ㄦ',
-    maze='ㄤ',
-    outdoors='ㄠ',
-}
-
---[[
-〰 〱 〴 〵 〶 〻 ぀ ぁ ㄨ ㄩ 䗾 䘋 䖤       󰑣 󰔫 󰔬 󰡳 󰡴 󰡵 󰮯
-ㄔ 䇫 䆦 䆓 䅯 䅭 䅧 䅦 䅬 䉶 䐾
-
-
-]]
-
--- GetPlayerFacing() --radians
-
-function ctrl.speed:getIcon()
-    if self.data.speed == 0 then
-        if IsResting() then
-            return ss.rest
-        elseif IsSwimming('player') then
-            return ss.fish
-        elseif IsFlying('player') then
-            return ss.fly
-        elseif IsMounted() then
-            return ss.engine
-        else
-            return ss.still
-        end
-    end
-end
-
---[[
-function ctrl.speed:compute()
-    local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed('player')
-    self.data.raw = currentSpeed
-
-    self.data.isMounted = IsMounted()
-    self.data.isFlying = IsFlying('player')
-    self.data.isSwimming = IsSwimming('player')
-    self.data.isSubmerged = IsSubmerged('player')
-    self.data.isFalling = IsFalling('player')
-    self.data.bonus = GetSpeed()
-
-    if self.data.isMounted then
-        self.data.max = (flightSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    elseif self.data.isSwimming then
-        self.data.max = (swimSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    else
-        self.data.max = (runSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    end
-
-    local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
-
-    self.data.isDragonriding = canGlide
-
-    if isGliding then
-        self.data.speed = (forwardSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    else
-        self.data.speed = (currentSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    end
-end
-
-function ctrl.speed:status()
-    self.data.symbol = '䃿'
-
-    if self.data.isMounted then
-        self.data.symbol = c.y..ss.mount
-    end
-
-    if self.data.isFlying then
-        self.data.symbol = c.y..ss.fly
-    end
-
-    if self.data.isDragonriding then
-        self.data.symbol = c.g..ss.dragon
-    end
-
-    if self.data.isSwimming then
-        self.data.symbol = c.c..ss.fish
-    end
-
-    if self.data.isSubmerged then
-        self.data.symbol = c.b..ss.submarine
-    end
-
-    if self.data.isFalling then
-        self.data.symbol = c.r..ss.fall
-    end
-
-    if UnitIsDead('player') then
-        self.data.symbol = c.a..ss.dead
-    end
-
-    if UnitIsGhost('player') then
-        self.data.symbol = c.a..ss.ghost
-    end
-
-    if self.data.symbol == '䃿' then
-        if self.data.speed > 0 then
-            if self.data.speed > self.data.max then
-                self.data.symbol = c.p..ss.sprint
-                self.data.color = c.r
-            elseif self.data.speed < 100 then
-                self.data.symbol = c.o..ss.slow
-                self.data.color = c.o
-            elseif self.data.speed > 140 then
-                self.data.symbol = c.g..ss.run
-                self.data.color = c.g
-            else
-                self.data.symbol = c.v..ss.walk
-                self.data.color = c.b
-            end
-        else
-            if IsResting() then
-                self.data.symbol = c.a..''
-            elseif IsInInstance() then
-                self.data.symbol = c.y..ss.instance
-            elseif IsIndoors() then
-                self.data.symbol = c.a..ss.indoors
-            else
-                self.data.symbol = c.a..ss.outdoors
-            end
-            self.data.color = c.r
-        end
-    end
-end
-
-function ctrl.speed:draw()
-    self.fs.fsicon:SetText(self.data.symbol)
-    self.fs.fsspeed:SetText(string.format('%s%d', self.data.color, self.data.speed))
-    self.fs.fsmax:SetText(string.format('%s%.1f', c.c, self.data.max))
-    self.fs.fsbonus:SetText(string.format('%s%.1f', c.g, self.data.bonus))
-end
-
-]]
 
 ctrl.speed.data = {
+    speed = 0,
+    max = 0,
     currentSpeed = 0,
     runSpeed = 0,
     flightSpeed = 0,
     swimSpeed = 0,
     bonusSpeed = 0,
-
+    canGlide = nil,
+    isGliding = nil,
+    forwardSpeed = 0,
     isMoving = nil,
     isLooking = nil,
     isTurning = nil,
     isMounted = nil,
+    isFlying = nil,
     isSwimming = nil,
     isSubmerged = nil,
     isFalling = nil,
-    --isDragonriding = nil,
-    color = c.r,
-    symbol = '䃿'
+    facing = 0,
+    color = c.w,
+    icon = '䃿'
 }
 
 function ctrl.speed.SPEED_UPDATE()
@@ -272,33 +105,121 @@ function ctrl.speed.PLAYER_STOPPED_TURNING()
     ctrl.speed.data.isTurning = nil
 end
 
-function ctrl.speed.VEHICLE_UPDATE()
-    ctrl.speed.data.isMounted = IsMounted()
+function ctrl.speed:draw()
+    self.fs.fsspeed:SetText(string.format('%s%d', self.data.color, (self.data.speed / 7 * 100)))
+    self.fs.fsicon:SetText(string.format('%s%s', self.data.color, self.data.icon))
+    self.fs.fsfake:SetText(string.format('%s%d', self.data.color, '888'))
+    self.fs.fsmax:SetText(string.format('%s%d', c.c, (self.data.max / 7 * 100)))
+    self.fs.fsbonus:SetText(string.format('%s%.1f', c.p, self.data.bonus))
 end
 
-local base = BASE_MOVEMENT_SPEED
+function ctrl.speed:facing()
+    if IsInInstance() then
+        if self.f.compassBar:IsShown() then
+            self.f.compassBar:Hide()
+        end
+    else
+        local facing = GetPlayerFacing()
+        facing = facing or 0
+        self.data.facing = math.deg(facing)
+        --self:debug(facing, self.data.facing)
+        self.f.compassBar:ClearAllPoints()
+        local newx = self.data.facing - 16
+        if newx < 30 then newx = newx + 360 end
+        self.f.compassBar:SetPoint(a.br, self.f.compassContainer, a.br, newx, 0)
+        if not self.f.compassBar:IsShown() then
+            self.f.compassBar:Show()
+        end
+    end
+end
+
+function ctrl.speed:icon()
+    if self.data.canGlide then --dragonriding
+        if self.data.isGliding then
+            self.data.color = c.g
+            self.data.icon = s.isGliding
+        else
+            self.data.color = c.r
+            self.data.icon = s.canGlide
+        end
+    elseif self.data.isMounted then
+        if self.data.isFlying then
+            if self.data.speed >= self.data.max then
+                self.data.color = c.g
+                self.data.icon = s.isFlyingFast
+            elseif self.data.speed > 0 then
+                self.data.color = c.y
+                self.data.icon = s.isFlyingSlow
+            else
+                self.data.color = c.r
+                self.data.icon = s.isOnFlyingMount
+            end
+        else
+            if self.data.speed >= self.data.max then
+                self.data.color = c.g
+                self.data.icon = s.isDrivingFast
+            elseif self.data.speed > 0 then
+                self.data.color = c.y
+                self.data.icon = s.isDrivingSlow
+            else
+                self.data.color = c.r
+                self.data.icon = s.isOnGroundMount
+            end
+        end
+    elseif self.data.isSwimming then
+        if self.data.speed >= self.data.max then
+            self.data.color = c.g
+            self.data.icon = s.isSwimmingFast
+        elseif self.data.speed > 0 then
+            self.data.color = c.y
+            self.data.icon = s.isSwimmingSlow
+        else
+            self.data.color = c.r
+            self.data.icon = s.isSwimming
+        end
+    elseif self.data.isFalling then
+        self.data.color = c.r
+        self.data.icon = s.isFalling
+    else
+        if self.data.speed >= self.data.max then
+            self.data.color = c.c
+            self.data.icon = s.isZooming
+        elseif self.data.speed > 10 then
+            self.data.color = c.g
+            self.data.icon = s.isRunning
+        elseif self.data.speed > 0 then
+            self.data.color = c.y
+            self.data.icon = s.isWalking
+        elseif self.data.isTurning then
+            self.data.color = c.w
+            self.data.icon = s.isTurning
+        elseif self.data.isLooking then
+            self.data.color = c.w
+            self.data.icon = s.isLooking
+        else
+            self.data.color = c.r
+            self.data.icon = s.isStill
+        end
+    end
+end
 
 function ctrl.speed:compute()
-    if self.data.isMounted then
-        self.data.max = ((self.data.flightSpeed / base) * 100) or 0
-    elseif self.data.isSwimming then
-        self.data.max = ((self.data.swimSpeed / base) * 100) or 0
+    if self.data.canGlide then
+        self.data.speed = self.data.forwardSpeed
+        self.data.max = self.data.flightSpeed
     else
-        self.data.max = ((self.data.runSpeed / base) * 100) or 0
-    end
-
-    
-
-    self.data.isDragonriding = canGlide
-
-    if isGliding then
-        self.data.speed = (forwardSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
-    else
-        self.data.speed = (currentSpeed / BASE_MOVEMENT_SPEED) * 100 or 0
+        self.data.speed = self.data.currentSpeed
+        if self.data.isMounted then
+            self.data.max = self.data.flightSpeed
+        elseif self.data.isSwimming then
+            self.data.max = self.data.swimSpeed
+        else
+            self.data.max = self.data.runSpeed
+        end
     end
 end
 
-function ctrl.speed:getAll()
+function ctrl.speed:getData()
     local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed('player')
     self.data.currentSpeed = currentSpeed
     self.data.runSpeed = runSpeed
@@ -314,15 +235,15 @@ function ctrl.speed:getAll()
     self.data.isMounted = IsMounted()
     self.data.isFlying = IsFlying('player')
     self.data.isSwimming = IsSwimming('player')
-    self.data.isSubmerged = IsSubmerged('player')
     self.data.isFalling = IsFalling('player')
 end
 
-
 function ctrl.speed:update()
+    self:getData()
     self:compute()
-    self:status()
+    self:icon()
     self:draw()
+    --if ctrl.prefs.mod[self.name].compass then self:facing() end
 end
 
 function ctrl.speed:tick(interval)
@@ -339,14 +260,28 @@ function ctrl.speed:prefs()
     ctrl.merge(fontstrings['fsbonus'], ctrl.prefs.mod[self.name].stats)
 end
 
+function ctrl.speed:addCompass()
+    local cc_opt = {name='ctrlspdcmp', target=ctrl.speed.f.main, isResizable=nil, isMovable=nil, isClipsChildren=1, w=64, h=26, a=a.b, pa=a.b, x=0, y=4}
+    local cb_opt = {name='ctrlspdcmpf', target=ctrl.speed.f.compassContainer, isResizable=nil, isMovable=nil, isClipsChildren=1, w=484, h=30, a=a.br, pa=a.br}
+    local ctx_opt = {t='numbers.png', target=ctrl.speed.f.compassBar, l=-5}
+    self.f.compassContainer = ctrl.frame.new(self, cc_opt)
+    self.f.compassBar = ctrl.frame:new(cb_opt)
+    self.tx.compass = ctrl.tx:new(ctx_opt)
+end
+
 function ctrl.speed.setup(self)
     self:prefs()
     self.f.main = ctrl.frame.new(self, self.options.frame)
-    ctrl.frame.generate(self, subframes)
+    --ctrl.frame.generate(self, subframes)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)
+    --self.f.fcomp:SetClampedToScreen(false)
     self.fs.fsfake:SetAlpha(0.2)
+
+    if ctrl.prefs.mod[self.name].compass then self:addCompass() end
+
     self:registerCtrlFrame(4, self.f.main)
+    ctrl:inspect(ctrl.speed)
 end
 
 ctrl.speed:init()

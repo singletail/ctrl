@@ -5,11 +5,14 @@ function (modTable)
         h = 21,
         fs = 7,
         scale = 1.0,
+        bar = {
+            max = 139,
+            mult = 1.39,
+        },
         path = [[Interface\AddOns\ctrl\assets\plater\]],
     }
 
     local p = modTable.prefs
-    p.multi = math.floor((p.w - p.h) / 100)
 
     modTable.elements = {
         frame = {

@@ -65,13 +65,13 @@ function ctrl.events.DUEL_REQUESTED(evt)
 end
 
 function ctrl.events.PLAYER_REGEN_DISABLED()
-    --ctrl.events.alert('Aggro', nil, c.r)
-    ctrl.sfx:play('alert23')
+    ctrl.events.alert('+ combat', nil, c.r)
+    --ctrl.sfx:play('alert23')
 end
 
 function ctrl.events.PLAYER_REGEN_ENABLED()
-    --ctrl.events.alert('Combat ended')
-    ctrl.sfx:play('pop')
+    ctrl.events.alert('Combat ended')
+    --ctrl.sfx:play('- combat')
 end
 
 function ctrl.events.PLAYER_GUILD_UPDATE(evt)

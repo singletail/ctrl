@@ -286,6 +286,27 @@ ctrl.s = {
     ["Taint No Thang"]      = '〡',
     ["Spreading Taint"]     = '㐃',
 
+    ["isGliding"]           = '䀛',
+    ["canGlide"]            = '䇫',
+    ['isFlyingFast']        = '',
+    ['isFlyingSlow']        = '䗤',
+    ['isOnFlyingMount']     = '󰀜',
+    ['isDrivingFast']       = '󰞬',
+    ['isDrivingSlow']       = '䐹',
+    ['isOnGroundMount']     = '󰀛',
+    ['isSwimmingFast']      = '䆓',
+    ['isSwimmingSlow']      = '䉶',
+    ['isSwimming']          = '󱢺',
+    ['isFalling']           = '䂹',
+    ['isZooming']           = '䅧',
+    ['isRunning']           = 'ぁ',
+    ['isWalking']           = '぀',
+    ['isStill']             = '䅯',
+    ['isLooking']           = 'ㄔ',
+    ['isTurning']           = '䅭',
+
+
+
     ["Player-5-0AA78045"] = '㐪', --Singltail
 }
 
