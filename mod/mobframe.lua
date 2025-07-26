@@ -36,7 +36,6 @@ ctrl.mobframe.displayTable = {}
 
 local textures = {
     ['bk'] = { target='main', t='dark1', path = ctrl.p.tx, l=-6, al=0.6 },
-    --['fsbk']= { target='main', t='LCDbig.png', path=ctrl.p.tx, l=-5, al=1, x=0, y=0, w=mod.options.frame.w - 8, h=mod.options.frame.h - mod.options.statusRowSize, a=a.b, pa=a.b },
     ['tr1'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-186, y=-2 },
     ['tr2'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-96, y=-2 },
     ['tr3'] = { target='main', t='LCDsm27.png', path=ctrl.p.tx, l=-4, w=36, h=18, a=a.tr, pa=a.tr, x=-6, y=-2 },
@@ -149,7 +148,7 @@ function ctrl.mobframe.setup(self)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)
     self:createFontStrings()
-    self:registerCtrlFrame(4, self.f.main)
+    self:registerCtrlFrame(5, self.f.main)
 end
 
 ctrl.mobframe:init()

@@ -24,7 +24,7 @@ local subframes = {
 }
 
 local textures = {
-    ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6, al=0.8 },
+    ['maindark'] = { t='dark1', path=ctrl.p.tx, target='main', l=-6, al=0.6 },
     ['ctrl_v'] = {target='main', t='ctrl_sm.png', path=ctrl.p.ctrl, l=-5, w=16, h=32, a=a.t, pa=a.t, x=0, y=-4 },
 }
 

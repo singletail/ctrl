@@ -68,6 +68,8 @@ end
 function ctrl.frame.new(module, o)
     o = o or {}
     o.target = o.target or default.target
+    if type(o.target) == 'string' then o.target = module.f[o.target] end
+
     o.globalName = o.globalName or nil
     o.class = o.class or default.class
     o.template = o.template or default.template

@@ -12,11 +12,9 @@ local mod = {
     symbol = s.taunt,
     options = {
         events = {
-            --'PLAYER_STARTED_MOVING',
             'DUEL_REQUESTED',
             'PLAYER_REGEN_DISABLED',
             'PLAYER_REGEN_ENABLED',
-            --'PLAYER_GUILD_UPDATE',
             'ADDON_ACTION_BLOCKED',
             'ADDON_ACTION_FORBIDDEN',
             'MACRO_ACTION_BLOCKED',
@@ -33,6 +31,7 @@ local mod = {
             'OBJECT_ENTERED_AOI',
             'OBJECT_LEFT_AOI',
             'GX_RESTARTED',
+            'UNIT_CHEAT_TOGGLE_EVENT',
         },
     }
 }
@@ -172,17 +171,12 @@ function ctrl.events.OBJECT_LEFT_AOI(evt)
     ctrl.events.alert('OBJECT_LEFT_AOI '..tostring(guid), nil, c.w)
 end
 
-function ctrl.events.UNIT_FLAGS(evt)
-    local unit = evt[1] or ''
-    if UnitIsUnit(unit, 'player') then
-        ctrl.events.alert('UNIT_FLAGS: player', nil, c.w)
-    else
-        ctrl.events:info('UNIT_FLAGS '..tostring(unit))
-    end
-end
-
 function ctrl.events.GX_RESTARTED()
     ctrl.events.alert('GX_RESTARTED', 'redalert', c.y)
+end
+
+function ctrl.events.UNIT_CHEAT_TOGGLE_EVENT()
+    ctrl.events.alert('UNIT_CHEAT_TOGGLE_EVENT', 'airhorn', c.r)
 end
 
 ctrl.events:init()

@@ -9,7 +9,7 @@ local mod = {
     color = c.g,
     symbol = s.target,
     options = {
-        timers = { 1 },
+        timers = { 1/30 },
         events = {
             'SPEED_UPDATE',
             'PLAYER_STARTED_MOVING',
@@ -28,19 +28,13 @@ local mod = {
 
 ctrl.speed = ctrl.mod:new(mod)
 
-local subframes = {
-    --['fclip'] = { target='main', w=64, h=26, a=a.b, pa=a.b, x=0, y=4, isClipsChildren=1 },
-    --['fcomp'] = { target='fclip', w=484, h=30, a=a.br, pa=a.br, x=0, y=0, isClipsChildren=1 },
-}
-
 local textures = {
     ['bk'] = { t='dark1', target='main', l=-8, al=0.6 },
     ['txicon'] = { t='LCDsm27.png', target='main', l=-7, a=a.t, pa=a.t, w=32, h=26, x=0, y=-2, al=0.8 },
     ['txdisp'] = { t='LCDsm27.png', target='main', l=-7, a=a.t, pa=a.t, w=56, h=28, x=0, y=-29, al=0.8 },
     ['txstat1'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=52, al=0.8 },
     ['txstat2'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=46, h=18, x=0, y=33, al=0.8 },
-    --['compbk'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=68, h=30, x=0, y=2, al=0.8 },
-    --['comp'] = { target='fcomp', t='numbers.png', l=0 },
+    ['compbk'] = { t='LCDsm27.png', target='main', l=-7, a=a.b, pa=a.b, w=64, h=28, x=0, y=4, al=0.8 },
 }
 
 local fontstrings = {
@@ -122,7 +116,6 @@ function ctrl.speed:facing()
         local facing = GetPlayerFacing()
         facing = facing or 0
         self.data.facing = math.deg(facing)
-        --self:debug(facing, self.data.facing)
         self.f.compassBar:ClearAllPoints()
         local newx = self.data.facing - 16
         if newx < 30 then newx = newx + 360 end
@@ -243,7 +236,7 @@ function ctrl.speed:update()
     self:compute()
     self:icon()
     self:draw()
-    --if ctrl.prefs.mod[self.name].compass then self:facing() end
+    if ctrl.prefs.mod[self.name].compass then self:facing() end
 end
 
 function ctrl.speed:tick(interval)
@@ -261,27 +254,23 @@ function ctrl.speed:prefs()
 end
 
 function ctrl.speed:addCompass()
-    local cc_opt = {name='ctrlspdcmp', target=ctrl.speed.f.main, isResizable=nil, isMovable=nil, isClipsChildren=1, w=64, h=26, a=a.b, pa=a.b, x=0, y=4}
-    local cb_opt = {name='ctrlspdcmpf', target=ctrl.speed.f.compassContainer, isResizable=nil, isMovable=nil, isClipsChildren=1, w=484, h=30, a=a.br, pa=a.br}
-    local ctx_opt = {t='numbers.png', target=ctrl.speed.f.compassBar, l=-5}
+    local cc_opt = {target='main', isResizable=nil, isMovable=nil, isClipsChildren=1, w=60, h=24, a=a.b, pa=a.b, x=0, y=6}
+    local cb_opt = {target='compassContainer', isResizable=nil, isMovable=nil, isClipsChildren=1, w=484, h=24, a=a.br, pa=a.br}
+    local ctx_opt = {t='numbers.png', target='compassBar', l=-5, al=0.7}
     self.f.compassContainer = ctrl.frame.new(self, cc_opt)
-    self.f.compassBar = ctrl.frame:new(cb_opt)
-    self.tx.compass = ctrl.tx:new(ctx_opt)
+    self.f.compassBar = ctrl.frame.new(self, cb_opt)
+    self.f.compassBar:SetClampedToScreen(false)
+    self.tx.compass = ctrl.tx.new(self, ctx_opt)
 end
 
 function ctrl.speed.setup(self)
     self:prefs()
-    self.f.main = ctrl.frame.new(self, self.options.frame)
-    --ctrl.frame.generate(self, subframes)
+    self.f.main = ctrl.frame:new(self.options.frame)
     ctrl.tx.generate(self, textures)
     ctrl.fs.generate(self, fontstrings)
-    --self.f.fcomp:SetClampedToScreen(false)
     self.fs.fsfake:SetAlpha(0.2)
-
     if ctrl.prefs.mod[self.name].compass then self:addCompass() end
-
     self:registerCtrlFrame(4, self.f.main)
-    ctrl:inspect(ctrl.speed)
 end
 
 ctrl.speed:init()

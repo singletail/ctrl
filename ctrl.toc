@@ -31,31 +31,33 @@ ui\btns.lua
 ui\template.lua
 templates\btn.lua
 
+core\minimap.lua
+core\console.lua
 core\alert.lua
 core\sfx.lua
 core\cvar.lua
 core\ui.lua
 core\worldframe.lua
-core\minimap.lua
-core\console.lua
-core\events.lua
 core\group.lua
+core\mobs.lua
 
-mod\taunt.lua
-mod\pet.lua
+mod\events.lua
 mod\power.lua
 mod\cmd.lua
 mod\info.lua
-# mod\death.lua
-# mod\mobs.lua
 mod\speed.lua
-#mod\loot.lua
-#mod\party.lua
+mod\target.lua
+mod\taunt.lua
+mod\pet.lua
+mod\mobframe.lua
+
+# in progress
+mod\pull.lua
 
 # disabled:
-mod\target.lua
-# mod\pulled.lua
-# mod\mobframe.lua
+# mod\death.lua
+# mod\loot.lua
+# mod\party.lua
 
 DB.lua
 ctrl.lua

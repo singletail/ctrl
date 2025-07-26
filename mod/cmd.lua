@@ -10,7 +10,7 @@ local mod = {
     symbol = s.ctrl,
     options = {
         events = {
-            'UI_SCALE_CHANGED',
+            --'UI_SCALE_CHANGED',
         },
         frame = {
             name = 'cmd', w=0, h=0, x=0, y=0, a=a.tl, pa=a.tl, isResizable = nil, isMovable = nil, target = ctrl.power.f.main,
@@ -150,7 +150,7 @@ end
 function ctrl.cmd.setup(self)
     self:prefs()
     self.f.main = ctrl.frame:new(self.options.frame)
-    self.f.main:SetScale(ctrl.prefs.ui.scale)
+    --self.f.main:SetScale(ctrl.prefs.ui.scale)
     ctrl.tx.generate(ctrl.cmd, textures)
     self:buttons()
     self:registerCtrlFrame(1, self.f.main)

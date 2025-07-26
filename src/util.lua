@@ -10,81 +10,10 @@ function ctrl.pack(...)
     return { n = select("#", ...), ... }
 end
 
-function ctrl.toStr(t)
-    if t == nil then
-        return 'nil'
-    elseif type(t) == 'string' then
-        return t
-    elseif type(t) == 'table' then
-        local str = ctrl.c.d .. '{'
-        if t.n then
-            for i, value in ipairs(t) do
-                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
-                if i < t.n then
-                    str = str .. ','
-                end
-            end
-        elseif #t > 0 then
-            for i, value in ipairs(t) do
-                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
-                if i < #t then
-                    str = str .. ','
-                end
-            end
-        else
-            for k, v in pairs(t) do
-                str = str .. ' ' .. ctrl.c.y .. k .. ctrl.c.a .. ':' .. ctrl.c.g .. tostring(v)
-            end
-        end
-        str = str .. ctrl.c.d .. ' }'
-        return str
-    else
-        return tostring(t)
-    end
-end
-
-function ctrl.firstToUpper(str)
-    return (str:gsub("^%l", string.upper))
-end
-
-function ctrl.groupConfig()
-    local unitId = 'player'
-    local groupSize = 1
-    if IsInRaid() then
-        unitId = 'raid'
-        groupSize = 40
-    elseif IsInGroup() then
-        unitId = 'party'
-        groupSize = 5
-    end
-    return unitId, groupSize
-end
-
-function ctrl.hexMarkupToRGBA(hexMarkup)
-    local hexString = strsub(hexMarkup, 5, 10)
-    hexString = hexString .. strsub(hexMarkup, 3, 4)
-    local clr = CreateColorFromRGBAHexString(hexString)
-    local r, g, b, a = clr:GetRGBA()
-    return {r, g, b, a}
-end
-
-function ctrl.healthPct(unit)
-    return math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
-end
-
-function ctrl.healthPctStr(perc)
-    local color = ctrl.c.g
-    if perc < 50 then color = ctrl.c.y end
-    if perc < 25 then color = ctrl.c.r end
-    if perc < 1 then color = ctrl.c.dim end
-    return color..perc..'%'
-end
-
 --[[ Metatables ]]
 
 local metakey = {}
 
---local function metafunction(t) return t[metakey] end
 local metaKeyTable = {
     __index = function(t)
         return t[metakey]
@@ -172,8 +101,6 @@ function ctrl.safecopy(obj, depth)
                     else
                         o[k] = {}
                     end
-                    --else
-                    --print('safecopy skipped table with metatable ' .. tostring(rawV))
                 end
             elseif t == 'string' then
                 o[k] = tostring(rawV)
@@ -187,8 +114,6 @@ function ctrl.safecopy(obj, depth)
                 end
             elseif t == nil then
                 o[k] = nil
-                --else
-                --print('safecopy skipped item of type ' .. t)
             end
         end
     else
@@ -208,7 +133,7 @@ function ctrl.safeset(dest, src, depth, ignoremetatables)
         local t = type(rawV)
         if t == 'table' then
             if getmetatable(t) and ignoremetatables then
-                --ctrl.debug(ctrl, 'Skipping table ' .. tostring(k) .. ' because it has a metatable.')
+                -- skip
             else
                 if depth > 0 then
                     if dest[k] then
@@ -228,8 +153,6 @@ function ctrl.safeset(dest, src, depth, ignoremetatables)
             end
         elseif t == 'string' or t == 'number' or t == 'boolean' then
             dest[k] = rawV
-        else
-            --ctrl.debug(ctrl, 'safecopy skipped item ' .. tostring(k) .. ' with type ' .. t)
         end
     end
 end
@@ -238,7 +161,6 @@ function ctrl.pp(input, limit, istr)
     limit = limit or 100
     istr = istr or '->   '
     if (limit < 1) then
-        --ctrl.output "ERROR: Item limit reached."
         return limit - 1
     end
     local ts = type(input)
@@ -268,4 +190,76 @@ local typeCol = {
 function ctrl.wrap(any)
     local ret = typeCol[any] or typeCol[type(any)] or ctrl.c.r
     return string.format('%s%s%s', ret, tostring(any), ctrl.c.d)
+end
+
+-- Game related -- TODO: move to new file
+
+function ctrl.toStr(t)
+    if t == nil then
+        return 'nil'
+    elseif type(t) == 'string' then
+        return t
+    elseif type(t) == 'table' then
+        local str = ctrl.c.d .. '{'
+        if t.n then
+            for i, value in ipairs(t) do
+                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
+                if i < t.n then
+                    str = str .. ','
+                end
+            end
+        elseif #t > 0 then
+            for i, value in ipairs(t) do
+                str = str .. ' ' .. ctrl.c.a .. tostring(i) .. ':' .. ctrl.c.w .. tostring(value)
+                if i < #t then
+                    str = str .. ','
+                end
+            end
+        else
+            for k, v in pairs(t) do
+                str = str .. ' ' .. ctrl.c.y .. k .. ctrl.c.a .. ':' .. ctrl.c.g .. tostring(v)
+            end
+        end
+        str = str .. ctrl.c.d .. ' }'
+        return str
+    else
+        return tostring(t)
+    end
+end
+
+function ctrl.firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
+function ctrl.groupConfig()
+    local unitId = 'player'
+    local groupSize = 1
+    if IsInRaid() then
+        unitId = 'raid'
+        groupSize = 40
+    elseif IsInGroup() then
+        unitId = 'party'
+        groupSize = 5
+    end
+    return unitId, groupSize
+end
+
+function ctrl.hexMarkupToRGBA(hexMarkup)
+    local hexString = strsub(hexMarkup, 5, 10)
+    hexString = hexString .. strsub(hexMarkup, 3, 4)
+    local clr = CreateColorFromRGBAHexString(hexString)
+    local r, g, b, a = clr:GetRGBA()
+    return {r, g, b, a}
+end
+
+function ctrl.healthPct(unit)
+    return math.floor((UnitHealth(unit) / UnitHealthMax(unit)) * 100)
+end
+
+function ctrl.healthPctStr(perc)
+    local color = ctrl.c.g
+    if perc < 50 then color = ctrl.c.y end
+    if perc < 25 then color = ctrl.c.r end
+    if perc < 1 then color = ctrl.c.dim end
+    return color..perc..'%'
 end

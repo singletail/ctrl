@@ -49,11 +49,9 @@ ctrl.minimap.mode = 0
 
 local subframes = {
     ['loc'] = { target = 'main', w = 300, h = 400, strata = 'BACKGROUND', a=a.tl, pa=a.tl, x=0, y=0 },
-    --['iconlist'] = { target = UIParent, w = 300, h = 500, strata = 'BACKGROUND', a=a.tl, pa=a.tl, x=100, y=-300 },
 }
 
 local textures = {
-    --['tx'] = { t = 'bluebk_inset_256', path = ctrl.p.tx, l = -6 },
     ['loctx'] = { target = 'loc', t = 'bluebk_full_256', path = ctrl.p.tx, l = -6 },
     ['ct'] = { t = 'pride_t', path = p.ux, l = -6 },
     ['cl'] = { t = 'pride_l', path = p.ux, l = -6 },
@@ -67,15 +65,11 @@ local textures = {
     ['ll'] = { target = 'loc', t = 'pride_l', path = p.ux, l = -6 },
     ['lr'] = { target = 'loc', t = 'pride_r', path = p.ux, l = -6 },
     ['lb'] = { target = 'loc', t = 'pride_b', path = p.ux, l = -6 },
-    -- for iconlist:
-    --['iconlistbk'] = { target = 'iconlist', t = 'bluebk_full_256', path = ctrl.p.tx, l = -6 },
-
 }
 
 local fontstrings = {
     ['fsTime'] = { target = 'main', t = '', fontFile = 'Prompt-Bold.ttf', fontSize = 24, a = a.tl, pa = a.t, x=-50, y=-12},
     ['fsDate'] = { target = 'main', t = '', fontFile = 'Prompt-Medium.ttf', fontSize = 14, a = a.b, pa = a.b, x = 0, y = 6 },
-
     ['mapID'] = { target = 'loc', t = '', fontFile = 'Prompt-Regular.ttf', fontSize = 13, a = a.t, pa = a.t, x=0, y=-4},
     ['zone'] = { target = 'loc', t = '', fontFile = 'Prompt-Regular.ttf', fontSize = 18, a = a.t, pa = a.t, x = 0, y = -19 },
     ['subzone'] = { target = 'loc', t = '', fontFile = 'Prompt-Regular.ttf', fontSize = 12, a = a.t, pa = a.t, x = 0, y = -36 },
@@ -103,8 +97,6 @@ function ctrl.minimap:resize(frame, w, h)
         },
         [1] = {
             { f = 'main', alpha=0,},
-            --{ f = 'loc', w=800, h=128, anchors = {{ t = UIParent, a = a.c, pa = a.c, x = 0, y = -80 }, } },
-            --{ f = 'loc', w=800, h=128, alpha = 1.0, anchors = {{ t = UIParent, a = a.c, pa = a.c, x = 0, y = -8 }, } },
             { f = MinimapCluster, w=1200, h=800, anchors={{ t = UIParent, a = a.c, pa = a.c, x = 0, y = 0 }, } },
             { f = MinimapCluster.MinimapContainer, w=1200, h=800, anchors={{ t = MinimapCluster, a = a.c, pa = a.c, x = 0, y = 0 }, } },
             { f = Minimap, alpha = 0.5, scale=2, w=600, h=600, anchors={{ t = MinimapCluster.MinimapContainer, a = a.c, pa = a.c, x = 0, y = 0 }, } },
@@ -131,7 +123,6 @@ function ctrl.minimap:resize(frame, w, h)
     end
     local tx = {
         [0] = {
-            --['loctx'] = { { t = self.f.loc, a = a.tl, pa = a.tl, x = 0, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 0, y = 0 }} },
             ['ct'] = { alpha = 1, anchors = { { t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.tr, x = 1, y = -1 }} },
             ['cl'] = { alpha = 1, anchors = {{ t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.bl, x = 0, y = -1 }} },
             ['cr'] = { alpha = 1, anchors = {{ t = self.f.main, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.f.main, a = a.br, pa = a.br, x = 1, y = -1 }} },
@@ -146,7 +137,6 @@ function ctrl.minimap:resize(frame, w, h)
             ['lb'] = { alpha = 1, anchors = {{ t = self.f.loc, a = a.tl, pa = a.bl, x = -1, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 1, y = -1 }} },
         },
         [1] = {
-            --['loctx'] = { { t = self.f.loc, a = a.tl, pa = a.tl, x = 0, y = 0 }, { t = self.f.loc, a = a.br, pa = a.br, x = 0, y = 0 }} },
             ['ct'] = { alpha = 0, anchors = { { t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.tr, x = 1, y = -1 }} },
             ['cl'] = { alpha = 0, anchors = {{ t = self.f.main, a = a.tl, pa = a.tl, x = -1, y = 0 }, { t = self.f.main, a = a.br, pa = a.bl, x = 0, y = -1 }} },
             ['cr'] = { alpha = 0, anchors = {{ t = self.f.main, a = a.tl, pa = a.tr, x = 0, y = 0 }, { t = self.f.main, a = a.br, pa = a.br, x = 1, y = -1 }} },
@@ -173,18 +163,12 @@ function ctrl.minimap:resize(frame, w, h)
         end
     end
 
-
-
-
     if ctrl.minimap.mode == 0 then
         C_CVar.SetCVar('rotateMinimap', 0)
         Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground')
     else
         C_CVar.SetCVar('rotateMinimap', 1)
-        --Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground')
     end
-    
-
 end
 
 
@@ -259,32 +243,10 @@ end
 ctrl.minimap:init()
 
 function ctrl.minimap:configureFrames()
-    --Minimap:SetZoom(0)
-    --C_CVar.SetCVar('rotateMinimap', nil)
-    --MinimapCompassTexture:Hide()
-    --Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground')
     ExpansionLandingPageMinimapButton:SetScale(0.5)
 end
 
-function ctrl.minimap:refresh()
-    --self:configureFrames()
-    --self:adjustFrames()
-end
-
-function ctrl.minimap.DISPLAY_SIZE_CHANGED()
-    ctrl.minimap:refresh()
-end
-
-function ctrl.minimap.UI_SCALE_CHANGED()
-    ctrl.minimap:refresh()
-end
-
-function ctrl.minimap.TAXI_NODE_STATUS_CHANGED()
-    ctrl.minimap:refresh()
-end
-
 function ctrl.minimap.PLAYER_ENTERING_WORLD()
-    ctrl.minimap:refresh()
     ctrl.minimap:UpdateClock()
     ctrl.minimap:UpdateLocNew()
 end

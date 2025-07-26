@@ -20,25 +20,25 @@ ctrl.prefs = {
     },
     ui = {
         height = 128,
-        scale = 1,
+        scale = 2,
     },
     mod = {
         power = {
             frame = {
-                width = 24,
+                width = 20,
             },
             buttons = {
-                width = 22,
-                height = 22,
+                width = 18,
+                height = 18,
                 spacing = -4,
                 top = -36,
             },
             font = {
-                size = 11,
+                size = 9,
                 file = 'Prompt-Medium',
                 offset = {
                     x = 0,
-                    y = -1,
+                    y = 0,
                 },
             },
         },
@@ -120,7 +120,7 @@ ctrl.prefs = {
             icon = {
                 fontSize = 21,
                 fontFile = 'Prompt-Medium',
-                x = 0,
+                x = -2,
                 y = -6,
             },
             display = {
