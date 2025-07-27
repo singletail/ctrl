@@ -20,7 +20,7 @@ ctrl.prefs = {
     },
     ui = {
         height = 128,
-        scale = 2,
+        scale = 1,
     },
     mod = {
         power = {
