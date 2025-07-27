@@ -41,6 +41,7 @@ core\worldframe.lua
 core\group.lua
 core\mobs.lua
 
+mod\plates.lua
 mod\events.lua
 mod\power.lua
 mod\cmd.lua

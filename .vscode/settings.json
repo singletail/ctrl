@@ -32,7 +32,8 @@
         "BASE_MOVEMENT_SPEED",
         "class",
         "Commentator",
-        "PLAYER"
+        "PLAYER",
+        "PixelUtil"
     ],
     "Lua.diagnostics.disable": [
         "assign-type-mismatch"

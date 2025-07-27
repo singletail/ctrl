@@ -51,6 +51,7 @@ function ctrl.fs.new(module, o)
     o.fontObject = ctrl.font(o.fontFile, o.fontSize, o.fontFlags)
 
     local fs = o.target:CreateFontString()
+    fs:SetParent(o.target)
     fs:SetFontObject(o.fontObject)
 
     if tonumber(o.w) and tonumber(o.h) then fs:SetSize(o.w, o.h) end

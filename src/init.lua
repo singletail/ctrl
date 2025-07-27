@@ -32,6 +32,7 @@ ctrl.p = {
     ux = [[Interface\AddOns\ctrl\assets\ux\]],
     sfx = [[Interface\AddOns\ctrl\assets\sfx\]],
     ctrl = [[Interface\AddOns\ctrl\assets\ctrl\]],
+    np = [[Interface\AddOns\ctrl\assets\nameplate\]],
 }
 
 UIParentLoadAddOn("Blizzard_DebugTools")

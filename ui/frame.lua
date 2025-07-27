@@ -92,7 +92,7 @@ function ctrl.frame.new(module, o)
     end
     f:SetParent(o.target)
     f:SetFrameStrata(o.strata)
-    f:SetClampedToScreen(true)
+    --f:SetClampedToScreen(true)
     if o.isClipsChildren then f:SetClipsChildren(true) end
     if o.isMovable then
         f:EnableMouse(true)
