@@ -10,6 +10,7 @@ If you write addons, I encourage you to take a look at the code, especially the 
 
 ## User Features
 
+- Nameplates: User-definable color coding, icon, and notes for any npc.
 - Extra-large minimap with sharp texture scaling.
 - Taunt tracker with sound alerts.
 - Info display with ping, taint status, etc.
@@ -28,12 +29,6 @@ If you write addons, I encourage you to take a look at the code, especially the 
 - Raid death sfx by role.
 - Model viewer with options.
 - Better distance tracking.
-
-### Plater integration
-
-- User-definable color coding, icon, and notes for any npc.
-- Will eventually be replaced by a full nameplate addon.
-- Until then, check the plater directory for directions.
 
 ## Developer Features
 
