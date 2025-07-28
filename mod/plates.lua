@@ -137,6 +137,8 @@ end
 function ctrl.plates.UNIT_HEALTH(evt)
     local unit = evt[1] or ''
     if not unit or unit == '' then return end
+    local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
+    if not nameplate or not nameplate.nameplate then return end
     C_NamePlate.GetNamePlateForUnit(unit).nameplate:updateHealth()
 end
 
