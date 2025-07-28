@@ -124,8 +124,8 @@ end
 
 local mod = {
     name = 'logs',
-    color = ctrl.c.g,
-    symbol = ctrl.s.log,
+    color = c.g,
+    symbol = s.log,
     log = log,
     dumpBuffer = dumpBuffer,
     setup = setup,

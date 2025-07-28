@@ -5,7 +5,7 @@
 ## Notes: |cff24cf19Control system for Singletail's mods.|r
 ## Category: Combat
 ## Group: ctrl
-## SavedVariables: ctrldata
+## SavedVariables: CtrlData
 ## IconTexture: Interface\AddOns\ctrl\assets\ctrl\ctrl.png
 
 embeds.xml
@@ -41,7 +41,7 @@ core\worldframe.lua
 core\group.lua
 core\mobs.lua
 
-mod\plates.lua
+mod\nameplates.lua
 mod\events.lua
 mod\power.lua
 mod\cmd.lua

@@ -2,7 +2,6 @@
 
 ---@class ctrl
 local addon, ctrl = ...
-
 local c, s = ctrl.c, ctrl.s
 
 local mod = {
@@ -15,41 +14,50 @@ local mod = {
         },
         db = {
             'prefs',
+            'player',
             'unit',
             'loot',
             'logs',
         }
     },
-    ready = nil,
 }
 
 ctrl.data = ctrl.mod:new(mod)
 
-function ctrl.data:login()
-    --_G.ctrldata = {} -- wipe data
-    _G.ctrldata = _G.ctrldata or {}
+function ctrl.data:check()
     for _, v in pairs(self.options.db) do
-        _G.ctrldata[v] = _G.ctrldata[v] or {}
-        ctrl.data[v] = _G.ctrldata[v]
-        if not ctrl.data[v] then
-            ctrl.error(ctrl.data, 2, 'ctrl:data table ' .. v .. ' not initialized')
-        end
+        _G.CtrlData[v] = _G.CtrlData[v] or {}
+        ctrl.data[v] = _G.CtrlData[v]
     end
-    ctrl.data:inc()
-    ctrl.data.ready = 1
 end
 
-function ctrl.data:inc()
-    ctrl.data.prefs.last = GetServerTime()
-    ctrl.data.prefs.guid = UnitGUID("player")
+function ctrl.data:clean()
+    for _, v in pairs(self.options.db) do
+        if ctrl.data.prefs[v] and ctrl.data.prefs[v].wipe then ctrl.data[v] = {} end
+    end
+end
+
+function ctrl.data:count()
+    local guid = UnitGUID('player')
+    if not guid then ctrl.data:crit('UnitGUID = nil'); return end
+    ctrl.data.player[guid] = ctrl.data.player[guid] or {}
+    ctrl.data.player[guid].name = UnitName('player')
+    ctrl.data.player[guid].realm = GetRealmName()
+    ctrl.data.player[guid].last = GetServerTime()
+    ctrl.data.player[guid].count = ctrl.data.player[guid].count or 0
+    ctrl.data.player[guid].count = ctrl.data.player[guid].count + 1
 end
 
 function ctrl.data.SAVED_VARIABLES_TOO_LARGE(evt)
     ctrl.data:crit('SAVED_VARIABLES_TOO_LARGE ' .. tostring(evt[1]))
 end
 
-function ctrl.data.setup(self)
-    --self:debug('ctrl.data module setup()')
+function ctrl.data:login()
+    _G.CtrlData = _G.CtrlData or {}
+    self:check()
+    self:clean()
+    self:count()
+    self.is.ready = 1
 end
 
 ctrl.data:init()

@@ -21,46 +21,16 @@ local rgba = {
     ['nil'] = { 0.0, 0.0, 0.0, 1.0, },
 }
 
-local i = {
-    kick = '㏅',
-    caster = '〗',
-    stop = 'ゕ',
-    frontal = '㏘',
-    dispel = '㍈',
-    poison = '㍑',
-    disease = '䆿',
-    purge = '㍓',
-    avoid = '䃯',
-    tankbuster = '䁶',
-    tanking = '㍵',
-    warn = 'ゃ', 
-    cc = '㇂',
-    boss = '䅴',
-    rotate = '䂈',
-    penis = '㏤',
-    dodge = '䅧',
-    collapse = 'ㄫ',
-    stack = '㐅',
-    ['nil'] = '␀',
+
+
+ctrl.db = {
+
+    -- Ara'Kara
+    [216336] = { s=s.collapse, c=c.rgba.o, t1='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
+    [214840] = { s=s.biohazard, c=c.rgba.g, t1="Dispel 8s DoT"}, --Engorged Crawler
 }
 
-local h = {
-    reset       = [[|r]],
-    white       = [[|cffffffff]],
-    boss        = [[|cffff0000]],
-    red         = [[|cffff2e38]],
-    orange      = [[|cffffb836]],
-    yellow      = [[|cfffff000]],
-    green       = [[|cff24cf19]],
-    blue        = [[|cff4975ff]],
-    violet      = [[|cffd649ff]],
-    cyan        = [[|cff5bcefa]],
-    pink        = [[|cfff563af]],
-    gray        = [[|cff888888]],
-    black       = [[|cff000000]],
-    dim         = [[|cff333333]],
-    ['nil']     = [[|c33000000]],
-}
+--[[
 
 local p = {
     boss = { i.boss, rgba.red, h.pink, 'Boss '},
@@ -83,7 +53,7 @@ local p = {
     cc = { i.cc, rgba.red, h.red, 'CC '},
 }
 
-_G.CtrlDB = {
+ctrl.db = {
     -- Ara'Kara
     [216336] = { p = p.collapse, t='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
     [214840] = { p = p.poison, t="Dispel 8s DoT"}, --Engorged Crawler
@@ -181,7 +151,7 @@ _G.CtrlDB = {
 
 
     -- CONVERT:
-    --[[
+
     --Necrotic Wake
 
     [165137] = { --Zolramus Gatekeeper
@@ -616,5 +586,5 @@ _G.CtrlDB = {
         debug = '',
     },
     ]]
-}
+
 

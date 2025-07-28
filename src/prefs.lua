@@ -6,7 +6,7 @@ local ctrl = select(2, ...)
 -- Defaults, overwritten by user prefs
 
 ctrl.prefs = {
-    reset = true,
+    reset = 1,
     font = {
         file = 'Prompt-Medium',
         size = 11,
@@ -17,6 +17,16 @@ ctrl.prefs = {
         level = 8,
         max = 1000,
         index = 1,
+        wipe = 1,
+    },
+    player = {
+        wipe = nil,
+    },
+    unit = {
+        wipe = 1,
+    },
+    loot = {
+        wipe = 1,
     },
     ui = {
         height = 128,

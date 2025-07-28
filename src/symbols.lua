@@ -69,7 +69,7 @@ ctrl.s = {
     ['frost']          = '',
     ['pirate']         = '󰨈',
     ['sparkle']        = '󰙴',
-    ['heart'] = '㎠',
+    ['heart']          = '㎠',
 
     ['kick']           = '㏅',
     ['kick2']          = '㏆',
@@ -144,8 +144,8 @@ ctrl.s = {
     ['threesome']      = '㐅',
     ['spank']          = '㐇',
     ['anal']           = '㐉',
-    ['gag'] = '㎱',
-    ['fear'] = '㎖',
+    ['gag']            = '㎱',
+    ['fear']           = '㎖',
     ['whip']           = '㐩',
     ['singletail']     = '㐪',
 
@@ -272,6 +272,15 @@ ctrl.s = {
     ['MONK']        = '䃱',
     ['DEATHKNIGHT'] = '㌢',
 
+    ['boss']      = 'ぢ',
+    ['worldboss'] = '【',
+    ['rareelite'] = '䆓',
+    ['elite']     = '䅈',
+    ['rare']      = '㎙',
+    ['normal']    = '㌤',
+    ['trivial']   = '󱔎',
+    ['minus']     = '䅶',
+
     ["The Immortal Taint"]  = '䀈',
     ["Tainted Angels"]      = '㌦',
     ["Taintcraft"]          = '䂭',
@@ -305,9 +314,18 @@ ctrl.s = {
     ['isLooking']           = 'ㄔ',
     ['isTurning']           = '䅭',
 
-
-
     ["Player-5-0AA78045"] = '㐪', --Singltail
+}
+
+ctrl.s.reaction = {
+    [1] = '䣰', -- hated
+    [2] = '󰨈', -- hostile
+    [3] = '', -- unfriendly
+    [4] = '㊴', -- neutral
+    [5] = '󰙊', -- friendly
+    [6] = '󰃫', -- honored
+    [7] = '㐅', -- revered
+    [8] = '䅴', -- exalted
 }
 
 -- 㐪 ㌡ ㌢ 䖿 䃿 䄃 ㏦ ㏧ ㍉ ㍊ 〧 〨 〖 ㏘ ㎛ 䃜 䄚 䣯 䣰
