@@ -5,28 +5,27 @@ local ctrl = select(2, ...)
 
 -- Defaults, overwritten by user prefs
 
-ctrl.prefs = {
-    reset = 1,
+ctrl.defaults = {
     font = {
         file = 'Prompt-Medium',
         size = 11,
         flags = '',
     },
     log = {
-        enable = 1,
+        enable = nil,
         level = 8,
         max = 1000,
         index = 1,
-        wipe = 1,
+        --wipe = 1,
     },
     player = {
-        wipe = nil,
+        --wipe = nil,
     },
     unit = {
-        wipe = 1,
+        --wipe = 1,
     },
     loot = {
-        wipe = 1,
+        --wipe = 1,
     },
     ui = {
         height = 128,
@@ -158,11 +157,22 @@ ctrl.prefs = {
     },
 }
 
+-- TODO
+ctrl.prefs = ctrl.defaults
+
 function ctrl.loadprefs()
-    if ctrl.prefs.reset then
-        ctrl.data.prefs = ctrl.cp(ctrl.prefs)
-    else
-        ctrl.merge(ctrl.data.prefs, ctrl.prefs)
+
+    ctrl.log(ctrl.master, 5, 'ctrl.loadprefs()')
+
+    if not ctrl.data.prefs then
+        ctrl.log(ctrl.master, 4, 'ctrl.loadprefs() - Setting default preferences')
+        ctrl.data.prefs = ctrl.cp(ctrl.defaults)
+        --_G.CtrlData.prefs = ctrl.cp(ctrl.prefs)
     end
+
+
+    --ctrl.data.prefs = _G.CtrlData.prefs
     ctrl.prefs = ctrl.data.prefs
+    --ctrl.pp(ctrl.prefs)
+    ctrl.log(ctrl.master, 5, 'ctrl.prefs ready')
 end

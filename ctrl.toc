@@ -41,7 +41,9 @@ core\worldframe.lua
 core\group.lua
 core\mobs.lua
 
-mod\nameplates.lua
+mod\plates.lua
+
+# mod\nameplates.lua
 mod\events.lua
 mod\power.lua
 mod\cmd.lua
@@ -53,7 +55,7 @@ mod\pet.lua
 mod\mobframe.lua
 
 # in progress
-mod\pull.lua
+# mod\pull.lua
 
 # disabled:
 # mod\death.lua

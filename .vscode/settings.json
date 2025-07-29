@@ -33,7 +33,8 @@
         "class",
         "Commentator",
         "PLAYER",
-        "PixelUtil"
+        "PixelUtil",
+        "BACKGROUND"
     ],
     "Lua.diagnostics.disable": [
         "assign-type-mismatch"

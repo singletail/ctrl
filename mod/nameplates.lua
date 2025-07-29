@@ -371,6 +371,7 @@ function ctrl.nameplates.NAME_PLATE_UNIT_ADDED(evt)
     np.cp:SetUnit(evt[1])
 end
 
+--[[
 local hookHealth = function(unitFrame)
     local np = unitFrame:GetParent()
     if not np or not np.cp or not np.cp.unit then return end
@@ -381,10 +382,72 @@ end
 function ctrl.nameplates:hooks()
     hooksecurefunc("CompactUnitFrame_UpdateHealth", hookHealth)
 end
+]]
+
+local template = {
+    f = {
+        evt = nil,
+        base = nil,
+        health = nil,
+        power = nil,
+        cast = nil,
+        data = nil,
+        tx = {},
+        fs = {},
+    },
+    set = {
+        -- functions
+    },
+    is = {
+        on = nil,
+        player = nil,
+        npc = nil,
+    },
+    unit = nil,
+    guid = nil,
+    npcId = nil,
+    name = nil,
+    data = {
+        target = nil,
+        aggro = nil,
+        health = 0,
+        healthMax = 1,
+        healthPct = 100,
+        spawnIndex = nil,
+    },
+    player = {
+        pvpName = nil,
+        class = nil,
+        guildName = nil,
+        guildRank = nil,
+        ilvl = nil,
+    },
+    npc = {
+        reaction = nil,
+        classification = nil,
+        creatureType = nil,
+        creatureFamily = nil,
+    },
+    db = {
+        icon = '',
+        t1 = '',
+        t2 = '',
+    },
+    color = {
+        hex = '|cffffffff',
+        rgba = { r=1, g=1, b=1, a=1 },
+    },
+}
+
+function ctrl.nameplates:generate()
+    ctrl.np = ctrl.np or {}
+    for i=1,40 do
+        
+    end
+end
 
 function ctrl.nameplates:setup()
     ctrl.nameplate = ctrl.nameplate or {}
-    --self:hooks()
 end
 
 ctrl.nameplates:init()

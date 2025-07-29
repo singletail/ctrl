@@ -143,6 +143,7 @@ function ctrl.mobframe:prefs()
 end
 
 function ctrl.mobframe.setup(self)
+    self:debug('setup()')
     self:prefs()
     self.f.main = ctrl.frame.new(self, self.options.frame)
     ctrl.tx.generate(self, textures)

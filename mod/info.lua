@@ -87,6 +87,7 @@ function ctrl.info:lamps()
         lamp.w = ctrl.prefs.mod.info.lamp.width
         lamp.h = ctrl.prefs.mod.info.lamp.height
         lamp.anchors = {{ a=a.tr, pa=a.tr, x=ctrl.prefs.mod.info.lamp.x, y=ctrl.prefs.mod.info.lamp.y - ((i-1) * ctrl.prefs.mod.info.lamp.spacing)}}
+        ctrl.pp(lamp.anchors)
         ctrl.info.lamp[i] = ctrl.btns.new(self, lamp)
         ctrl.info.lamp[i]:off()
     end
