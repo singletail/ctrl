@@ -4,61 +4,22 @@
 local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
-local rgba = {
-    boss = { 1, 0.0, 0.0, 1},
-    red = { 0.5, 0.0, 0.0, 0.5, },
-    orange = { 0.5, 0.25, 0.0, 0.5, },
-    yellow = { 0.5, 0.5, 0.0, 0.75, },
-    yelloworange = { 0.75, 0.5, 0.0, 0.75, },
-    green = { 0.0, 0.25, 0.0, 0.5, },
-    blue = { 0.0, 0.0, 0.25, 0.5, },
-    violet = { 0.5, 0.0, 0.5, 0.75, },
-    cyan = { 0.0, 0.5, 0.5, 0.75, },
-    pink = { 1.0, 0.0, 0.5, 0.75, },
-    gray = { 0.5, 0.5, 0.5, 0.75, },
-    white = { 0.5, 0.5, 0.5, 0.75, },
-    dim = { 0.0, 0.0, 0.0, 0.25, },
-    ['nil'] = { 0.0, 0.0, 0.0, 1.0, },
-}
-
-
-
 ctrl.db = {
-
-    -- Ara'Kara
-    [216336] = { s=s.collapse, c=c.rgba.o, t1='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
-    [214840] = { s=s.biohazard, c=c.rgba.g, t1="Dispel 8s DoT"}, --Engorged Crawler
+    npcId = {
+        -- Ara'Kara
+        [216336] = { s=s.collapse, c=c.rgba.o, t1='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
+        [214840] = { s=s.biohazard, c=c.rgba.g, t1="Dispel 8s DoT"}, --Engorged Crawler
+        [216341] = { s=s.bleed, c=c.rgba.r, t1="Dispel 12s Bleed"}, --Jabbing Flyer
+        [216293] = { s=s.kick, c=c.rgba.p, hex=c.c, t1="Prio Kick Barrage"}, --Trilling Attendant
+    }
 }
 
 --[[
 
-local p = {
-    boss = { i.boss, rgba.red, h.pink, 'Boss '},
-    poison = { i.poison, rgba.green, h.green, 'Poison '},
-    disease = { i.disease, rgba.green, h.green, 'Disease '},
-    kick = { i.kick, rgba.yellow, h.yellow, i.warn..' Prio Kick '},
-    frontal = { i.rotate, rgba.orange, h.orange, 'Frontal '},
-    dispel = { i.dispel, rgba.blue, h.blue, 'Dispel '},
-    warn = { i.warn, rgba.red, h.yellow, 'Warn: '},
-    dodge = { i.dodge, rgba.yellow, h.yellow, 'Dodge '},
-    collapse = { i.collapse, rgba.orange, h.orange, 'Collapse '},
-    stack = { i.stack, rgba.orange, h.orange, 'Collapse '},
 
-    caster = { i.caster, rgba.green, h.green, 'Kick '},
-    stop = { i.stop, rgba.orange, h.orange, 'Stop '},
-    purge = { i.purge, rgba.violet, h.violet, 'Purge '},
-    avoid = { i.avoid, rgba.gray, h.gray, 'Avoid '},
-    tankbuster = { i.tankbuster, rgba.orange, h.orange, 'Tankbuster '},
-    tanking = { i.tanking, rgba.cyan, h.cyan, 'Tanking '},
-    cc = { i.cc, rgba.red, h.red, 'CC '},
-}
 
 ctrl.db = {
     -- Ara'Kara
-    [216336] = { p = p.collapse, t='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
-    [214840] = { p = p.poison, t="Dispel 8s DoT"}, --Engorged Crawler
-    [216341] = { p = p.dispel, t="Dispel 12s Bleed"}, --Jabbing Flyer
-    [216293] = { p = p.kick, t=h.yellow..i.warn.." Prio Kick Barrage"}, --Trilling Attendant
     [217531] = { p = p.kick, t =h.yellow..i.warn..' Prio Kick Horrifying Shrill', t2=h.green.."て Targeted Frontal Spray"}, --Ixin
     [218324] = { p = p.warn, t=h.cyan..'㍊ Mitigate Call of the Brood'}, --Nakt
     [217533] = { p = p.dodge, t=h.green..i.dodge..'Dodge Poisonous Cloud'}, --Atik
@@ -585,6 +546,28 @@ ctrl.db = {
         symbol = s.kick,
         debug = '',
     },
-    ]]
 
 
+
+
+
+    local p = {
+    boss = { i.boss, rgba.red, h.pink, 'Boss '},
+    poison = { i.poison, rgba.green, h.green, 'Poison '},
+    disease = { i.disease, rgba.green, h.green, 'Disease '},
+    kick = { i.kick, rgba.yellow, h.yellow, i.warn..' Prio Kick '},
+    frontal = { i.rotate, rgba.orange, h.orange, 'Frontal '},
+    dispel = { i.dispel, rgba.blue, h.blue, 'Dispel '},
+    warn = { i.warn, rgba.red, h.yellow, 'Warn: '},
+    dodge = { i.dodge, rgba.yellow, h.yellow, 'Dodge '},
+    collapse = { i.collapse, rgba.orange, h.orange, 'Collapse '},
+    stack = { i.stack, rgba.orange, h.orange, 'Collapse '},
+
+    caster = { i.caster, rgba.green, h.green, 'Kick '},
+    stop = { i.stop, rgba.orange, h.orange, 'Stop '},
+    purge = { i.purge, rgba.violet, h.violet, 'Purge '},
+    avoid = { i.avoid, rgba.gray, h.gray, 'Avoid '},
+    tankbuster = { i.tankbuster, rgba.orange, h.orange, 'Tankbuster '},
+    tanking = { i.tanking, rgba.cyan, h.cyan, 'Tanking '},
+    cc = { i.cc, rgba.red, h.red, 'CC '},
+}    ]]

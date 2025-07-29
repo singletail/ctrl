@@ -21,18 +21,10 @@ local mod = {
 ctrl.nameplates = ctrl.mod:new(mod)
 
 --[[
-
 TODO:
-
-- Fix computing health bar width
 - Redo health event trigger
-- Icon
-- Target
-- New graphics (select?)
 - guid caching
 - inspect?
-
-
 ]]
 
 local default_cp = {
@@ -64,9 +56,6 @@ local default_cp = {
     creatureType = nil,
     creatureFamily = nil,
 }
-
-
--- Update Events
 
 local function UpdateNPC(self) --every frame
     if UnitIsUnit(self.unit, 'target') then
@@ -157,7 +146,6 @@ end
 
 local function ConfigureNPC(self)
     self.isPlayer = nil
-
     local _, _, _, _, _, npcId, spawnId = strsplit("-", self.guid)
     self.npcId = tonumber(npcId)
     self.spawnIndex = bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3)
@@ -239,15 +227,9 @@ local function UpdatePlayer(self)
     --
 end
 
-
-
 local function Update(self)
     if not self.unit then return end
-    if self.isPlayer then
-        self:UpdatePlayer()
-    else
-        self:UpdateNPC()
-    end
+    if self.isPlayer then self:UpdatePlayer() else self:UpdateNPC() end
 end
 
 local function UpdateHealth(self)
@@ -271,7 +253,6 @@ local function Refresh(self)
     end
     self.tx.cap:SetVertexColor(self.color[1], self.color[2], self.color[3], self.color[4])
     self.tx.healthBar:SetVertexColor(self.color[1], self.color[2], self.color[3], self.color[4])
-
     self:HideBlizzard()
     self.f.main:Show()
 end
@@ -309,8 +290,6 @@ local theme = { --160
         ['fs6'] = { fontFile='Prompt-Regular', fontSize=7, t="", target='top', h=7, w=80, x=-2, y=-15, a=a.tr, pa=a.tr, jH='RIGHT' },
     },
 }
-
-
 
 function ctrl.nameplates:addFrames(cp)
     for k, v in pairs(theme.frames) do

@@ -80,7 +80,7 @@ ctrl.s = {
     ['new']            = '󰎔',
     ['pro']            = '󰐭',
     ['bio']            = '󰂦',
-    ['bleed']          = '䂩',
+    ['bleed']          = '䂇',
     ['wipe']           = '󰫩',
     ['sleep']          = '󰋣',
     ['command']        = '、',
@@ -313,6 +313,8 @@ ctrl.s = {
     ['isStill']             = '䅯',
     ['isLooking']           = 'ㄔ',
     ['isTurning']           = '䅭',
+
+    ['dispel']               = '㍈',
 
     ["Player-5-0AA78045"] = '㐪', --Singltail
 }
