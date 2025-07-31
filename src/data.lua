@@ -61,7 +61,7 @@ end
 function ctrl.data:login()
     ctrl.data:debug('ctrl.data:login()')
     --if _G.CtrlData then ctrl.data:debug('_G.CtrlData exists') else ctrl.data:warn('_G.CtrlData does not exist') end
-    --_G.CtrlData = _G.CtrlData or {}
+    _G.CtrlData = _G.CtrlData or {}
     self:check()
     --self:clean()
     --self:count()

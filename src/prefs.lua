@@ -164,11 +164,11 @@ function ctrl.loadprefs()
 
     ctrl.log(ctrl.master, 5, 'ctrl.loadprefs()')
 
-    if not ctrl.data.prefs then
+   -- if not ctrl.data.prefs then
         ctrl.log(ctrl.master, 4, 'ctrl.loadprefs() - Setting default preferences')
         ctrl.data.prefs = ctrl.cp(ctrl.defaults)
         --_G.CtrlData.prefs = ctrl.cp(ctrl.prefs)
-    end
+   -- end
 
 
     --ctrl.data.prefs = _G.CtrlData.prefs
