@@ -5,29 +5,11 @@ local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 
-local UIParent = UIParent
-local tostring = tostring
-local tonumber = tonumber
-local strsplit = strsplit
-
-local GetTime = GetTime
-
-local UnitExists = UnitExists
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local UnitGUID = UnitGUID
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-
-local UnitIsEnemy = UnitIsEnemy
-local UnitReaction = UnitReaction
-local UnitClassification = UnitClassification
-local UnitCreatureType = UnitCreatureType
-local UnitCreatureFamily = UnitCreatureFamily
-
-local GUIDIsPlayer = C_PlayerInfo.GUIDIsPlayer
-local GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
-local CreateFrame = CreateFrame
+local UIParent, GetTime, CreateFrame = UIParent, GetTime, CreateFrame
+local tostring, tonumber, strsplit = tostring, tonumber, strsplit
+local UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitIsEnemy = UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitIsEnemy
+local UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily = UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily
+local GUIDIsPlayer, GetNamePlateForUnit = C_PlayerInfo.GUIDIsPlayer, C_NamePlate.GetNamePlateForUnit
 
 local mod = {
     name = 'plates',
@@ -157,49 +139,16 @@ local template = {
     },
 }
 
-
-
--- Events
-
-function ctrl.plates.UI_SCALE_CHANGED()
-    ctrl.plates:redraw()
-end
-
-function ctrl.plates.NAME_PLATE_CREATED(evt)
-    ctrl.plates:attach(evt[1])
-end
-
-function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt)
-    GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1])
-end
-
-function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt)
-    GetNamePlateForUnit(evt[1])['np']:Reset()
-end
-
-function ctrl.plates.UNIT_HEALTH(evt)
-    GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1])
-end
-
-function ctrl.plates.UNIT_MAXHEALTH(evt)
-    GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1])
-end
-
-function ctrl.plates.UNIT_SPELLCAST_START(evt)
-    GetNamePlateForUnit(evt[1])['np']:CastStart(evt)
-end
-
-function ctrl.plates.UNIT_SPELLCAST_STOP(evt)
-    GetNamePlateForUnit(evt[1])['np']:CastStop(evt)
-end
-
-function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt)
-    GetNamePlateForUnit(evt[1])['np']:CastStart(evt)
-end
-
-function ctrl.plates.UNIT_SPELLCAST_CHANNEL_STOP(evt)
-    GetNamePlateForUnit(evt[1])['np']:CastStop(evt)
-end
+function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:redraw() end
+function ctrl.plates.NAME_PLATE_CREATED(evt) ctrl.plates:attach(evt[1]) end
+function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
+function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) GetNamePlateForUnit(evt[1])['np']:Reset() end
+function ctrl.plates.UNIT_HEALTH(evt) GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1]) end
+function ctrl.plates.UNIT_MAXHEALTH(evt) GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1]) end
+function ctrl.plates.UNIT_SPELLCAST_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
+function ctrl.plates.UNIT_SPELLCAST_STOP(evt) GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end
+function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
+function ctrl.plates.UNIT_SPELLCAST_CHANNEL_STOP(evt) GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end
 
 -- To Check
 
@@ -250,9 +199,11 @@ end
 
 local function OnUpdateSpell(self)
     local name, displayName, textureID, startTimeMs, endTimeMs, _, castID, notInterruptible, spellID = UnitCastingInfo(
-    self.unit)
-    if not name then name, displayName, textureID, startTimeMs, endTimeMs, _, notInterruptible, spellID = UnitChannelInfo(
-        self.unit) end
+        self.unit)
+    if not name then
+        name, displayName, textureID, startTimeMs, endTimeMs, _, notInterruptible, spellID = UnitChannelInfo(
+            self.unit)
+    end
     if not name then return end
     self.fs[8]:SetText(tostring(name) .. ' ' .. tostring(spellID))
     if notInterruptible then self.tx.cast:SetVertexColor(0, 0, 1, 0.5) else self.tx.cast:SetVertexColor(0.5, 0.5, 0, 1) end
@@ -292,17 +243,9 @@ local function UpdateHealth(self)
     self:UpdateTarget()
 end
 
-
-
 local function UpdateTarget(self)
-    -- Target Name
     local target = self.unit .. 'target'
-    if not UnitExists(target) then
-        ctrl.plates:debug('UpdateTarget', 'No target found', self.unit)
-        self.fs[7]:SetText('')
-        return
-    end
-
+    if not UnitExists(target) then self.fs[7]:SetText('') return end
     local targetName, col, icon = UnitName(target), c.w, s.target
     if UnitInRaid(target) or UnitInParty(target) then
         local role = UnitGroupRolesAssigned(target) or 'NONE'
@@ -311,7 +254,6 @@ local function UpdateTarget(self)
         icon = s.alert; col = c.p
     end
     self.fs[7]:SetText(string.format('%s%s %s', col, icon, targetName))
-    ctrl.plates:debug('UpdateTarget', self.unit, targetName)
 end
 
 local function UpdateThreat(self)
@@ -395,8 +337,12 @@ local function ConfigPlayer(self)
     cp(self.color.rgba, c.class[self.player.class])
     self.player.isFriend = C_FriendList.IsFriend(self.guid)
     self.str.icon = self.player.isFriend and s.heart or s[self.guildName] or s[self.player.class] or s.crit
-    if self.player.isFriend then self.color.frame = c.rgba.p elseif s[self.player.guildName] then self.color.frame = c
-        .rgba.c end
+    if self.player.isFriend then
+        self.color.frame = c.rgba.p
+    elseif s[self.player.guildName] then
+        self.color.frame = c
+            .rgba.c
+    end
 end
 
 local function CheckDB(self)
@@ -413,8 +359,7 @@ local function ConfigNPC(self)
     local _, _, _, _, _, npcId, spawnId = strsplit("-", self.guid)
     self.npc.npcId = tonumber(npcId)
     self.npc.spawnIndex = bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3)
-    if self.npc.spawnIndex and tonumber(self.npc.spawnIndex) > 0 then self.displayName = self.name ..
-        ' ' .. tostring(self.npc.spawnIndex) end
+    if self.npc.spawnIndex and tonumber(self.npc.spawnIndex)>0 then self.displayName=self.name..' '..tostring(self.npc.spawnIndex) end
     self.npc.reaction = UnitReaction(self.unit, 'player')
     self.npc.classification = UnitClassification(self.unit)
     self.npc.creatureType = UnitCreatureType(self.unit)
@@ -424,7 +369,7 @@ local function ConfigNPC(self)
         self.str.icon = s[self.npc.classification] or s.eightball
     else
         cp(self.color.rgba, c.reaction[self.npc.reaction])
-        self.icon = s.reaction[self.npc.reaction] or s.eightball
+        self.str.icon = s.reaction[self.npc.reaction] or s.eightball
     end
     self.str.t1 = self.npc.creatureType or ''
     if self.npc.creatureFamily and self.npc.creatureFamily ~= self.npc.creatureType then
@@ -465,9 +410,7 @@ local function Reset(self)
     self:Hide()
 end
 
-local function Hide(self)
-    self.f.base:Hide(); self.f.cast:Hide()
-end
+local function Hide(self) self.f.base:Hide(); self.f.cast:Hide() end
 local function ClearAllPoints(self) self.f.base:ClearAllPoints() end
 local function SetParent(self, parent) self.f.base:SetParent(parent) end
 local function SetPoint(self, anc, parent, panc, x, y) self.f.base:SetPoint(anc, parent, panc, x, y) end
@@ -561,8 +504,9 @@ function ctrl.plates:fsAdd(np, k, v)
 end
 
 function ctrl.plates:anchor(e, opt)
-    for n = 1, #opt.anchors do e:SetPoint(opt.anchors[n].a, opt.parent, opt.anchors[n].pa, opt.anchors[n].x,
-            opt.anchors[n].y) end
+    for n = 1, #opt.anchors do
+        e:SetPoint(opt.anchors[n].a, opt.parent, opt.anchors[n].pa, opt.anchors[n].x, opt.anchors[n].y)
+    end
 end
 
 function ctrl.plates:build(np)
