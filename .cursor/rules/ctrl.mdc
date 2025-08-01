@@ -1,0 +1,95 @@
+---
+description: Project Description
+globs:
+alwaysApply: true
+---
+
+## 1. Ctrl
+
+-   **Project**
+    -   A personal quality-of-life World of Warcraft addon suite emphasizing speed and efficiency.
+    -   https://github.com/singletail/ctrl
+
+## 2. Code
+
+-   **Language**
+    -   Lua 5.1 only.
+        -   https://www.lua.org/manual/5.1/
+-   **API**
+    -   WoW API 11.2+
+        -   https://warcraft.wiki.gg/wiki/World_of_Warcraft_API
+-   **Reference**
+    -   Blizzard UI Code for reference only - do not modify
+        -   BlizzardInterfaceCode/Interface/AddOns
+
+## 3. Features
+
+-   **User Modules:**
+    -   Nameplates: User-definable color coding, icon, and notes for any npc.
+    -   Extra-large minimap with sharp texture scaling.
+    -   Taunt tracker with sound alerts.
+    -   Info display with ping, taint status, etc.
+    -   Target display with iLvl & npcId.
+    -   Speedometer (with bonus speed % display).
+    -   Re-summons your companion pet whenever possible.
+    -   Raid pull notification via USER_FLAGS.
+    -   Enemy mob scanner with distance.
+    -   Automatic UI scaling for true pixel-perfect widgets.
+    -   Custom font with hundreds of glyphs for use in frames or nameplates.
+    -   Monitors CVar settings and fixes them if they change unexpectedly.
+    -   In-Progress
+        -   Loot roll tracker.
+        -   Raid death sfx by role.
+        -   Model viewer with options.
+        -   Better distance tracking.
+
+-   **Developer Features**
+    -   Blazing-fast event dispatcher.
+    -   Ultra-performant CLEU monitor.
+    -   Super-fast timer callbacks.
+    -   Ridiculously fast table operations (see util.lua).
+    -   Metatable-based modules with standardized timer/event callbacks.
+    -   Easy frame/texture/fontString creation with standardized functions.
+    -   FontOjbect caching.
+    -   Fast display tables, minimizing string calls.
+    -   Metatable generation with default value returns.
+    -   Templates for buttons with some built-in designs.
+    -   Efficient raid gear inspection (no GUI yet).
+    -   Safe & efficient SavedVariables reading & writing.
+    -   Write console log to SavedVariables in JSON, with log levels.
+
+## 4. Execution
+
+-   **Runtime**
+    -   Files pre-load into a cache at client launch.
+    -   Cache converts into metatables at login, adding standardized:
+        -   Events
+        -   Timers
+        -   CLEU
+        -   Frame management
+        -   Texture/Button/FontObject creation and storage
+        -   Logging to console and/or SavedVariables file
+-   **Login**
+    -   Cache is deleted
+    -   Prefs are loaded and verified from SavedVariables
+    -   module setup() functions are called for frame generation, etc.
+    -   Events & timers start.
+-   **Event Handling**
+    -   Two local event frames (CLEU and everything else)
+    -   One event registry and dispatcher for each. 
+    -   Index-based dispatch for even more performance.
+    -   Varargs delivered to module packed with n-index
+-   **Timer**
+    -   One local event frame.
+    -   One local event loop.
+    -   Multiple registered timers for each module.
+    -   Dispatch calls tick(interval) in registered modules.
+
+## 5. Notably missing
+
+-   **TODOs**
+    -   In-game config.
+    -   Chat system integration.
+    -   Table builder.
+    -   Error handler.
+    -   Stack debugging.
