@@ -21,8 +21,8 @@ ctrl.c                  = {
     dim         = [[|cff333333]],
     gray        = [[|cffaaaaaa]],
     ['TANK']    = [[|cff5bcefa]],
-    ['HEALER']  = [[|cff24cf19]],
-    ['DAMAGER'] = [[|cffffffff]],
+    ['HEALER']  = [[|cffff2e38]],
+    ['DAMAGER'] = [[|cfffff000]],
     ['NONE']    = [[|cff888888]],
 }
 
