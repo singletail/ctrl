@@ -58,6 +58,12 @@ local mod = {
     },
 }
 
+-- x, y = GetCursorPosition()
+-- xPos, yPos, distance = ClosestGameObjectPosition(gameObjectID)
+-- f:SetScript("OnEnter", function(self, motion)
+--  	...
+-- end)
+
 ctrl.plates = ctrl.mod:new(mod)
 
 local function cp(t, vals)
@@ -93,6 +99,7 @@ local theme = {
         ['shadow'] = { t='320_shadow.png', parent='top', w=334, h=60, a=a.c, pa=a.c, level=-5, alpha=0.6 },
         ['frame'] = { t='320_frame.png', parent='top', level=-4, alpha=0.5 },
         ['glow'] = { t='320_glow.png', parent='top', w=334, h=60, a=a.c, pa=a.c, level=-2, alpha=0.1 },
+        ['box'] = { t='box.png', parent='top', w=64, h=64, a=a.c, pa=a.c, level=-2, alpha=1 },
     },
     fs = {
         [1] = { fs=26, parent='top', x=0, y=0, w=48, h=48, fh=a.c, fv=a.m },
