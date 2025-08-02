@@ -73,15 +73,15 @@ local theme = {
         ['top'] = { w = 320, h = 48, level = 10 },
     },
     tx = {
-        ['bk'] = { t = '320_bk.png', level = -7, alpha = 0.6 },
-        ['cap'] = { t = '320_cap_flat.png', h = 48, w = 24, level = -6, alpha = 0.5 },
-        ['health'] = { t = '320_hbar_flat.png', parent = 'health', level = -6, alpha = 0.5 },
+        ['warn'] = { t = 'warn.png', a = a.c, pa = a.c, level = -7, w = 400, h = 170, alpha = 1 },
+        ['bk'] = { t = '320_bk.png', level = -6, alpha = 0.6 },
+        ['cap'] = { t = '320_cap_flat.png', h = 48, w = 24, level = -5, alpha = 0.5 },
+        ['health'] = { t = '320_hbar_flat.png', parent = 'health', level = -5, alpha = 0.5 },
         ['castbk'] = { t = '320_hbar_flat.png', parent = 'castbk', level = -6, alpha = 0.5 },
         ['cast'] = { t = '320_hbar_flat.png', parent = 'cast', level = -5, alpha = 0.5 },
-        ['shadow'] = { t = '320_shadow.png', parent = 'top', w = 334, h = 60, a = a.c, pa = a.c, level = -5, alpha = 0.6 },
-        ['frame'] = { t = '320_frame.png', parent = 'top', level = -4, alpha = 0.5 },
+        ['shadow'] = { t = '320_shadow.png', parent = 'top', w = 334, h = 60, a = a.c, pa = a.c, level = -4, alpha = 0.6 },
+        ['frame'] = { t = '320_frame.png', parent = 'top', level = -3, alpha = 0.5 },
         ['glow'] = { t = '320_glow.png', parent = 'top', w = 334, h = 60, a = a.c, pa = a.c, level = -2, alpha = 0.1 },
-        ['box'] = { t = 'box.png', parent = 'top', w = 64, h = 64, a = a.c, pa = a.c, level = -2, alpha = 1 },
     },
     fs = {
         [1] = { fs = 26, parent = 'top', x = 0, y = 0, w = 48, h = 48, fh = a.c, fv = a.m },
@@ -221,6 +221,7 @@ local function CastStart(self, evt)
 end
 
 local function CastStop(self, evt)
+    self.tx.warn:Hide()
     self.f.cast:Hide()
     self:UpdateTarget()
 end
@@ -405,8 +406,10 @@ local function Reset(self)
     self.tx.frame:SetVertexColor(1, 1, 1, 0.5)
     self.tx.cast:SetVertexColor(1, 1, 1, 0.5)
     self.tx.castbk:SetVertexColor(0, 0, 0, 0.5)
+    self.tx.warn:SetVertexColor(1, 0.9, 0, 1)
     self.f.base:SetScale(theme.default.scale or 1)
     self.f.cast:SetScript('OnUpdate', nil)
+    self.tx.warn:Hide()
     self:Hide()
 end
 
