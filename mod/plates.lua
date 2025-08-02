@@ -143,8 +143,8 @@ function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:redraw() end
 function ctrl.plates.NAME_PLATE_CREATED(evt) ctrl.plates:attach(evt[1]) end
 function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
 function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) GetNamePlateForUnit(evt[1])['np']:Reset() end
-function ctrl.plates.UNIT_HEALTH(evt) GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1]) end
-function ctrl.plates.UNIT_MAXHEALTH(evt) GetNamePlateForUnit(evt[1])['np']:DrawHealth(evt[1]) end
+function ctrl.plates.UNIT_HEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
+function ctrl.plates.UNIT_MAXHEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
 function ctrl.plates.UNIT_SPELLCAST_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
 function ctrl.plates.UNIT_SPELLCAST_STOP(evt) GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end
 function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
@@ -161,12 +161,12 @@ end
 
 function ctrl.plates.UNIT_THREAT_LIST_UPDATE(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateThreat() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
 end
 
 function ctrl.plates.UNIT_THREAT_SITUATION_UPDATE(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateThreat() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
 end
 
 -- ???
@@ -255,66 +255,22 @@ local function UpdateTarget(self)
         icon = s.alert; col = c.p
     end
     self.fs[7]:SetText(string.format('%s%s %s', col, icon, targetName))
+    self:UpdateTargetFrame()
+    self:UpdateThreat()
+end
+
+local function UpdateTargetFrame(self)
+    local fc = {1, 1, 1, 0.1}
+    if UnitAffectingCombat(self.unit) then if UnitIsUnit(self.unit, 'target') then fc = {1, 0.9, 0, 1} else fc = {1, 0, 0, 1} end end
+    self.tx.frame:SetVertexColor(fc[1],fc[2],fc[3],fc[4])
 end
 
 local function UpdateThreat(self)
-    local col = {
-        off = { 1, 1, 1, 0 },
-        dim = { 1, 1, 1, 0.2 },
-        orange = { 1, 0.5, 0, 1 },
-        yellow = { 1, 1, 0, 1 },
-        red = { 1, 0, 0, 1 },
-    }
-    local col_frame = 'dim'
-    local col_glow = 'off'
-    if not UnitAffectingCombat(self.unit) then
-        if UnitIsUnit(self.unit, 'target') then col_frame = 'yellow' end
-    else
-        --if UnitIsUnit(self.unit, 'target') then col_frame = 'orange' else col_frame = 'red' end
-        if IsInRaid() or IsInGroup() then
-            local role = UnitGroupRolesAssigned('player')
-            local threatStatus = UnitThreatSituation('player', self.unit)
-        end
-    end
-    --[[
-    if UnitAffectingCombat(self.unit) then
-        self.tx.frame:SetVertexColor(c.rgba.r)
-        if IsInRaid() or IsInGroup() then
-            local role = UnitGroupRolesAssigned('player')
-            local threatStatus = UnitThreatSituation('player', self.unit)
-            if role == 'TANK' then
-                if threatStatus == 3 then
-                    self.tx.frame:SetVertexColor(c.rgba.c)
-                    self.tx.glow:SetVertexColor(1, 1, 1, 0.2)
-                elseif threatStatus == 2 then
-                    self.tx.frame:SetVertexColor(c.rgba.o)
-                    self.tx.glow:SetVertexColor(c.rgba.o)
-                else
-                    self.tx.frame:SetVertexColor(c.rgba.r)
-                    self.tx.glow:SetVertexColor(c.rgba.r)
-                end
-            else
-                if threatStatus == 3 then
-                    self.tx.frame:SetVertexColor(c.rgba.r)
-                    self.tx.glow:SetVertexColor(c.rgba.r)
-                elseif threatStatus == 2 then
-                    self.tx.frame:SetVertexColor(c.rgba.y)
-                    self.tx.glow:SetVertexColor(c.rgba.o)
-                else
-                    self.tx.frame:SetVertexColor(c.rgba.g)
-                    self.tx.glow:SetVertexColor(1, 1, 1, 0.2)
-                end
-            end
-        end
-    else
-        self.tx.glow:SetVertexColor(1, 1, 1, 0.1)
-        if UnitIsUnit(self.unit, 'target') then
-            self.tx.frame:SetVertexColor(c.rgba.y)
-        else
-            self.tx.frame:SetVertexColor(1, 1, 1, 0.1)
-        end
-    end
-    ]]
+    local threat = UnitThreatSituation('player', self.unit)
+    if not threat then self.tx.glow:SetVertexColor(1, 1, 1, 0.1) return end
+    local tcol = {{1,0,0,1},{1,0.9,0,1},{0,0,1,1}}
+    if UnitGroupRolesAssigned('player') == 'TANK' then threat = math.abs(threat * -1) end
+    self.tx.glow:SetVertexColor(tcol[threat][1], tcol[threat][2], tcol[threat][3], tcol[threat][4])
 end
 
 local function Draw(self)
@@ -422,6 +378,7 @@ function ctrl.plates:fn(np)
     np.Draw = Draw
     np.UpdateHealth = UpdateHealth
     np.UpdateTarget = UpdateTarget
+    np.UpdateTargetFrame = UpdateTargetFrame
     np.UpdateThreat = UpdateThreat
     np.OnUpdateSpell = OnUpdateSpell
     np.CastStart = CastStart
