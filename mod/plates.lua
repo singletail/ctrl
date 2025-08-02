@@ -7,7 +7,9 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
 local UIParent, GetTime, CreateFrame = UIParent, GetTime, CreateFrame
 local tostring, tonumber, strsplit = tostring, tonumber, strsplit
-local UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitIsEnemy = UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitIsEnemy
+local UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax = UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax
+local UnitClass, UnitRace = UnitClass, UnitRace
+local UnitIsEnemy, UnitInRaid, UnitInParty, UnitGroupRolesAssigned = UnitIsEnemy, UnitInRaid, UnitInParty, UnitGroupRolesAssigned
 local UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily = UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily
 local GUIDIsPlayer, GetNamePlateForUnit = C_PlayerInfo.GUIDIsPlayer, C_NamePlate.GetNamePlateForUnit
 
@@ -16,6 +18,7 @@ local mod = {
     color = c.g,
     symbol = s.wipe,
     options = {
+        timers = { 1 },
         events = {
             'UI_SCALE_CHANGED',
             'NAME_PLATE_CREATED',
@@ -60,7 +63,7 @@ local function cp(t, vals)
 end
 
 local theme = {
-    default = { w = 0, h = 0, x = 0, y = 0, a = a.tl, pa = a.tl, parent = 'base', alpha = 1, scale = 0.4, f = 'Prompt-Regular', fs = 14, strata = 'BACKGROUND', layer = 'ARTWORK', level = 0, fh = a.l, fv = a.t },
+    default = { w = 0, h = 0, x = 0, y = 0, a = a.tl, pa = a.tl, parent = 'base', alpha = 1, scale = 0.5, f = 'Prompt-Regular', fs = 14, strata = 'BACKGROUND', layer = 'ARTWORK', level = 0, fh = a.l, fv = a.t },
     path = {
         tx = [[Interface\AddOns\ctrl\assets\nameplate\]],
         font = [[Interface\AddOns\ctrl\assets\fnt\]],
@@ -86,10 +89,10 @@ local theme = {
     fs = {
         [1] = { fs = 26, parent = 'top', x = 0, y = 0, w = 48, h = 48, fh = a.c, fv = a.m },
         [2] = { f = 'Prompt-Medium', fs = 16, parent = 'top', w = 240, h = 14, x = 42, y = -2 },
-        [3] = { parent = 'top', w = 200, h = 14, x = 42, y = -16 },
-        [4] = { parent = 'top', w = 120, h = 14, x = 42, y = -30 },
-        [5] = { parent = 'top', h = 14, w = 52, x = -4, y = -2, a = a.tr, pa = a.tr, fh = a.r },
-        [6] = { parent = 'top', h = 14, w = 80, x = -4, y = -16, a = a.tr, pa = a.tr, fh = a.r },
+        [3] = { parent = 'top', w = 220, h = 14, x = 42, y = -16.5 },
+        [4] = { parent = 'top', w = 180, h = 14, x = 42, y = -30 },
+        [5] = { parent = 'top', h = 14, w = 60, x = -4, y = -2, a = a.tr, pa = a.tr, fh = a.r },
+        [6] = { parent = 'top', h = 14, w = 120, x = -4, y = -16, a = a.tr, pa = a.tr, fh = a.r },
         [7] = { parent = 'top', h = 14, w = 160, x = -4, y = -30, a = a.tr, pa = a.tr, fh = a.r },
         [8] = { parent = 'cast', h = 14, w = 160, x = 42, y = 0, a = a.tl, pa = a.tl, fh = a.l }, --cast
         [9] = { f = 'SourceCodePro-Medium', fs = 16, parent = 'top', x = 42, y = -48, a = a.tl, pa = a.tl },
@@ -101,6 +104,7 @@ local template = {
         base = nil,
         health = nil,
         cast = nil,
+        castbk = nil,
         top = nil,
     },
     tx = {},
@@ -114,6 +118,7 @@ local template = {
         player = {
             pvpName = nil,
             class = nil,
+            race = nil,
             guildName = nil,
             guildRank = nil,
             isFriend = nil,
@@ -127,9 +132,9 @@ local template = {
             creatureFamily = nil,
         },
         str = {
-            icon = s.question,
-            t1 = '',
-            t2 = '',
+            icon = nil,
+            t1 = nil,
+            t2 = nil,
         },
         color = {
             hex = '|cffffffff',
@@ -139,7 +144,7 @@ local template = {
     },
 }
 
-function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:redraw() end
+function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:refreshAll() end
 function ctrl.plates.NAME_PLATE_CREATED(evt) ctrl.plates:attach(evt[1]) end
 function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
 function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) GetNamePlateForUnit(evt[1])['np']:Reset() end
@@ -161,21 +166,21 @@ end
 
 function ctrl.plates.UNIT_THREAT_LIST_UPDATE(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
 end
 
 function ctrl.plates.UNIT_THREAT_SITUATION_UPDATE(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
 end
 
 -- ???
 
 function ctrl.plates.UNIT_TARGET(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
     local targetplate = GetNamePlateForUnit('target')
-    if targetplate and targetplate['np'] then targetplate['np']:UpdateTarget() end
+    if targetplate and targetplate['np'] then targetplate['np']:UpdateTargetName() end
 end
 
 function ctrl.plates.UNIT_NAME_UPDATE(evt)
@@ -188,7 +193,7 @@ end
 
 function ctrl.plates.UNIT_ATTACK(evt)
     local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTarget() end
+    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
 end
 
 function ctrl.plates.UNIT_CLASSIFICATION_CHANGED(evt)
@@ -217,13 +222,13 @@ end
 
 local function CastStart(self, evt)
     self.f.cast:Show()
-    self:UpdateTarget()
+    --self:UpdateTargetName()
 end
 
 local function CastStop(self, evt)
     self.tx.warn:Hide()
     self.f.cast:Hide()
-    self:UpdateTarget()
+    --self:UpdateTargetName()
 end
 
 -- Draw
@@ -231,6 +236,12 @@ end
 local function UpdateHealth(self)
     local h = UnitHealth(self.unit) or 0
     local hm = UnitHealthMax(self.unit) or 1
+    if hm == 0 then
+        self.fs[5]:SetText('')
+        self.fs[6]:SetText('')
+        self.f.health:SetWidth(0)
+        return
+    end
     local hp = math.floor((h / hm) * 100)
     local hmod, hstr = 1, ''
     if hm > 1000000 then
@@ -241,10 +252,9 @@ local function UpdateHealth(self)
     self.fs[5]:SetText(string.format('%d%%', hp))
     self.fs[6]:SetText(string.format('%.1f/%.1f%s', h / hmod, hm / hmod, hstr))
     self.f.health:SetWidth(hp * (theme.f.health.w / 100))
-    self:UpdateTarget()
 end
 
-local function UpdateTarget(self)
+local function UpdateTargetName(self)
     local target = self.unit .. 'target'
     if not UnitExists(target) then self.fs[7]:SetText('') return end
     local targetName, col, icon = UnitName(target), c.w, s.target
@@ -255,13 +265,22 @@ local function UpdateTarget(self)
         icon = s.alert; col = c.p
     end
     self.fs[7]:SetText(string.format('%s%s %s', col, icon, targetName))
-    self:UpdateTargetFrame()
-    self:UpdateThreat()
 end
 
 local function UpdateTargetFrame(self)
     local fc = {1, 1, 1, 0.1}
-    if UnitAffectingCombat(self.unit) then if UnitIsUnit(self.unit, 'target') then fc = {1, 0.9, 0, 1} else fc = {1, 0, 0, 1} end end
+    if self.color.frame then cp(fc, self.color.frame) end
+    if UnitAffectingCombat(self.unit) then
+        if UnitIsUnit(self.unit, 'target') then
+            fc = {1, 0.5, 0, 1}
+        else
+            fc = {1, 0, 0, 1}
+        end
+    else
+        if UnitIsUnit(self.unit, 'target') then
+            fc = {1, 0.9, 0, 0.5}
+        end
+    end
     self.tx.frame:SetVertexColor(fc[1],fc[2],fc[3],fc[4])
 end
 
@@ -277,11 +296,20 @@ local function Draw(self)
     self.fs[1]:SetText(self.str.icon or s.question)
     self.fs[2]:SetText(self.color.hex .. (self.displayName or self.name or s.question))
     self.fs[3]:SetText(self.str.t1 or self.player.guildName or '')
-    self.fs[4]:SetText(self.str.t2 or self.player.guildRank or '')
+    self.fs[4]:SetText(self.str.t2 or self.player.guildRank or self.npc.npcId or '')
     self.tx.health:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
     self.tx.cap:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
     self.tx.frame:SetVertexColor(self.color.frame[1], self.color.frame[2], self.color.frame[3], self.color.frame[4])
-    self.nameplate.UnitFrame:Hide()
+    self.tx.glow:SetVertexColor(1, 1, 1, 0)
+    if self.nameplate.UnitFrame then self.nameplate.UnitFrame:Hide() end
+end
+
+local function Refresh(self)
+    self:Draw()
+    self:UpdateHealth()
+    self:UpdateTargetName()
+    self:UpdateTargetFrame()
+    if not self.isPlayer then self:UpdateThreat() end
 end
 
 -- Functions: Config
@@ -289,17 +317,15 @@ end
 local function ConfigPlayer(self)
     self.player.pvpName = UnitPVPName(self.unit)
     self.player.class = select(2, UnitClass(self.unit))
-    self.player.guildName, self.player.guildRank = GetGuildInfo(self.unit)
+    self.player.race = UnitRace(self.unit)
+    local guildName, guildRank = GetGuildInfo(self.unit)
+    self.player.guildName = guildName
+    self.player.guildRank = guildRank
     self.displayName = self.unitPVPName or self.unitName
-    cp(self.color.rgba, c.class[self.player.class])
+    if c.class[self.player.class] then cp(self.color.rgba, c.class[self.player.class]) else ctrl.plates:warn('No Class', self.player.class) end
     self.player.isFriend = C_FriendList.IsFriend(self.guid)
-    self.str.icon = self.player.isFriend and s.heart or s[self.guildName] or s[self.player.class] or s.crit
-    if self.player.isFriend then
-        self.color.frame = c.rgba.p
-    elseif s[self.player.guildName] then
-        self.color.frame = c
-            .rgba.c
-    end
+    self.str.icon = self.player.isFriend and s.heart or s[self.player.guildName] or s[self.player.class] or s.crit
+    if self.player.isFriend then cp(self.color.frame, c.rgba.p) elseif c.guild[self.player.guildName] then cp(self.color.frame, c.guild[self.player.guildName]) end
 end
 
 local function CheckDB(self)
@@ -315,8 +341,12 @@ end
 local function ConfigNPC(self)
     local _, _, _, _, _, npcId, spawnId = strsplit("-", self.guid)
     self.npc.npcId = tonumber(npcId)
-    self.npc.spawnIndex = bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3)
-    if self.npc.spawnIndex and tonumber(self.npc.spawnIndex)>0 then self.displayName=self.name..' '..tostring(self.npc.spawnIndex) end
+    if spawnId then
+        self.npc.spawnIndex = bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3)
+        if self.npc.spawnIndex and tonumber(self.npc.spawnIndex)>0 then self.displayName=self.name..' '..tostring(self.npc.spawnIndex) end
+    else
+        self.displayName = self.name
+    end
     self.npc.reaction = UnitReaction(self.unit, 'player')
     self.npc.classification = UnitClassification(self.unit)
     self.npc.creatureType = UnitCreatureType(self.unit)
@@ -345,14 +375,24 @@ local function AddUnit(self, unit)
     self.name = UnitName(unit)
     self.isPlayer = GUIDIsPlayer(self.guid)
     if self.isPlayer then self:ConfigPlayer() else self:ConfigNPC() end
-    self:Draw()
-    self.f.base:Show()
-    self:UpdateTarget()
     self.f.cast:SetScript('OnUpdate', function() self:OnUpdateSpell() end)
+    self.f.base:Show()
+    self:Refresh()
 end
 
 local function Reset(self)
-    cp(self, self.default)
+    self.unit = nil
+    self.guid = nil
+    self.name = nil
+    self.displayName = nil
+    self.isPlayer = nil
+    self.player = {}
+    self.npc = {}
+    self.str = {}
+    self.color = {}
+    self.color.hex = '|cffffffff'
+    self.color.rgba = { 0, 1, 0, 1 }
+    self.color.frame = { 1, 1, 1, 0.1 }
     for _, v in ipairs(self.fs) do v:SetText('') end
     self.f.health:SetWidth(theme.f.health.w)
     self.f.cast:SetWidth(theme.f.cast.w)
@@ -376,8 +416,9 @@ local function SetPoint(self, anc, parent, panc, x, y) self.f.base:SetPoint(anc,
 
 function ctrl.plates:fn(np)
     np.Draw = Draw
+    np.Refresh = Refresh
     np.UpdateHealth = UpdateHealth
-    np.UpdateTarget = UpdateTarget
+    np.UpdateTargetName = UpdateTargetName
     np.UpdateTargetFrame = UpdateTargetFrame
     np.UpdateThreat = UpdateThreat
     np.OnUpdateSpell = OnUpdateSpell
@@ -480,10 +521,14 @@ end
 
 -- Setup & Generation
 
-function ctrl.plates:redraw()
+function ctrl.plates:refreshAll()
     for i = 1, 40 do
-        if ctrl.np[i].nameplate then ctrl.np[i].nameplate.UnitFrame:Hide() end
+        if ctrl.np and ctrl.np[i] and ctrl.np[i].unit then ctrl.np[i]:Refresh() end
     end
+end
+
+function ctrl.plates.tick()
+    ctrl.plates:refreshAll()
 end
 
 function ctrl.plates:new(i)

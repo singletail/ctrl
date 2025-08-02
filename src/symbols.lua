@@ -285,6 +285,7 @@ ctrl.s = {
     ["Tainted Angels"]      = '㌦',
     ["Taintcraft"]          = '䂭',
     ["Power Word Taint"]    = '㍋',
+    ["The Spreading Taint"] = '㏠',
     ["War Taint"]           = '㎆',
     ["Taint of the Titans"] = '㏛',
     ["Taint"]               = '㏠',

@@ -38,12 +38,11 @@ core\sfx.lua
 core\cvar.lua
 core\ui.lua
 core\worldframe.lua
-#core\group.lua
+core\inspect.lua
+core\group.lua
 core\mobs.lua
 
 mod\plates.lua
-
-# mod\nameplates.lua
 mod\events.lua
 mod\power.lua
 mod\cmd.lua
@@ -53,6 +52,7 @@ mod\target.lua
 mod\taunt.lua
 mod\pet.lua
 mod\mobframe.lua
+mod\party.lua
 
 # in progress
 # mod\pull.lua

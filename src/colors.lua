@@ -41,8 +41,9 @@ ctrl.c.rgba = {
 
 ctrl.c.class = { -- these are dimmed, used for nameplates.
     DEATHKNIGHT = { 0.38, 0.06, 0.11, 1, },
-    DEMONHUNTER = { 0.32, 0.9, 0.4, 1, },
+    DEMONHUNTER = { 0.32, 0.09, 0.4, 1, },
     DRUID = { 0.5, 0.25, 0.02, 1, },
+    EVOKER = { 0.1, 0.29, 0.25, 1, },
     HUNTER = { 0.33, 0.41, 0.22, 1, },
     MAGE = { 0.2, 0.4, 0.46, 1, },
     MONK = { 0.0, 0.5, 0.28, 1, },
@@ -76,6 +77,25 @@ ctrl.c.enemy = {
     ['trivial'] = { 0.25, 0.0, 0.0, 1, },
     ['minus'] = { 0.2, 0.0, 0.0, 1, },
 }
+
+ctrl.c.guild = {
+    ["The Immortal Taint"]  = { 1, 0, 0.9, 1.0 }, --pink
+    ["Tainted Angels"]      = { 0, 0.6, 0.6, 1.0 }, --cyan
+    ["Taintcraft"]          = { 0, 0.7, 0, 1.0 }, --green
+    ["Power Word Taint"]    = { 0, 0.1, 0.8, 1.0 }, --blue
+    ["The Spreading Taint"] = { 0.6, 0, 0.8, 1.0 }, --violet
+    ["War Taint"]           = { 0, 0.7, 0, 1.0 }, --green
+    ["Taint of the Titans"] = { 0, 0.7, 0, 1.0 }, --green
+    ["Taint"]               = { 0, 0.7, 0, 1.0 }, --green
+    ["Bear Taint"]          = { 0, 0.7, 0, 1.0 }, --green
+    ["Tainter Tots"]        = { 0, 0.7, 0, 1.0 }, --green
+    ["Tainted Love"]        = { 0, 0.7, 0, 1.0 }, --green
+    ["Taint of Madness"]    = { 0, 0.7, 0, 1.0 }, --green
+    ["Taint No Thang"]      = { 0, 0.6, 0.6, 1.0 }, --cyan
+    ["Spreading Taint"]     = { 0, 0.7, 0, 1.0 }, --green
+}
+
+
 
 ctrl.c.pm     = {
     [1] = [[|cff05dde2]], --cyan

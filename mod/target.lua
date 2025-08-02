@@ -14,7 +14,6 @@ local mod = {
         events = {
             'PLAYER_TARGET_CHANGED',
             'PLAYER_ENTERING_WORLD',
-            'INSPECT_READY',
         },
         frame = {
             name = 'ctrltgt',
@@ -47,7 +46,7 @@ function ctrl.tgt:createFontStrings()
     end
 end
 
--- Inspect (experimental)
+--[[ Inspect (experimental)
 
 function ctrl.tgt.INSPECT_READY(evt)
     if evt and evt[1] and ctrl.tgt.target and evt[1] == ctrl.tgt.target.guid then
@@ -66,6 +65,7 @@ function ctrl.tgt:inspect()
     ClearInspectPlayer()
     self:draw()
 end
+]]
 
 -- Draw
 
@@ -101,7 +101,7 @@ function ctrl.tgt:drawPlayer()
     self.buffer[2] = string.format('%s%s', c.g, self.target.guildName or '')
     self.buffer[3] = string.format('%s%s', c.b, self.target.guildRank or '')
     self.buffer[4] = string.format('%s%s %s %d', self.target.color, self.target.specializationName or '', self.target.className or '', self.target.level or 0)
-    if self.target.itemLevel then self.buffer[9] = string.format('%siLvl %d', c.g, self.target.itemLevel) end
+    if self.target.itemLevel then self.buffer[9] = string.format('%siLvl %d', c.g, self.target.itemLevel) else self.buffer[9] = '' end
     self.buffer[10] = string.format('%s%s', c.v, self.target.guid)
 end
 
@@ -198,6 +198,7 @@ function ctrl.tgt:updateStats()
     self:getAggro(6)
     self:getTarget(7)
     self:getRange(8)
+    self:inspect()
 end
 
 -- Mob
@@ -272,6 +273,17 @@ function ctrl.tgt:getPlayerColor(t)
     return (string.format('|c%s', hex))
 end
 
+function ctrl.tgt:inspect()
+    if not self.target.guid or not C_PlayerInfo.GUIDIsPlayer(self.target.guid) then return end
+    local inspectEntry = ctrl.inspect.unit('target')
+    if not inspectEntry then return end
+    self.target.itemLevel = inspectEntry.itemLevel
+    self.target.specializationID = inspectEntry.specializationID
+    self.target.specializationName = inspectEntry.specializationName
+    self.target.role = inspectEntry.role
+    self:drawPlayer()
+end
+
 function ctrl.tgt:addPlayer(guid)
     local className, classFilename, classId = UnitClass(u)
     local guildName, guildRank = GetGuildInfo(u)
@@ -293,7 +305,6 @@ function ctrl.tgt:addPlayer(guid)
     t.icon = ctrl.tgt:getPlayerIcon(t)
     self.target = ctrl.cp(t)
     self.cache[guid] = ctrl.cp(t)
-    NotifyInspect(u)
 end
 
 -- Methods

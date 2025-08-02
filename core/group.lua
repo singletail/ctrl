@@ -20,11 +20,9 @@ local mod = {
         events = {
             'PLAYER_ENTERING_WORLD',
             'GROUP_ROSTER_UPDATE',
-            'INSPECT_READY',
         },
         timers = {
-            1,
-            3,
+            1, 10,
         }
     },
 }
@@ -58,18 +56,9 @@ INVSLOT_RANGED		= 18;
 INVSLOT_TABARD		= 19;
 ]]
 
-local defaultUnit = {
-    unit = nil,
-    name = 'Unknown',
-    class = 'Unknown',
-    role = 'NONE',
-    specializationID = 0,
-    itemLevel = 0,
-    lastInspect = 0,
-    inv = {},
-    color = c.w,
-}
 
+
+--[[
 function ctrl.group:copyGuidToData(guid)
     if not guid or not ctrl.group.guid[guid] then return end
     ctrl.data.unit[guid] = {}
@@ -144,48 +133,67 @@ function ctrl.group:checkQueue()
     self:debug('NotifyInspect(' .. unit .. ')')
 end
 
-function ctrl.group:addGuid(guid, unit)
-    if not guid then return end
-    self:debug('addGuid(' .. guid .. ', ' ..  unit .. ')')
-    if ctrl.data.unit[guid] then
-        ctrl.group.guid[guid] = ctrl.cp(ctrl.data.unit[guid])
-    else
-        ctrl.group.guid[guid] = ctrl.cp(defaultUnit)
-        ctrl.group.guid[guid].name = UnitName(unit) or 'Unknown'
-        ctrl.group.guid[guid].class = select(2, UnitClass(unit)) or 'Unknown'
-        ctrl.group.guid[guid].pvpName = UnitPVPName(unit) or ctrl.group.guid[guid].name
+]]
+
+local default = {
+    unit = nil,
+    name = 'Unknown',
+    pvpName = 'Unknown',
+    class = 'Unknown',
+    role = 'NONE',
+    specializationID = 0,
+    specializationName = 'Unknown',
+    itemLevel = 0,
+    inv = {},
+    color = c.w,
+    t = 0,
+}
+
+function ctrl.group:updateGuid(guid, unit)
+end
+
+function ctrl.group:checkGuid(guid, unit)
+    self:debug('checkGuid(' .. guid .. ', ' ..  unit .. ')')
+    if not ctrl.group.guid[guid] then
+        if ctrl.data.unit[guid] then
+            ctrl.group.guid[guid] = ctrl.cp(ctrl.data.unit[guid])
+        else
+            ctrl.group.guid[guid] = ctrl.cp(default)
+            ctrl.group.guid[guid].name = UnitName(unit) or 'Unknown'
+            ctrl.group.guid[guid].pvpName = UnitPVPName(unit) or 'Unknown'
+            ctrl.group.guid[guid].class = select(2, UnitClass(unit)) or 'Unknown'
+            ctrl.group.guid[guid].role = UnitGroupRolesAssigned(unit)
+        end
     end
     ctrl.group.guid[guid].unit = unit
-    local tempRole = UnitGroupRolesAssigned(unit)
-    if tempRole and tempRole ~= 'NONE' then
-        ctrl.group.guid[guid].role = tempRole
+    ctrl.group.guid[guid].t = ctrl.group.guid[guid].t or 0
+    if ctrl.group.guid[guid].t < (GetServerTime() - 60) then
+        self:debug('requesting inspect for ' .. unit .. ' ' .. guid)
+        local inspectEntry = ctrl.inspect.unit(unit)
+        if inspectEntry then
+            self:debug('received inspect info for ' .. guid)
+            ctrl.merge(ctrl.group.guid[guid], inspectEntry)
+        end
     end
 end
 
-function ctrl.group:check(unit)
+
+
+function ctrl.group:mapUnit(unit)
     local guid = UnitGUID(unit)
     if not guid then return end
     ctrl.group.unit[unit] = guid
-    if not ctrl.group.guid[guid] then self:addGuid(guid, unit) end
-    tinsert(ctrl.group.queue, unit)
-    if ctrl.group.guid[guid].name ~= UnitName(unit) then
-        ctrl.group.guid[guid].name = UnitName(unit) or 'Unknown'
-    end
+    self:checkGuid(guid, unit)
 end
 
+
 function ctrl.group:scan()
-    self:debug('scan()')
-    ctrl.group.queue = {}
-    ClearInspectPlayer()
     self.unitId, self.groupSize = ctrl.groupConfig()
     for i = 1, self.groupSize do
         local unit = self.unitId .. i
         if unit == 'party5' or unit == 'player1' then unit = 'player' end
-        if UnitIsPlayer(unit) then
-            self:check(unit)
-        else
-            self.unit[unit] = nil
-        end
+        if not UnitIsPlayer(unit) then self.unit[unit] = nil; return end
+        self:mapUnit(unit)
     end
     ctrl.group.flag.scanGroup = nil
 end
@@ -193,12 +201,12 @@ end
 function ctrl.group:tick(interval)
     if interval == 1 then
         if ctrl.group.flag.scanGroup then ctrl.group:scan() end
-    elseif interval == 3 then
-        ctrl.group:checkQueue()
+    else
+        ctrl.group:scan()
     end
 end
 
-function ctrl.group.GROUP_ROSTER_UPDATE(evt)
+function ctrl.group.GROUP_ROSTER_UPDATE()
     ctrl.group.flag.scanGroup = 1
 end
 
