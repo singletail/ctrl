@@ -7,10 +7,27 @@ local c, s, a = ctrl.c, ctrl.s, ctrl.a
 ctrl.db = {
     npcId = {
         -- Ara'Kara
-        [216336] = { s=s.collapse, c=c.rgba.o, t1='Collapse', t2='Charges if > 8yds'}, --Ravenous Crawler
-        [214840] = { s=s.biohazard, c=c.rgba.g, t1="Dispel 8s DoT"}, --Engorged Crawler
-        [216341] = { s=s.bleed, c=c.rgba.r, t1="Dispel 12s Bleed"}, --Jabbing Flyer
-        [216293] = { s=s.kick, c=c.rgba.p, hex=c.c, t1="Prio Kick Barrage"}, --Trilling Attendant
+        [218325] = { i=s.minus, c=c.rgba.gray}, -- Swarming Flyer
+        [216336] = { i=s.collapse, c=c.rgba.o, t1='Stack', t2='Charge >8yds'}, --Ravenous Crawler
+        [214840] = { i=s.biohazard, c=c.rgba.dkg, t1=c.y.."󰟟 8s Poison DoT"}, --Engorged Crawler
+        [216341] = { i=s.bleed, c=c.rgba.dkr, t1="12s Bleed DoT", t2=c.y..'Mitigate or Dispel'}, --Jabbing Flyer
+        [216293] = { i=s.kick, c=c.rgba.b, t1=c.y..s.warn.." Kick/Stop Resonant Barrage", t2='Kick Web Bolt if spare', s=434793}, --Trilling Attendant
+        [217531] = { i=s.warn, c=c.rgba.p, hex=c.c, t1=c.y..s.warn..' Kick Horrifying Shrill', t2=c.g.."て Dodge Spray Puddles", s=434802}, --Ixin
+        [218324] = { i=c.y..s.stack, c=c.rgba.p, hex=c.c, t1=c.y..'Stack for adds', t2='Mitigate'}, --Nakt
+        [217533] = { i=s.biohazard, c=c.rgba.p, hex=c.c, t1='Dodge Poisonous Cloud', t2='Kick/dispel poison DoT on tank'}, --Atik
+        [213179] = { i=s.boss, c=c.rgba.p, hex=c.c,  t1=c.y..s.run.." Kite/nuke fix'd adds", t2='Stack Goss puddles, Tank DoT x3'}, --Avanoxx (BOSS)
+        [216337] = { i=s.collapse, c=c.rgba.o, t1='Stack', t2='Charge >8yds'}, --Bloodworker
+        [216333] = { i=s.aura, c=c.rgba.o, t="Leech DoT on Tank", t2="Defensives to reduce healing"}, --Bloodstained Assistant
+        [223253] = { i=s.kick, c=c.rgba.b, t1=c.y..'Kick Revolting Volley', t2='AoE/Poison DoT', s=448248 }, --Bloodstained Webmage
+        [228015] = { i=s.one, c=c.rgba.p, t1=c.y..s.fallout..' Nuke: Bolsters enemies', t2='㍊ Mitigate Locust Swarm channel'}, --Hulking Bloodguard
+        [216340] = { i=s.megaphone, c=c.rgba.p, t1=c.y..s.warn..' Nuke/CC/Stun Alarm Shrill', t2='10s cast = 50y summon'}, --Sentry Stagshell
+        [215405] = { i=s.boss, c=c.rgba.p, hex=c.c, t1=s.tank..' Face away '..s.run..' Drop Infestation away', t2=s.stack..' Stack in Eye away from tank' }, --Anub'zekt (BOSS)
+        [220599] = { i=s.kick, c=c.rgba.b, t1=c.y..s.warn..' Kick Silken Restraints', s=442210}, --boss adds
+        [216364] = { i=s.kick, c=c.rgba.p, t1=c.y..'Kick Venom Volley', t2=s.run..' Dodge Webs', s=433841}, -- Blood Overseer
+        [216363] = { i=s.warn, c=c.rgba.o, t1=c.g..s.puddle..' Black Blood puddle on aggro', t2=s.run..' Dodge webs '..s.tank..' Tank DoT'}, --Reinforced Drone
+        [216365] = { i=s.warn, c=c.rgba.o, t1=c.g..s.puddle..' Black Blood puddle on aggro', t2=s.move..' Dashes to random, Mitigate'}, --Winged Carrier
+        [215407] = { i=s.boss, c=c.rgba.p, hex=c.c, t1=c.y..s.puddle..' Stand in puddle for Singularity', t2=s.stack..' Aim poison away (90 deg)'}, --Ki'katal the Harvester (BOSS)
+        [215826] = { i=s.puddle, c=c.rgba.dkg, t1='Black Blood puddle', t2='Drop in good spot'}, -- boss adds
     }
 }
 
@@ -19,21 +36,6 @@ ctrl.db = {
 
 
 ctrl.db = {
-    -- Ara'Kara
-    [217531] = { p = p.kick, t =h.yellow..i.warn..' Prio Kick Horrifying Shrill', t2=h.green.."て Targeted Frontal Spray"}, --Ixin
-    [218324] = { p = p.warn, t=h.cyan..'㍊ Mitigate Call of the Brood'}, --Nakt
-    [217533] = { p = p.dodge, t=h.green..i.dodge..'Dodge Poisonous Cloud'}, --Atik
-    [216337] = { p = p.collapse, t="Collapse", t2='Charges if > 8yds'}, --Bloodworker
-    [216333] = { p = p.warn, t="Leech DoT on Tank", t2="(Physical)"}, --Bloodstained Assistant
-    [223253] = {p = p.kick, t = h.green..i.poison..' Prio Kick Revolting Volley', t2='AoE/Poison DoT' }, --Bloodstained Webmage
-    [228015] = {p=p.collapse, t=h.pink..i.collapse..' Stack for 50% DR', t2='㍊ Mitigate Locust Swarm'}, --Hulking Bloodguard
-    [216340] = {p=p.kick, t=h.yellow..i.warn..' Prio Kick Alarm Shrill'}, --Sentry Stagshell
-    [216364] = {p=p.boss, t=h.yellow..i.kick..'Prio Kick Venom Volley', t2=i.dodge..'Dodge Webs'},
-    [216363] = {p=p.poison, t=h.green..i.poison..'Drops Black Blood', t2=h.yellow..i.warn..'Melee gives slow DoT'}, --Reinforced Drone
-    [216365] = {p=p.poison, t=h.green..i.poison..'Drops Black Blood', t2=i.dodge..'Dodge Charge'}, --Winged Carrier
-    [213179] = {p=p.boss, t=h.yellow..i.warn..'Onslaught 5s, leaves pools', t2='Tank dmg DoT x3'}, --Avanoxx
-    [220599] = {p=p.boss, t=h.green..i.kick..'Prio Kick Silken Restraints', t2='Dodge Everything'}, --Anub'zekt
-    [215407] = {p=p.boss, t='Kick/kill bloods, free team', t2='Dodge All'},
 
 
     -- Beledar

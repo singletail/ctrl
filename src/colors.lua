@@ -37,6 +37,9 @@ ctrl.c.rgba = {
     p = { 0.7, 0, 0.8, 1.0 }, -- pink
     w = { 1, 1, 1, 1.0 }, -- white
     black = { 0, 0, 0, 1 }, -- black
+    gray = { 0.25, 0.25, 0.25, 0.5 }, -- gray
+    dkr = { 0.25, 0, 0, 1.0 }, -- red
+    dkg = { 0, 0.3, 0.1, 1.0 }, -- green
 }
 
 ctrl.c.class = { -- these are dimmed, used for nameplates.

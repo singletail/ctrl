@@ -130,6 +130,7 @@ local template = {
             classification = nil,
             creatureType = nil,
             creatureFamily = nil,
+            alert = nil,
         },
         str = {
             icon = nil,
@@ -146,14 +147,14 @@ local template = {
 
 function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:refreshAll() end
 function ctrl.plates.NAME_PLATE_CREATED(evt) ctrl.plates:attach(evt[1]) end
-function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
-function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) GetNamePlateForUnit(evt[1])['np']:Reset() end
+function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end end
+function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:Reset() end end
 function ctrl.plates.UNIT_HEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
 function ctrl.plates.UNIT_MAXHEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
-function ctrl.plates.UNIT_SPELLCAST_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
-function ctrl.plates.UNIT_SPELLCAST_STOP(evt) GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end
-function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt) GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end
-function ctrl.plates.UNIT_SPELLCAST_CHANNEL_STOP(evt) GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end
+function ctrl.plates.UNIT_SPELLCAST_START(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end end
+function ctrl.plates.UNIT_SPELLCAST_STOP(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end end
+function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end end
+function ctrl.plates.UNIT_SPELLCAST_CHANNEL_STOP(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end end
 
 -- To Check
 
@@ -222,6 +223,11 @@ end
 
 local function CastStart(self, evt)
     self.f.cast:Show()
+    local spellId = evt[3]
+    if self.npc.alert and self.npc.alert == spellId then
+        self.tx.warn:Show()
+        ctrl.sfx:play('alert23')
+    end
     --self:UpdateTargetName()
 end
 
@@ -287,7 +293,7 @@ end
 local function UpdateThreat(self)
     local threat = UnitThreatSituation('player', self.unit)
     if not threat then self.tx.glow:SetVertexColor(1, 1, 1, 0.1) return end
-    local tcol = {{1,0,0,1},{1,0.9,0,1},{0,0,1,1}}
+    local tcol = {[0]={1,0,0,0.5},[1]={1,0.5,0,0.5},[2]={1,0.9,0,0.5},[3]={0,1,0,0.5}}
     if UnitGroupRolesAssigned('player') == 'TANK' then threat = math.abs(threat * -1) end
     self.tx.glow:SetVertexColor(tcol[threat][1], tcol[threat][2], tcol[threat][3], tcol[threat][4])
 end
@@ -329,12 +335,13 @@ local function ConfigPlayer(self)
 end
 
 local function CheckDB(self)
-    if ctrl.db[self.npc.npcId] then
-        if ctrl.db[self.npc.npcId].icon then self.str.icon = ctrl.db[self.npc.npcId].icon end
-        if ctrl.db[self.npc.npcId].t1 then self.str.t1 = ctrl.db[self.npc.npcId].t1 end
-        if ctrl.db[self.npc.npcId].t2 then self.str.t2 = ctrl.db[self.npc.npcId].t2 end
-        if ctrl.db[self.npc.npcId].c then cp(self.color.rgba, ctrl.db[self.npc.npcId].c) end
-        if ctrl.db[self.npc.npcId].hex then self.color.hex = ctrl.db[self.npc.npcId].hex end
+    if ctrl.db.npcId[self.npc.npcId] then
+        if ctrl.db.npcId[self.npc.npcId].i then self.str.icon = ctrl.db.npcId[self.npc.npcId].i end
+        if ctrl.db.npcId[self.npc.npcId].t1 then self.str.t1 = ctrl.db.npcId[self.npc.npcId].t1 end
+        if ctrl.db.npcId[self.npc.npcId].t2 then self.str.t2 = ctrl.db.npcId[self.npc.npcId].t2 end
+        if ctrl.db.npcId[self.npc.npcId].c then cp(self.color.rgba, ctrl.db.npcId[self.npc.npcId].c) end
+        if ctrl.db.npcId[self.npc.npcId].hex then self.color.hex = ctrl.db.npcId[self.npc.npcId].hex end
+        if ctrl.db.npcId[self.npc.npcId].s then self.npc.alert = ctrl.db.npcId[self.npc.npcId].s end
     end
 end
 

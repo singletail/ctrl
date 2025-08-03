@@ -12,7 +12,7 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "c:\\Users\\scott\\.cursor\\extensions\\ketho.wow-api-0.20.8\\Annotations\\Core"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.20.8\\Annotations\\Core"
     ],
     "Lua.diagnostics.globals": [
         "ReloadUI",
@@ -3168,7 +3168,8 @@
         "SpellFlyoutOpenReason",
         "SPELLBOOK_SPELL_NOT_ON_ACTION_BAR",
         "SPELLBOOK_FILTER_PASSIVES",
-        "SPELLBOOK_SEARCH_HIDE_PASSIVES_DISABLED"
+        "SPELLBOOK_SEARCH_HIDE_PASSIVES_DISABLED",
+        "BOSS"
     ],
     "Lua.diagnostics.disable": [
         "assign-type-mismatch"
