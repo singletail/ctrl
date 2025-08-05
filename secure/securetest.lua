@@ -30,7 +30,7 @@ local default = {
         subLevel = -7,
         filter = 'TRILINEAR',
         wrap = 'CLAMPTOBLACKADDITIVE',
-        path = [[Interface\AddOns\ctrl\assets\tx\]],
+        path = [=[Interface\AddOns\ctrl\assets\tx\]=],
         t = 'checkengine40',
         alpha = 1,
         x=0,
@@ -139,14 +139,15 @@ end
 local function securebutton(o)
     o = o or {}
     for k, v in pairs(default.btn) do o[k] = o[k] or v end
-    local btn = CreateFrame('Button', n, f, 'SecureActionButtonTemplate')
+    local btn = CreateFrame('Button', o.n, o.f, 'SecureActionButtonTemplate')
     btn:SetSize(o.w, o.h)
     btn:SetPoint(o.a, o.f, o.pa, o.x, o.y)
     btn:RegisterForClicks('AnyDown')
     return btn
 end
 
-local pre = [[
+--[[
+local pre = [=[
     local s = self:GetAttribute('s')
     local t = newtable(strsplit('|', s))
     local m = '/focus target\n/cleartarget\n'
@@ -155,10 +156,10 @@ local pre = [[
     end
     m = m .. '/cast [exists,nodead,harm] Disrupt\n/target focus\n/clearfocus\n/startattack'
     self:SetAttribute('macrotext', m)
-]]
+]=]
 
 
-local pre2 = [[
+local pre2 = [=[
     local a = self:GetAttribute('a')
     local s = self:GetAttribute('s')
     local i = self:GetAttribute('i')
@@ -168,7 +169,7 @@ local pre2 = [[
     i = i + 1
     if i >= #t then i = 1 end
     self:SetAttribute('i', i)
-]]
+]=]
 
 local function configureSecureButton2(btn)
     btn:SetAttribute('a', '/targetenemy [harm][nodead]\n/startattack\n/cast ')
@@ -198,7 +199,7 @@ end
 
 function ctrl.secure.setup()
     local f = secureframe({globalName='ctrlsecure',w=256,h=167})
-    f.tx = securetexture({f=f,t='screen_384',path=[[Interface\AddOns\ctrl\assets\1999\]]})
+    f.tx = securetexture({f=f,t='metal_half_h'})
     f.btn = securebutton({f=f,globalName='CtrlSecureBtnTest',w=128,h=128,a='CENTER',pa='CENTER'})
     f.btn.tx = securetexture({f=f.btn,w=128,h=128})
     configureSecureButton(f.btn)
@@ -207,3 +208,16 @@ function ctrl.secure.setup()
     compileSecureBtn2(f.btn2, f)
 end
 
+]]
+
+function ctrl.secure.setup()
+    local f = secureframe({globalName='ctrlsecure',w=256,h=128, a='CENTER',pa='CENTER'})
+    f.tx = securetexture({f=f,t='metal_half_h'})
+    f.btn = securebutton({f=f,globalName='CtrlSecureBtnTest',w=64,h=64,a='CENTER',pa='CENTER'})
+    f.btn.tx = securetexture({f=f.btn,w=64,h=64})
+    f.btn:SetAttribute('type', 'macro')
+    f.btn:SetAttribute('macrotext', '/say hi')
+    f.btn:RegisterForClicks('AnyUp', 'AnyDown')
+end
+
+ctrl.secure.setup()

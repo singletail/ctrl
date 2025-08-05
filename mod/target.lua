@@ -218,6 +218,7 @@ end
 
 function ctrl.tgt:spawnIndex(guid)
     local _, _, _, _, _, _, spawnId = strsplit("-", guid)
+    if not spawnId then return nil end
     local spawnIndex = bit.rshift(bit.band(tonumber(string.sub(spawnId, 1, 5), 16), 0xffff8), 3)
     return spawnIndex
 end

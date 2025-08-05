@@ -54,6 +54,8 @@ mod\pet.lua
 mod\mobframe.lua
 mod\party.lua
 
+
+
 # in progress
 # mod\pull.lua
 
@@ -63,4 +65,9 @@ mod\party.lua
 # mod\party.lua
 
 DB.lua
+
+secure\sec.lua
+secure\secure.lua
+
+
 ctrl.lua

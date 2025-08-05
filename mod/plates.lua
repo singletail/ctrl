@@ -130,7 +130,7 @@ local template = {
             classification = nil,
             creatureType = nil,
             creatureFamily = nil,
-            alert = nil,
+            kick = nil,
         },
         str = {
             icon = nil,
@@ -185,7 +185,7 @@ function ctrl.plates.UNIT_TARGET(evt)
 end
 
 function ctrl.plates.UNIT_NAME_UPDATE(evt)
-    GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1])
+    if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
 end
 
 function ctrl.plates.UNIT_TARGETABLE_CHANGED(evt)
@@ -204,12 +204,8 @@ end
 -- Spellcast Event Functions
 
 local function OnUpdateSpell(self)
-    local name, displayName, textureID, startTimeMs, endTimeMs, _, castID, notInterruptible, spellID = UnitCastingInfo(
-        self.unit)
-    if not name then
-        name, displayName, textureID, startTimeMs, endTimeMs, _, notInterruptible, spellID = UnitChannelInfo(
-            self.unit)
-    end
+    local name, _, _, startTimeMs, endTimeMs, _, _, notInterruptible, spellID = UnitCastingInfo(self.unit)
+    if not name then name, _, _, startTimeMs, endTimeMs, _, notInterruptible, spellID = UnitChannelInfo(self.unit) end
     if not name then return end
     self.fs[8]:SetText(tostring(name) .. ' ' .. tostring(spellID))
     if notInterruptible then self.tx.cast:SetVertexColor(0, 0, 1, 0.5) else self.tx.cast:SetVertexColor(0.5, 0.5, 0, 1) end
@@ -224,17 +220,15 @@ end
 local function CastStart(self, evt)
     self.f.cast:Show()
     local spellId = evt[3]
-    if self.npc.alert and self.npc.alert == spellId then
+    if self.npc.kick and self.npc.kick == spellId then
         self.tx.warn:Show()
         ctrl.sfx:play('alert23')
     end
-    --self:UpdateTargetName()
 end
 
 local function CastStop(self, evt)
     self.tx.warn:Hide()
     self.f.cast:Hide()
-    --self:UpdateTargetName()
 end
 
 -- Draw
@@ -341,7 +335,7 @@ local function CheckDB(self)
         if ctrl.db.npcId[self.npc.npcId].t2 then self.str.t2 = ctrl.db.npcId[self.npc.npcId].t2 end
         if ctrl.db.npcId[self.npc.npcId].c then cp(self.color.rgba, ctrl.db.npcId[self.npc.npcId].c) end
         if ctrl.db.npcId[self.npc.npcId].hex then self.color.hex = ctrl.db.npcId[self.npc.npcId].hex end
-        if ctrl.db.npcId[self.npc.npcId].s then self.npc.alert = ctrl.db.npcId[self.npc.npcId].s end
+        if ctrl.db.npcId[self.npc.npcId].s then self.npc.kick = ctrl.db.npcId[self.npc.npcId].kick end
     end
 end
 
