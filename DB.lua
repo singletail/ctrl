@@ -34,7 +34,9 @@ ctrl.db = {
         [213892] = { n='Nightfall Shadowmage', kick=431303, i=s.kick, c=c.rgba.b, t1=c.y..s.warn..' Kick Night Bolt', z=2662 }, -- Nightfall Shadowmage 1
         [223994] = { n='Nightfall Shadowmage', kick=431303, i=s.kick, c=c.rgba.b, t1=c.y..s.warn..' Kick Night Bolt', z=2662 }, -- Nightfall Shadowmage 2
         [228540] = { n='Nightfall Shadowmage', kick=431303, i=s.kick, c=c.rgba.b, t1=c.y..s.warn..' Kick Night Bolt', z=2662 }, -- Nightfall Shadowmage 3
-    
+        -- The Rookery 2648
+        [207199] = { n='Cursed Rooktender', kick=427260, i=s.kick, c=c.rgba.b, hex=c.c, t1=c.y..s.warn..' Kick Lightning Surge', z=2648 },
+        [214439] = { n='Corrupted Oracle', kick=430238, i=s.kick, c=c.rgba.b, hex=c.c, t1=c.y..s.warn..' Kick Void Bolt', z=2648 },
     }
 }
 

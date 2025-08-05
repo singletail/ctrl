@@ -4,11 +4,8 @@
 local ctrl = select(2, ...)
 local c, s, a = ctrl.c, ctrl.s, ctrl.a
 
-
-local UIParent, GetTime, CreateFrame = UIParent, GetTime, CreateFrame
-local tostring, tonumber, strsplit = tostring, tonumber, strsplit
-local UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax = UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax
-local UnitClass, UnitRace = UnitClass, UnitRace
+local UIParent, GetTime, CreateFrame, tostring, tonumber, strsplit = UIParent, GetTime, CreateFrame, tostring, tonumber, strsplit
+local UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitClass, UnitRace = UnitExists, UnitIsUnit, UnitName, UnitGUID, UnitHealth, UnitHealthMax, UnitClass, UnitRace
 local UnitIsEnemy, UnitInRaid, UnitInParty, UnitGroupRolesAssigned = UnitIsEnemy, UnitInRaid, UnitInParty, UnitGroupRolesAssigned
 local UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily = UnitReaction, UnitClassification, UnitCreatureType, UnitCreatureFamily
 local GUIDIsPlayer, GetNamePlateForUnit = C_PlayerInfo.GUIDIsPlayer, C_NamePlate.GetNamePlateForUnit
@@ -18,36 +15,30 @@ local mod = {
     color = c.g,
     symbol = s.wipe,
     options = {
-        timers = { 1 },
+        timers = { 0.25 },
         events = {
-            'UI_SCALE_CHANGED',
             'NAME_PLATE_CREATED',
             'NAME_PLATE_UNIT_ADDED',
             'NAME_PLATE_UNIT_REMOVED',
+            'RAID_TARGET_UPDATE',
+            'UI_SCALE_CHANGED',
+            'UNIT_CLASSIFICATION_CHANGED',
             'UNIT_HEALTH',
+            'UNIT_NAME_UPDATE',
             'UNIT_MAXHEALTH',
-            'UNIT_SPELLCAST_START',
-            'UNIT_SPELLCAST_STOP',
-            'UNIT_SPELLCAST_INTERRUPTED',
             'UNIT_SPELLCAST_CHANNEL_START',
             'UNIT_SPELLCAST_CHANNEL_STOP',
-            'UNIT_SPELLCAST_INTERRUPTED',
+            'UNIT_SPELLCAST_START',
+            'UNIT_SPELLCAST_STOP',
+            'UNIT_TARGETABLE_CHANGED',
             'UNIT_THREAT_LIST_UPDATE',
             'UNIT_THREAT_SITUATION_UPDATE',
-            'UNIT_TARGET',
-            'UNIT_NAME_UPDATE',
-            'UNIT_TARGETABLE_CHANGED',
-            'UNIT_ATTACK',
-            'UNIT_CLASSIFICATION_CHANGED',
+            --'UNIT_SPELLCAST_INTERRUPTED',
+            --'UNIT_TARGET',
+            --'UNIT_ATTACK',
         },
     },
 }
-
--- x, y = GetCursorPosition()
--- xPos, yPos, distance = ClosestGameObjectPosition(gameObjectID)
--- f:SetScript("OnEnter", function(self, motion)
---  	...
--- end)
 
 ctrl.plates = ctrl.mod:new(mod)
 
@@ -63,20 +54,20 @@ local function cp(t, vals)
 end
 
 local theme = {
-    default = { w = 0, h = 0, x = 0, y = 0, a = a.tl, pa = a.tl, parent = 'base', alpha = 1, scale = 0.5, f = 'Prompt-Regular', fs = 14, strata = 'BACKGROUND', layer = 'ARTWORK', level = 0, fh = a.l, fv = a.t },
+    default = { w=0, h=0, x=0, y=0, a=a.tl, pa=a.tl, parent='base', alpha=1, scale=0.5, f='Prompt-Regular', fs=14, strata='BACKGROUND', layer='ARTWORK', level=0, fh=a.l, fv=a.t },
     path = {
         tx = [[Interface\AddOns\ctrl\assets\nameplate\]],
         font = [[Interface\AddOns\ctrl\assets\fnt\]],
     },
     f = {
-        ['base'] = { w = 320, h = 48, a = a.c, pa = a.c, level = 1 },
+        ['base'] = { w = 320, h = 48, a = a.br, pa = a.br, x=100, y=-100, level = 1 },
         ['health'] = { w = 294, h = 44, x = 24, y = -2, level = 2 },
-        ['cast'] = { w = 294, h = 16, x = 24, y = 0, a = a.tl, pa = a.bl, level = 4 },
-        ['castbk'] = { w = 294, h = 16, x = 0, y = 0, a = a.tl, pa = a.tl, level = 3, parent = 'cast' },
+        ['cast'] = { w = 294, h = 18, x = 24, y = 0, a = a.tl, pa = a.bl, level = 4 },
+        ['castbk'] = { w = 294, h = 18, x = 0, y = 0, a = a.tl, pa = a.tl, level = 3, parent = 'cast' },
         ['top'] = { w = 320, h = 48, level = 10 },
     },
     tx = {
-        ['warn'] = { t = 'warn.png', a = a.c, pa = a.c, level = -7, w = 400, h = 170, alpha = 1 },
+        ['warn'] = { t = 'warn.png', a = a.c, pa = a.c, level = -7, w = 400, h = 170, alpha = 0.7 },
         ['bk'] = { t = '320_bk.png', level = -6, alpha = 0.6 },
         ['cap'] = { t = '320_cap_flat.png', h = 48, w = 24, level = -5, alpha = 0.5 },
         ['health'] = { t = '320_hbar_flat.png', parent = 'health', level = -5, alpha = 0.5 },
@@ -115,6 +106,7 @@ local template = {
         name = nil,
         displayName = nil,
         isPlayer = nil,
+        raidTarget = nil,
         player = {
             pvpName = nil,
             class = nil,
@@ -145,61 +137,23 @@ local template = {
     },
 }
 
-function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:refreshAll() end
 function ctrl.plates.NAME_PLATE_CREATED(evt) ctrl.plates:attach(evt[1]) end
 function ctrl.plates.NAME_PLATE_UNIT_ADDED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end end
 function ctrl.plates.NAME_PLATE_UNIT_REMOVED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:Reset() end end
+function ctrl.plates.RAID_TARGET_UPDATE() ctrl.plates:refreshAll() end
+function ctrl.plates.UI_SCALE_CHANGED() ctrl.plates:refreshAll() end
+function ctrl.plates.UNIT_CLASSIFICATION_CHANGED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end end
 function ctrl.plates.UNIT_HEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
+function ctrl.plates.UNIT_NAME_UPDATE(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end end
 function ctrl.plates.UNIT_MAXHEALTH(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateHealth(evt[1]) end end
-function ctrl.plates.UNIT_SPELLCAST_START(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end end
-function ctrl.plates.UNIT_SPELLCAST_STOP(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end end
 function ctrl.plates.UNIT_SPELLCAST_CHANNEL_START(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end end
 function ctrl.plates.UNIT_SPELLCAST_CHANNEL_STOP(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end end
+function ctrl.plates.UNIT_SPELLCAST_START(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStart(evt) end end
+function ctrl.plates.UNIT_SPELLCAST_STOP(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:CastStop(evt) end end
+function ctrl.plates.UNIT_TARGETABLE_CHANGED(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end end
+function ctrl.plates.UNIT_THREAT_LIST_UPDATE(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateTargetName() end end
+function ctrl.plates.UNIT_THREAT_SITUATION_UPDATE(evt) if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:UpdateTargetName() end end
 
--- To Check
-
-function ctrl.plates.UNIT_SPELLCAST_INTERRUPTED(evt)
-    ctrl.plates:warn('UNIT_SPELLCAST_INTERRUPTED', evt[1], evt[2], evt[3])
-    --GetNamePlateForUnit(evt[1])['np']:CastStop(evt)
-end
-
--- Threat
-
-function ctrl.plates.UNIT_THREAT_LIST_UPDATE(evt)
-    local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
-end
-
-function ctrl.plates.UNIT_THREAT_SITUATION_UPDATE(evt)
-    local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
-end
-
--- ???
-
-function ctrl.plates.UNIT_TARGET(evt)
-    local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
-    local targetplate = GetNamePlateForUnit('target')
-    if targetplate and targetplate['np'] then targetplate['np']:UpdateTargetName() end
-end
-
-function ctrl.plates.UNIT_NAME_UPDATE(evt)
-    if GetNamePlateForUnit(evt[1]) and GetNamePlateForUnit(evt[1])['np'] then GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1]) end
-end
-
-function ctrl.plates.UNIT_TARGETABLE_CHANGED(evt)
-    GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1])
-end
-
-function ctrl.plates.UNIT_ATTACK(evt)
-    local nameplate = GetNamePlateForUnit(evt[1])
-    if nameplate and nameplate['np'] then nameplate['np']:UpdateTargetName() end
-end
-
-function ctrl.plates.UNIT_CLASSIFICATION_CHANGED(evt)
-    GetNamePlateForUnit(evt[1])['np']:AddUnit(evt[1])
-end
 
 -- Spellcast Event Functions
 
@@ -231,7 +185,9 @@ local function CastStop(self, evt)
     self.f.cast:Hide()
 end
 
--- Draw
+local function UpdateRaidTarget(self)
+    self.raidTarget = GetRaidTargetIndex(self.unit) or nil
+end
 
 local function UpdateHealth(self)
     local h = UnitHealth(self.unit) or 0
@@ -269,17 +225,11 @@ end
 
 local function UpdateTargetFrame(self)
     local fc = {1, 1, 1, 0.1}
-    if self.color.frame then cp(fc, self.color.frame) end
-    if UnitAffectingCombat(self.unit) then
-        if UnitIsUnit(self.unit, 'target') then
-            fc = {1, 0.5, 0, 1}
-        else
-            fc = {1, 0, 0, 1}
-        end
+    if self.raidTarget then cp(fc, c.raid[self.raidTarget])
+    elseif UnitAffectingCombat(self.unit) then
+        if UnitIsUnit(self.unit, 'target') then cp(fc, c.hi.o) else cp(fc, c.hi.r) end
     else
-        if UnitIsUnit(self.unit, 'target') then
-            fc = {1, 0.9, 0, 0.5}
-        end
+        if UnitIsUnit(self.unit, 'target') then cp(fc, c.hi.y) else cp(fc, self.color.frame) end
     end
     self.tx.frame:SetVertexColor(fc[1],fc[2],fc[3],fc[4])
 end
@@ -293,18 +243,24 @@ local function UpdateThreat(self)
 end
 
 local function Draw(self)
-    self.fs[1]:SetText(self.str.icon or s.question)
+    if self.raidTarget then
+        self.fs[1]:SetText(s.raid[self.raidTarget])
+        self.tx.frame:SetVertexColor(c.raid[self.raidTarget][1], c.raid[self.raidTarget][2], c.raid[self.raidTarget][3], c.raid[self.raidTarget][4])
+    else
+        self.fs[1]:SetText(self.str.icon or s.question)
+        self.tx.frame:SetVertexColor(self.color.frame[1], self.color.frame[2], self.color.frame[3], self.color.frame[4])
+    end
     self.fs[2]:SetText(self.color.hex .. (self.displayName or self.name or s.question))
     self.fs[3]:SetText(self.str.t1 or self.player.guildName or '')
     self.fs[4]:SetText(self.str.t2 or self.player.guildRank or self.npc.npcId or '')
     self.tx.health:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
     self.tx.cap:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
-    self.tx.frame:SetVertexColor(self.color.frame[1], self.color.frame[2], self.color.frame[3], self.color.frame[4])
     self.tx.glow:SetVertexColor(1, 1, 1, 0)
-    if self.nameplate.UnitFrame then self.nameplate.UnitFrame:Hide() end
+    if self.nameplate.UnitFrame and self.nameplate.UnitFrame:IsShown() then self.nameplate.UnitFrame:Hide() end
 end
 
 local function Refresh(self)
+    self:UpdateRaidTarget()
     self:Draw()
     self:UpdateHealth()
     self:UpdateTargetName()
@@ -335,7 +291,7 @@ local function CheckDB(self)
         if ctrl.db.npcId[self.npc.npcId].t2 then self.str.t2 = ctrl.db.npcId[self.npc.npcId].t2 end
         if ctrl.db.npcId[self.npc.npcId].c then cp(self.color.rgba, ctrl.db.npcId[self.npc.npcId].c) end
         if ctrl.db.npcId[self.npc.npcId].hex then self.color.hex = ctrl.db.npcId[self.npc.npcId].hex end
-        if ctrl.db.npcId[self.npc.npcId].s then self.npc.kick = ctrl.db.npcId[self.npc.npcId].kick end
+        if ctrl.db.npcId[self.npc.npcId].kick then self.npc.kick = ctrl.db.npcId[self.npc.npcId].kick end
     end
 end
 
@@ -407,6 +363,8 @@ local function Reset(self)
     self.f.base:SetScale(theme.default.scale or 1)
     self.f.cast:SetScript('OnUpdate', nil)
     self.tx.warn:Hide()
+    self.f.cast:Hide()
+    self.f.charm:Hide()
     self:Hide()
 end
 
@@ -419,6 +377,7 @@ function ctrl.plates:fn(np)
     np.Draw = Draw
     np.Refresh = Refresh
     np.UpdateHealth = UpdateHealth
+    np.UpdateRaidTarget = UpdateRaidTarget
     np.UpdateTargetName = UpdateTargetName
     np.UpdateTargetFrame = UpdateTargetFrame
     np.UpdateThreat = UpdateThreat
@@ -458,7 +417,7 @@ function ctrl.plates:attach(nameplate)
     end
 end
 
--- Element Constructors
+-- Constructors
 
 function ctrl.plates:opt(v)
     local opt = {}
@@ -511,21 +470,53 @@ function ctrl.plates:anchor(e, opt)
     end
 end
 
+local function charmScript(self)
+    local cur = GetRaidTargetIndex(self.np.unit)
+    if self.i == 9 then
+        if cur then SetRaidTarget(self.np.unit, cur) end
+    elseif self.i ~= cur then
+        SetRaidTarget(self.np.unit, self.i)
+    end
+    self.np.f.charm:Hide()
+end
+
+local function charmFrame(np)
+    np.f.charm = ctrl.frame.new(ctrl.plates,{target=np.f.base, w=181, h=20, x=0, y=0, a=a.br, pa=a.tr})
+    np.f.charm.tx = ctrl.tx.new(ctrl.plates,{target=np.f.charm, t='box.png'})
+    np.f.charm.tx:SetVertexColor(0, 0, 0, 0.5)
+    np.f.charm.btn = np.f.charm.btn or {}
+    for i=1,9 do
+        np.f.charm.btn[i] = ctrl.frame.new(ctrl.plates,{target=np.f.charm, w=18, h=18, x=((i-1)*20)+1, y=2, a=a.l, pa=a.l})
+        np.f.charm.btn[i].tx = ctrl.tx.new(ctrl.plates, {target=np.f.charm.btn[i], t='box.png', al=0.2})
+        np.f.charm.btn[i].fs = ctrl.fs.new(ctrl.plates, {target=np.f.charm.btn[i], t=s.raid[i], fontSize=17, x=0, y=0, a=a.tl, pa=a.tl, w=19, h=19, fh=a.c, fv=a.m})
+        np.f.charm.btn[i].np = np
+        np.f.charm.btn[i].i = i
+        np.f.charm.btn[i]:SetScript('OnMouseUp', charmScript)
+    end
+    np.f.base.np = np
+    np.f.base:EnableMouse(true)
+    np.f.base:SetPassThroughButtons('LeftButton', 'MiddleButton')
+    np.f.base:SetScript('OnMouseDown', function(self)
+        if self.np.f.charm:IsShown() then self.np.f.charm:Hide() else self.np.f.charm:Show() end
+    end)
+    np.f.charm:Hide()
+end
+
 function ctrl.plates:build(np)
     self:fAdd(np, 'base', theme.f.base)
     for k, v in pairs(theme.f) do if k ~= 'base' then self:fAdd(np, k, v) end end
     for k, v in pairs(theme.tx) do self:txAdd(np, k, v) end
     for k, v in pairs(theme.fs) do self:fsAdd(np, k, v) end
     self:fn(np)
+    np.f.base:SetScale(theme.default.scale or 1)
+    charmFrame(np)
     np:Reset()
 end
 
 -- Setup & Generation
 
 function ctrl.plates:refreshAll()
-    for i = 1, 40 do
-        if ctrl.np and ctrl.np[i] and ctrl.np[i].unit then ctrl.np[i]:Refresh() end
-    end
+    for i = 1, 40 do if ctrl.np and ctrl.np[i] and ctrl.np[i].unit then ctrl.np[i]:Refresh() end end
 end
 
 function ctrl.plates.tick()
@@ -533,7 +524,7 @@ function ctrl.plates.tick()
 end
 
 function ctrl.plates:new(i)
-    local np = {}
+    local np = {i=i}
     cp(np, template)
     cp(np, np.default)
     self:build(np)

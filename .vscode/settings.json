@@ -3170,7 +3170,8 @@
         "SPELLBOOK_FILTER_PASSIVES",
         "SPELLBOOK_SEARCH_HIDE_PASSIVES_DISABLED",
         "BOSS",
-        "INSTANCE"
+        "INSTANCE",
+        "nop"
     ],
     "Lua.diagnostics.disable": [
         "assign-type-mismatch"

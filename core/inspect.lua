@@ -37,7 +37,7 @@ local default = {
 }
 
 function ctrl.inspect.INSPECT_READY(evt)
-    ctrl.inspect:debug('INSPECT_READY(' .. tostring(evt[1]) .. ')')
+    --ctrl.inspect:debug('INSPECT_READY(' .. tostring(evt[1]) .. ')')
     ctrl.inspect:reply(evt[1])
 end
 
@@ -45,19 +45,19 @@ function ctrl.inspect:reply(guid)
     if not guid or not C_PlayerInfo.GUIDIsPlayer(guid) then return end
     local entry = nil
     for i=1,#ctrl.inspect.queue do
-        self:debug('comparing ' .. guid .. ' with ' .. ctrl.inspect.queue[i][2])
+        --self:debug('comparing ' .. guid .. ' with ' .. ctrl.inspect.queue[i][2])
         if ctrl.inspect.queue[i][2] == guid then entry = ctrl.inspect.queue[i]; break end
     end
     if not entry then
-        ctrl.inspect:debug('no entry for ' .. guid)
+        --ctrl.inspect:debug('no entry for ' .. guid)
         return
     end
     local unit, _, inParty, ts = unpack(entry)
     if UnitGUID(unit) == guid then
-        self:debug('found entry, updating '..unit..' '..guid)
+        --self:debug('found entry, updating '..unit..' '..guid)
         self:update(unit, guid, inParty)
     end
-    ctrl.inspect:debug('removing from queue: ' .. unit)
+    --ctrl.inspect:debug('removing from queue: ' .. unit)
     self:remove(unit)
 end
 
@@ -102,7 +102,7 @@ end
 function ctrl.inspect:check()
     if InCombatLockdown() or #ctrl.inspect.queue == 0 then return end
     local unit, guid, inParty, ts = unpack(ctrl.inspect.queue[1])
-    self:debug('check(' .. unit .. ', ' .. guid .. ', ' .. tostring(inParty) .. ', ' .. ts .. ')')
+    --self:debug('check(' .. unit .. ', ' .. guid .. ', ' .. tostring(inParty) .. ', ' .. ts .. ')')
     if UnitExists(unit) then
         NotifyInspect(unit)
     else

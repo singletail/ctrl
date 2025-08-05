@@ -42,7 +42,7 @@ core\inspect.lua
 core\group.lua
 core\mobs.lua
 
-mod\plates.lua
+
 mod\events.lua
 mod\power.lua
 mod\cmd.lua
@@ -68,6 +68,6 @@ DB.lua
 
 secure\sec.lua
 secure\secure.lua
-
+mod\plates.lua
 
 ctrl.lua

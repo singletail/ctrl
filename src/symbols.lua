@@ -7,6 +7,7 @@ ctrl.s = {
     ['ctrl']       = '、',
     ['console']    = 'べ',
     ['power']      = '　',
+    ['off']        = 'ォ',
     ['evt']        = 'う',
     ['nul']        = '␀',
     ['bug']        = '〡',
@@ -329,6 +330,18 @@ ctrl.s.reaction = {
     [6] = '󰃫', -- honored
     [7] = '㐅', -- revered
     [8] = '䅴', -- exalted
+}
+
+ctrl.s.raid = { -- 󰫢 䜯 󰣏 ㏖ 󰃜  イ っ 󰫣 󰀥 󰻂 ㏕ ㏗ 䁕 䋌 䎅   󰝤 󰝥 󰽧 䓷  䑂 ▼ ァ ゠ ア
+    [1] = ctrl.c.y..'󰫢', -- yellow star
+    [2] = ctrl.c.o..'䋌', -- orange condom
+    [3] = ctrl.c.purple..'󰣏', -- purple diamond
+    [4] = ctrl.c.g..'㏕ ', -- green panties
+    [5] = ctrl.c.w..'󰽧', -- moon
+    [6] = ctrl.c.c..'󰝤', -- blue square
+    [7] = ctrl.c.r..'イ', -- red x
+    [8] = ctrl.c.w..'っ', -- skull
+    [9] = ctrl.c.r..ctrl.s.off,
 }
 
 -- 㐪 ㌡ ㌢ 䖿 䃿 䄃 ㏦ ㏧ ㍉ ㍊ 〧 〨 〖 ㏘ ㎛ 䃜 䄚 䣯 䣰

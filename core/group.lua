@@ -153,7 +153,7 @@ function ctrl.group:updateGuid(guid, unit)
 end
 
 function ctrl.group:checkGuid(guid, unit)
-    self:debug('checkGuid(' .. guid .. ', ' ..  unit .. ')')
+    --self:debug('checkGuid(' .. guid .. ', ' ..  unit .. ')')
     if not ctrl.group.guid[guid] then
         if ctrl.data.unit[guid] then
             ctrl.group.guid[guid] = ctrl.cp(ctrl.data.unit[guid])
@@ -168,10 +168,10 @@ function ctrl.group:checkGuid(guid, unit)
     ctrl.group.guid[guid].unit = unit
     ctrl.group.guid[guid].t = ctrl.group.guid[guid].t or 0
     if ctrl.group.guid[guid].t < (GetServerTime() - 60) then
-        self:debug('requesting inspect for ' .. unit .. ' ' .. guid)
+        --self:debug('requesting inspect for ' .. unit .. ' ' .. guid)
         local inspectEntry = ctrl.inspect.unit(unit)
         if inspectEntry then
-            self:debug('received inspect info for ' .. guid)
+            --self:debug('received inspect info for ' .. guid)
             ctrl.merge(ctrl.group.guid[guid], inspectEntry)
         end
     end

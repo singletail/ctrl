@@ -18,8 +18,8 @@ local default = {
         a = 'TOPLEFT',
         pa = 'TOPLEFT',
         strata = 'BACKGROUND',
-        isMovable = 1,
-        isResizable = 1,
+        isMovable = nil,
+        isResizable = nil,
         isClipsChildren = nil,
         isClampedToScreen = true,
     },
@@ -53,17 +53,19 @@ local default = {
     },
 }
 
+--[[
 local function resize(self, w, h)
     local fw = self:GetWidth()
     local fh = self:GetHeight()
     if fw < 36 then self:SetWidth(36) end
     if fh < 36 then self:SetHeight(36) end
 end
+]]
 
 local scripts = {
-    resize = {
-        ['OnSizeChanged'] = function(self, w, h) resize(self, w, h) end,
-    },
+    --resize = {
+    --    ['OnSizeChanged'] = function(self, w, h) resize(self, w, h) end,
+    --},
     move = {
         ['OnEnter'] = function(f) end,
         ['OnLeave'] = function(f) end,
@@ -118,7 +120,7 @@ function ctrl.sec.frame(o)
     f:SetPoint(o.a, o.parent, o.pa, o.x, o.y)
     f:SetSize(o.w, o.h)
     f:SetFrameStrata(o.strata)
-    --f:SetClipsChildren(o.isClipsChildren)
+    --[[f:SetClipsChildren(o.isClipsChildren)
     f:SetClampedToScreen(o.isClampedToScreen)
     if o.parent == UIParent then f:SetToplevel(true) end
     if o.isMovable then
@@ -132,7 +134,7 @@ function ctrl.sec.frame(o)
         f:SetResizable(true)
         f.sizer = ctrl.sec.sizer(f)
         for e, fn in pairs(scripts.resize) do f:SetScript(e, fn) end
-    end
+    end]]
     return f
 end
 

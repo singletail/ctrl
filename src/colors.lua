@@ -20,6 +20,7 @@ ctrl.c                  = {
     k           = [[|cff000000]],
     dim         = [[|cff333333]],
     gray        = [[|cffaaaaaa]],
+    purple      = [[|cff9000ff]],
     ['TANK']    = [[|cff5bcefa]],
     ['HEALER']  = [[|cffff2e38]],
     ['DAMAGER'] = [[|cfffff000]],
@@ -40,6 +41,29 @@ ctrl.c.rgba = {
     gray = { 0.25, 0.25, 0.25, 0.5 }, -- gray
     dkr = { 0.25, 0, 0, 1.0 }, -- red
     dkg = { 0, 0.3, 0.1, 1.0 }, -- green
+}
+
+ctrl.c.hi = {
+    r = { 1, 0, 0, 1.0 }, -- red
+    o = { 1, 0.5, 0.0, 1.0 }, -- orange
+    y = { 1, 0.9, 0.0, 1.0 }, -- yellow
+    g = { 0, 0.7, 0, 1.0 }, -- green
+    b = { 0, 0.1, 0.8, 1.0 }, -- blue
+    v = { 0.6, 0, 1, 1.0 }, -- violet
+    c = { 0, 0.8, 0.8, 1.0 }, -- cyan
+    p = { 0.9, 0, 1, 1.0 }, -- pink
+    w = { 1, 1, 1, 1.0 }, -- white
+}
+
+ctrl.c.raid = {
+    [1] = { 1.0, 0.9, 0.0, 1.0 }, -- yellow
+    [2] = { 1.0, 0.5, 0.0, 1.0 }, -- orange
+    [3] = { 0.6, 0, 1.0, 1.0 }, -- purple
+    [4] = { 0, 0.7, 0, 1.0 }, -- green
+    [5] = { 1, 1, 1, 1.0 }, -- white
+    [6] = { 0, 1.0, 1.0, 1.0 }, -- cyan
+    [7] = { 1.0, 0, 0, 1.0 }, -- red
+    [8] = { 1, 1, 1, 1.0 }, -- white
 }
 
 ctrl.c.class = { -- these are dimmed, used for nameplates.

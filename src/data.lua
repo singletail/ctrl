@@ -25,15 +25,10 @@ local mod = {
 ctrl.data = ctrl.mod:new(mod)
 
 function ctrl.data:check()
-    if _G.CtrlData then ctrl.data:debug('_G.CtrlData exists') else ctrl.data:warn('_G.CtrlData does not exist') end
-
+    if not _G.CtrlData then ctrl.data:warn('_G.CtrlData does not exist') end
     for _, v in pairs(self.options.db) do
-        --if _G.CtrlData[v] then ctrl.data:debug('_G.CtrlData '..tostring(v)..' exists') else ctrl.data:warn('_G.CtrlData '..tostring(v)..' does not exist') end
         _G.CtrlData[v] = _G.CtrlData[v] or {}
-
-
         ctrl.data[v] = _G.CtrlData[v]
-        --if ctrl.data[v] then ctrl.data:debug('ctrl.data '..tostring(v)..' exists') else ctrl.data:warn('ctrl.data '..tostring(v)..' does not exist') end
     end
 end
 
