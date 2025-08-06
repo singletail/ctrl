@@ -252,7 +252,7 @@ local function Draw(self)
     end
     self.fs[2]:SetText(self.color.hex .. (self.displayName or self.name or s.question))
     self.fs[3]:SetText(self.str.t1 or self.player.guildName or '')
-    self.fs[4]:SetText(self.str.t2 or self.player.guildRank or self.npc.npcId or '')
+    self.fs[4]:SetText(self.str.t2 or self.player.guildRank or self.npc.npcId or self.guid or '')
     self.tx.health:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
     self.tx.cap:SetVertexColor(self.color.rgba[1], self.color.rgba[2], self.color.rgba[3], self.color.rgba[4])
     self.tx.glow:SetVertexColor(1, 1, 1, 0)
@@ -364,7 +364,7 @@ local function Reset(self)
     self.f.cast:SetScript('OnUpdate', nil)
     self.tx.warn:Hide()
     self.f.cast:Hide()
-    self.f.charm:Hide()
+    if self.f.charm then self.f.charm:Hide() end
     self:Hide()
 end
 
@@ -509,7 +509,7 @@ function ctrl.plates:build(np)
     for k, v in pairs(theme.fs) do self:fsAdd(np, k, v) end
     self:fn(np)
     np.f.base:SetScale(theme.default.scale or 1)
-    charmFrame(np)
+    --charmFrame(np)
     np:Reset()
 end
 
