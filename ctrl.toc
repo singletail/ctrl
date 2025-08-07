@@ -40,7 +40,7 @@ core\ui.lua
 core\worldframe.lua
 core\inspect.lua
 core\group.lua
-core\mobs.lua
+# core\mobs.lua
 
 
 mod\events.lua
@@ -51,8 +51,8 @@ mod\speed.lua
 mod\target.lua
 mod\taunt.lua
 mod\pet.lua
-mod\mobframe.lua
-mod\party.lua
+# mod\mobframe.lua
+# mod\party.lua
 
 
 
