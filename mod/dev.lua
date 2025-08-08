@@ -99,7 +99,6 @@ end
 function ctrl.dev:execute(text)
     text = string.trim(text)
     local fn, err = loadstring(text, 'ctrldev')
-    self:debug('fn=', tostring(fn))
     if not fn then
         self:send(c.r .. err .. c.d)
         return nil, err
@@ -107,7 +106,6 @@ function ctrl.dev:execute(text)
     self:pre()
     local real_print = print
     print = ctrl_print
-    print('test print')
     local ok, result = pcall(fn)
     print = real_print
     self:post()
@@ -120,9 +118,7 @@ end
 
 function ctrl.dev:do_pcall()
     local text = self.input:GetText()
-    self:debug('text=', text)
     if not text then return nil end
-    -- WowLua:Queue(text) ???
     local ok, err = self:execute(text)
     if ok then return nil end
     -- local chunkName,lineNum = err:match("(%b[]):(%d+):")
