@@ -14,15 +14,16 @@ local mod = {
 ctrl.btns = ctrl.mod:new(mod)
 
 local default = {
-    class = 'Button',
-    subclass = 'SPST',
+    --class = 'Button',
+    --subclass = 'SPST',
     path = ctrl.p.btns,
     strata = 'DIALOG',
-    w = 25.6,
-    h = 25.6,
-    anchors = {
-        { a = 'CENTER', pa = 'TOPLEFT', x = 0, y = 0 }
-    },
+    a = 'TOPLEFT',
+    pa = 'TOPLEFT',
+    x = 0,
+    y = 0,
+    w = 24,
+    h = 24,
     t = {},
     l = {},
 }
@@ -158,13 +159,17 @@ function ctrl.btns.new(module, o)
     o = o or {}
     if o.template then ctrl.template:loadTemplateItem('btn', o) end
     if type(o.target) == 'string' then o.target = module.f[o.target] or module.f.main end
+    o.x = o.x or 0
+    o.y = o.y or 0
+    o.a = o.a or default.a
+    o.pa = o.pa or default.pa
+    o.anchors = o.anchors or {{ a = o.a, pa = o.pa, x = o.x, y = o.y }}
+    o.strata = o.strata or 'DIALOG'
 
     local btn = CreateFrame('Frame', nil, o.target)
     btn:SetFrameStrata('DIALOG')
     btn:SetSize(o.w, o.h)
-    for an = 1, #o.anchors do
-        btn:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y)
-    end
+    for an = 1, #o.anchors do btn:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y) end
     btn:SetClipsChildren(false)
     btn:EnableMouse(true)
 

@@ -92,7 +92,7 @@ function ctrl.frame.new(module, o)
     end
     f:SetParent(o.target)
     f:SetFrameStrata(o.strata)
-    --f:SetClampedToScreen(true)
+    if o.isClampedToScreen then f:SetClampedToScreen(true) end
     if o.isClipsChildren then f:SetClipsChildren(true) end
     if o.isMovable then
         f:EnableMouse(true)
@@ -113,12 +113,14 @@ function ctrl.frame.new(module, o)
         end
     end
     f:SetScript('OnSizeChanged', r)
+    if o.name then f.name = o.name end
     return f
 end
 
 function ctrl.frame.generate(module, frametable, container)
     container = container or module.f
     for k, v in pairs(frametable) do
+        v.name = v.name or k
         if v.target == 'UIParent' then v.target = UIParent end
         if type(v.target) == 'string' then v.target = module.f[v.target] or module.btn[v.target] or UIParent end
         container[k] = ctrl.frame.new(module, v)

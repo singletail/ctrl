@@ -42,7 +42,7 @@ core\inspect.lua
 core\group.lua
 # core\mobs.lua
 
-
+mod\dev.lua
 mod\events.lua
 mod\power.lua
 mod\cmd.lua
