@@ -70,6 +70,7 @@ local theme = {
         ['warn'] = { t = 'warn.png', a = a.c, pa = a.c, level = -7, w = 400, h = 170, alpha = 0.7 },
         ['bk'] = { t = '320_bk.png', level = -6, alpha = 0.6 },
         ['cap'] = { t = '320_cap_flat.png', h = 48, w = 24, level = -5, alpha = 0.5 },
+        ['zebra'] = { t = '320_hbar_zebra.png', parent = 'health', level = -4, alpha = 0.5 },
         ['health'] = { t = '320_hbar_flat.png', parent = 'health', level = -5, alpha = 0.5 },
         ['castbk'] = { t = '320_hbar_flat.png', parent = 'castbk', level = -6, alpha = 0.5 },
         ['cast'] = { t = '320_hbar_flat.png', parent = 'cast', level = -5, alpha = 0.5 },
@@ -291,7 +292,10 @@ local function CheckDB(self)
         if ctrl.db.npcId[self.npc.npcId].t2 then self.str.t2 = ctrl.db.npcId[self.npc.npcId].t2 end
         if ctrl.db.npcId[self.npc.npcId].c then cp(self.color.rgba, ctrl.db.npcId[self.npc.npcId].c) end
         if ctrl.db.npcId[self.npc.npcId].hex then self.color.hex = ctrl.db.npcId[self.npc.npcId].hex end
-        if ctrl.db.npcId[self.npc.npcId].kick then self.npc.kick = ctrl.db.npcId[self.npc.npcId].kick end
+        if ctrl.db.npcId[self.npc.npcId].kick then
+            self.npc.kick = ctrl.db.npcId[self.npc.npcId].kick
+            self.tx.zebra:SetAlpha(0.5)
+        end
     end
 end
 
@@ -354,6 +358,8 @@ local function Reset(self)
     self.f.health:SetWidth(theme.f.health.w)
     self.f.cast:SetWidth(theme.f.cast.w)
     self.tx.frame:SetVertexColor(1, 1, 1, 0.5)
+    self.tx.zebra:SetVertexColor(1, 0.9, 0, 0.5)
+    self.tx.zebra:SetAlpha(0)
     self.tx.health:SetVertexColor(1, 1, 1, 0.5)
     self.tx.cap:SetVertexColor(1, 1, 1, 0.5)
     self.tx.frame:SetVertexColor(1, 1, 1, 0.5)
@@ -470,6 +476,8 @@ function ctrl.plates:anchor(e, opt)
     end
 end
 
+--[[
+
 local function charmScript(self)
     local cur = GetRaidTargetIndex(self.np.unit)
     if self.i == 9 then
@@ -501,6 +509,7 @@ local function charmFrame(np)
     end)
     np.f.charm:Hide()
 end
+]]
 
 function ctrl.plates:build(np)
     self:fAdd(np, 'base', theme.f.base)

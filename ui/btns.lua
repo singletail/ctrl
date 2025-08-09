@@ -17,7 +17,7 @@ local default = {
     --class = 'Button',
     --subclass = 'SPST',
     path = ctrl.p.btns,
-    strata = 'DIALOG',
+    strata = 'BACKGROUND',
     a = 'TOPLEFT',
     pa = 'TOPLEFT',
     x = 0,
@@ -31,7 +31,7 @@ local default = {
 local function mouseUp(self, btn, ...)
     if self.enabled == 1 then
         if self.info.subclass == 'SPST' then
-            self:showValue(1)
+            self:showValue(self.default)
             self.module:click(self, self.info)
         elseif self.info.subclass ~= 'LIGHT' then
             self.module:click(self, self.info)
@@ -44,7 +44,9 @@ end
 
 local function mouseDown(self)
     if self.enabled == 1 then
-        if self.info.subclass == 'NC' or self.info.subclass == 'SPST' then
+        if self.info.subclass == 'SPST' then
+            self:showValue(abs(self.default - 1))
+        elseif self.info.subclass == 'NC' then
             self:showValue(0)
         elseif self.info.subclass ~= 'LIGHT' then
             self:showValue(1)
@@ -164,10 +166,10 @@ function ctrl.btns.new(module, o)
     o.a = o.a or default.a
     o.pa = o.pa or default.pa
     o.anchors = o.anchors or {{ a = o.a, pa = o.pa, x = o.x, y = o.y }}
-    o.strata = o.strata or 'DIALOG'
+    o.strata = o.strata or default.strata
 
     local btn = CreateFrame('Frame', nil, o.target)
-    btn:SetFrameStrata('DIALOG')
+    btn:SetFrameStrata(o.strata)
     btn:SetSize(o.w, o.h)
     for an = 1, #o.anchors do btn:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y) end
     btn:SetClipsChildren(false)
@@ -236,7 +238,8 @@ function ctrl.btns.new(module, o)
     btn.mouseDown = mouseDown
 
     btn.enabled = 1
-    btn.value = 1
+    btn.default = o.default or 0
+    btn.value = btn.default
     btn:setColor(btn.btnColor[1], btn.btnColor[2], btn.btnColor[3], btn.btnColor[4])
 
     local scripts = {

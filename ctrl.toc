@@ -1,7 +1,7 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: ctrl
 ## Author: |cffd649fft@wse.nyc|r
-## Version: 1.1.0
+## Version: 1.2
 ## Notes: |cff24cf19Control system for Singletail's mods.|r
 ## Category: Combat
 ## Group: ctrl

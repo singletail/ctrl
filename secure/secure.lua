@@ -54,6 +54,8 @@ local script_kick = [=[
     print(m)
 ]=]
 
+
+-- using this version for now - hard target and direct cast at target
 local script_kick_2 = [=[
     local k = self:GetAttribute('k')
     local s = self:GetAttribute('s')
@@ -69,9 +71,13 @@ local script_kick_2 = [=[
 
 function ctrl.secure:getKickMobs()
     local t, str = {}, ''
-    for _, entry in pairs(ctrl.db.npcId) do if entry.z and entry.z == self.instanceID then t[entry.n] = entry.kick end end
-    --for n, v in pairs(t) do str = str .. string.sub(n, 1, 8) .. '|' end
+    for _, entry in pairs(ctrl.db.npcId) do
+        if entry.z and entry.z == self.instanceID and entry.kick then
+            t[entry.n] = entry.kick -- using table key to remove duplicates
+        end
+    end
     for n, v in pairs(t) do str = str .. n .. '|' end
+    --for n, v in pairs(t) do str = str .. string.sub(n, 1, 8) .. '|' end -- alt version to truncate names
     str = str:sub(1, -2)
     if ctrl.secure.btn.kick then ctrl.secure.btn.kick:SetAttribute('s', str) end
     self.isDirty = nil

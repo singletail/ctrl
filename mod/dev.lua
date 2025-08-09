@@ -13,11 +13,13 @@ local mod = {
             --'UI_SCALE_CHANGED',
         },
         frame = {
-            name='main', w=512, h=512, x=256, y=384, a=a.bl, pa=a.bl, isResizable=1, isMovable=1
+            name='main', w=640, h=384, x=256, y=-384, a=a.tl, pa=a.tl, isResizable=1, isMovable=1
         },
     },
     mode = {
         multiline = 1,
+        pp = 1,
+        min = 0,
     },
 }
 
@@ -26,43 +28,50 @@ ctrl.dev = ctrl.mod:new(mod)
 local subframes = {
     ['slider'] = {name='slider', target='main', anchors = {{a=a.bl,pa=a.bl,x=0,y=120},{a=a.tr,pa=a.br,x=0,y=128}}},
     ['poutput'] = {name='poutput', target='main', anchors = {{a=a.tl,pa=a.tl,x=4,y=-42},{a=a.br,pa=a.br,x=-6,y=128}}},
-    ['pinput'] = {name='pinput', target='main', anchors = {{a=a.tl,pa=a.tl,x=6,y=-40},{a=a.br,pa=a.br,x=-7,y=18}}},
+    ['pinput'] = {name='pinput', target='main', anchors = {{a=a.tl,pa=a.tl,x=6,y=-40},{a=a.br,pa=a.br,x=-100,y=18}}},
 }
 
 local buttons = {
-    ['btn_testprint'] = {name='btn_testprint', target='pinput', template='wide', btnColor={ 1, 0.5, 0, 1 }, a=a.br, pa=a.br, y=84},
-    ['btn_testfn'] = {name='btn_testfn', target='pinput', template='wide', btnColor={ 1, 0, 0, 1 }, a=a.br, pa=a.br, y=56},
-    ['btn_multiline'] = {name='btn_multiline', target='pinput', template='widetoggle', btnColor={ 1, 0.9, 0, 1 }, a=a.br, pa=a.br, y=28},
-    ['btn_pcall'] = { name='btn_pcall', target='pinput', template='wide', btnColor={ 0, 1, 0, 1 }, a=a.br, pa=a.br},
+    ['btn_min'] = { name='btn_min', target='main', template='sqoff', btnColor={ 1, 0.9, 0, 1 }, a=a.c, pa=a.tr, x=-24, y=-24},
+    ['btn_pcall'] = { name='btn_pcall', target='main', template='simple', w=84, h=32, a=a.br, pa=a.br, x=-8, y=8, btnColor={ 0.2, 0.2, 0.2, 1 }},
+    ['btn_multiline'] = {name='btn_multiline', target='main', template='oval', w=84, h=24, a=a.br, pa=a.br, x=-10, y=42, btnColor={0,0,1,1}},
+    ['btn_pp'] = {name='btn_pp', target='main', template='oval', w=84, h=24, a=a.br, pa=a.br, x=-10, y=66, btnColor={0.9,0,1,1}},
+    --['btn_testfn'] = {name='btn_testfn', target='pinput', template='wide', btnColor={ 1, 0, 0, 1 }, a=a.br, pa=a.br, y=56},
 }
 
 local textures = {
-    ['tx_maindark'] = { t='deck.png', path=ctrl.p.dev, target='main', l=-8, al=0.8 },
+    ['tx_maindark'] = { t='dmetal_sq.png', path=ctrl.p.dev, target='main', l=-8, al=1 },
     ['tx_univac'] = { t='univac.png', w=512, h=32, path=ctrl.p.dev, target='main', l=-7, al=1, anchors = {{a=a.tl,pa=a.tl,x=8,y=-4},{a=a.br,pa=a.tr,x=-6,y=-39}}},
     ['tx_slider'] = { t='box.png', path=ctrl.p.dev, target='slider', l=-7, al=0.25, x=0, y=2, a=a.c, pa=a.c, w=32, h=2},
-    ['tx_poutput'] = { t='redbk_full_128.png', path=ctrl.p.dev, target='poutput', l=-7, al=0.8 },
-    ['tx_pinput'] = { t='redbk_full_128.png', path=ctrl.p.dev, target='pinput', l=-7, al=0.8 },
+    ['tx_poutput'] = { t='bluebk_full_256.png', path=ctrl.p.dev, target='poutput', l=-7, al=1 },
+    ['tx_pinput'] = { t='redbk_full_128.png', path=ctrl.p.dev, target='pinput', l=-7, al=1 },
 }
 
 local fontstrings = {
-    ['fs_pcall'] = { t='PCALL()', a=a.c, pa=a.c, x=-1, y=-2, target='btn_pcall', fontFile='Prompt-Bold.ttf', fontSize=12,},
-    ['fs_multiline'] = { t='FN()', a=a.c, pa=a.c, x=-1, y=-2, target='btn_multiline', fontFile='Prompt-Bold.ttf', fontSize=12,},
+    ['fs_min'] = { t=c.dim..s.min, a=a.c, pa=a.c, x=-1, y=-2, target='btn_min', fontFile='Prompt-Bold.ttf', fontSize=24,},
+    ['fs_pcall'] = { t=c.aa..'pcall()', a=a.c, pa=a.c, x=-1, y=0, target='btn_pcall', fontFile='Prompt-Medium.ttf', fontSize=12,},
+    ['fs_multiline'] = { t=c.aa..'multiline', a=a.c, pa=a.c, x=5, y=0, target='btn_multiline', fontFile='Prompt-Medium.ttf', fontSize=10,},
+    ['fs_pp'] = { t=c.aa..'pprint', a=a.c, pa=a.c, x=5, y=0, target='btn_pp', fontFile='Prompt-Medium.ttf', fontSize=10,},
+    --['fs_testfn'] = { t='testfn', a=a.c, pa=a.c, x=-1, y=-2, target='btn_testfn', fontFile='Prompt-Bold.ttf', fontSize=11,},
 }
 
-local ipsum = [=[
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
 
-"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-1914 translation by H. Rackham
+-- Welcome
 
-"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
-]=]
+function ctrl.dev:welcome()
+    local msg=c.r..s.ctrl..' '..c.d..c.o..'c'..c.y..'t'..c.d..c.g..'r'..c.d..c.b..'l '..c.d..c.v..'v'..ctrl.version..c.d
+    msg=msg..' by '..c.p..s.singletail..' '..'Singletail-Proudmoore'..c.d
+    self:add(msg)
+    local buildVersion, buildNumber, buildDate, interfaceVersion, localizedVersion, buildInfo = GetBuildInfo()
+    local msg2 = c.r..s.api..c.d..' '..c.o..buildVersion..c.d..' '..c.y..buildNumber..c.d..' '..c.g..buildDate..c.d..' '..c.b..interfaceVersion..c.d
+    self:add(msg2)
+end
 
--- Functions
 
 
 
+
+-- Output
 
 function ctrl.dev:pre()
     ctrl.dev.output:ClearHighlightText()
@@ -74,15 +83,29 @@ function ctrl.dev:write(text)
 end
 
 function ctrl.dev:post()
-    --ctrl.dev.ScrollToBottom()
+    ctrl.dev.scrollToBottom()
 end
 
-function ctrl.dev:send(text)
+function ctrl.dev:add(text)
+    self:pre()
+    self:write(text)
+    self:write('\n')
+    self:post()
+end
+
+function ctrl.dev:raw(text)
     self:pre()
     self:write(text)
     self:post()
 end
 
+function ctrl.dev:err(err)
+    self:pre()
+    self:write(c.r..err..c.d..'\n')
+    self:post()
+end
+
+--[[
 local function ctrl_print(...)
 	local out = ""
 	for i=1,select("#", ...) do
@@ -91,43 +114,81 @@ local function ctrl_print(...)
 		end
 		out = out .. tostring(select(i, ...))
 	end
-	--ctrl.dev:write(out..'\n')
-    --ctrl.dev.output:Insert(out..'\n')
-    CTRLOUTPUT:Insert(out..'\n')
+	ctrl.dev:add(out)
 end
 
-function ctrl.dev:execute(text)
-    text = string.trim(text)
-    local fn, err = loadstring(text, 'ctrldev')
-    self:debug('fn=', tostring(fn))
-    if not fn then
-        self:send(c.r .. err .. c.d)
-        return nil, err
+local function pack(...)
+    return {n=select("#",...),...}
+end
+]]
+
+
+-- Print
+
+local function ctrl_recursive(input, limit, strindent)
+    limit = limit or 1024
+    if (limit < 1) then return limit - 1 end
+    if strindent then strindent = '    ' .. strindent else strindent = '' end
+    if type(input)~='table' then return string.format('%s%s\n', strindent, ctrl.wrap(input)), limit - 1 end
+    if input.n then --packed table
+        local output = string.format('%s[table n=%s]\n', strindent, tostring(input.n))
+        for i=1,input.n do
+            output = output..ctrl_recursive(input[i], limit, strindent)
+        end
+        return output, limit - 1
+    elseif tonumber(#input) then --unpacked table
+        local output = string.format('%s[table len=%s]\n', strindent, tostring(#input))
+        for i=1,#input do
+            output = output..ctrl_recursive(input[i], limit, strindent)
+        end
+        return output, limit - 1
+    else -- pairs
+        local output = ''
+        for k,v in pairs(input) do
+            output = output..string.format('%s[%s]\n', strindent, tostring(k))
+            output = output..ctrl_recursive(v, limit, strindent)
+        end
+        return output, limit - 1
     end
+end
+
+local function ctrl_pp(...)
+    local str = ctrl_recursive(...)
+    ctrl.dev:add(str)
+end
+
+local function ctrl_print(...)
+    local t = {n=select("#",...),...}
+    local str = table.concat(t, ', ')
+    ctrl.dev:add(str)
+end
+
+
+-- execution
+
+function ctrl.dev:execute(text)
+    local fn, err = loadstring(text, 'ctrldev')
+    if not fn then self:err(err); return nil, err end
     self:pre()
     local real_print = print
-    print = ctrl_print
-    print('test print')
-    local ok, result = pcall(fn)
+    if self.mode.pp then print = ctrl_pp else print = ctrl_print end
+    local ok, p_err = pcall(fn)
     print = real_print
     self:post()
-    if not ok then
-        self:send(c.r .. result .. c.d)
-        return nil, result
-    end
+    if not ok then self:err(p_err); return nil, p_err end
     return true
 end
 
 function ctrl.dev:do_pcall()
     local text = self.input:GetText()
-    self:debug('text=', text)
+    text = string.trim(text)
     if not text then return nil end
-    -- WowLua:Queue(text) ???
     local ok, err = self:execute(text)
-    if ok then return nil end
-    -- local chunkName,lineNum = err:match("(%b[]):(%d+):")
-	-- lineNum = tonumber(lineNum)
-    -- (find line, highlight, etc.)
+    if ok then return true end
+    if not err then return nil end
+    local fname, line = err:match("(%b[]):(%d+):")
+	line = tonumber(line)
+    self:err(string.format('--> %s:%s: %s <--', fname, line, err))
 end
 
 
@@ -140,26 +201,22 @@ end
 function ctrl.dev:btn_multiline()
     self.btn.btn_multiline:toggle()
     self.mode.multiline = self.btn.btn_multiline:getValue()
-    self.fs.fs_multiline:SetAlpha((self.mode.multiline+1)/2)
     self:debug('ctrl.dev.mode.multiline=', self.mode.multiline)
 end
 
+function ctrl.dev:btn_pp()
+    self.btn.btn_pp:toggle()
+    self.mode.pp = self.btn.btn_pp:getValue()
+    self:debug('ctrl.dev.mode.pp=', self.mode.pp)
+end
+
 function ctrl.dev:btn_testfn()
-    self.input:SetText('local function test()\n    print("test")\nend')
+    self.input:SetText('local function testfn()\n  local t={}\n    for i=1,8 do\n      t[i]="test"\n    end\n  print(t)\nend\n\ntestfn()')
 end
-
-function ctrl.dev:btn_testprint()
-    local real_print = print
-    print = ctrl_print
-    print('test print')
-    print = real_print
-end
-
---
 
 function ctrl.dev:click(btn)
-    self:debug('click', btn.name)
-    ctrl.dev[btn.name](self)
+    ctrl.dev:debug('click', btn.name)
+    if ctrl.dev[btn.name] then ctrl.dev[btn.name](self) end
 end
 
 
@@ -178,14 +235,44 @@ local function OnEditFocusGained(f)
     ctrl.dev:debug('OnEditFocusGained', f.name)
 end
 
+local function OnKeyDown(f, key)
+    ctrl.dev:debug('OnKeyDown', tostring(key))
+end
+
 function ctrl.dev:addInputScripts()
-    ctrl.dev.input:SetScript('OnEditFocusGained', function(evtf) OnEditFocusGained(evtf) end)
     ctrl.dev.input:SetScript('OnEnterPressed', function(evtf) OnEnterPressed(evtf) end)
+    ctrl.dev.input:SetScript('OnEditFocusGained', function(evtf) OnEditFocusGained(evtf) end)
+    ctrl.dev.input:SetScript('OnKeyDown', OnKeyDown)
 end
 
 
 
--- Frame Parent Functions
+-- min/max
+
+function ctrl.dev:btn_min()
+    self.btn.btn_min:toggle()
+    self.mode.min = self.btn.btn_min:getValue()
+    if self.mode.min == 1 then
+        local w, h = self.f.main:GetSize()
+        self.w = w
+        self.h = h
+        self.f.main:SetSize(64,64)
+        self.btn.btn_min:SetPoint(a.c, self.f.main, a.tl, 36, -24)
+    else
+        self.w = self.w or 512
+        self.h = self.h or 512
+        self.f.main:SetSize(self.w, self.h)
+        self.btn.btn_min:SetPoint(a.c, self.f.main, a.tr, -24, -24)
+    end
+end
+
+function ctrl.dev:btn_max()
+    self.options.frame.y = self.options.frame.y + 100
+    self.f.main:SetPoint(a.bl, self.f.main, a.bl, 0, self.options.frame.y)
+end
+
+
+-- Frame Parent Scroll Functions
 
 local function pf_onMouseWheel(pf, delta)
     local child = pf.child
@@ -310,7 +397,7 @@ end
 
 function ctrl.dev.setup(self)
     local sc = UIParent:GetEffectiveScale()
-    ctrl.dev.fontObject = ctrl.dev.fontObject or ctrl.font('SourceCodePro-Medium', sc*15, '')
+    ctrl.dev.fontObject = ctrl.dev.fontObject or ctrl.font('SourceCodePro-Medium', sc*13, '')
 
     self:buildFrames()
     ctrl.tx.generate(self, textures)
@@ -318,9 +405,12 @@ function ctrl.dev.setup(self)
 
     ctrl.btns.generate(self, buttons)
     ctrl.fs.generate(self, fontstrings)
-    --self.btn.btn_multiline:off()
-    --self.fs.fs_multiline:SetAlpha(0.5)
-    self:debug('ctrl.dev.mode.multiline=', self.mode.multiline)
+
+    self.btn.btn_multiline:setValue(self.mode.multiline)
+    self.btn.btn_pp:setValue(self.mode.pp)
+
+    self:welcome()
+    self:btn_testfn()
 
 end
 

@@ -8,7 +8,7 @@ ctrl.mods               = {}
 
 ctrl.name               = 'ctrl'
 ctrl.description        = 'Singletail\'s Quality of Life.'
-ctrl.version            = 1.1
+ctrl.version            = 1.2
 ctrl.author             = 't@wse.nyc'
 ctrl.color              = [[|cfff563af]]
 ctrl.symbol             = '㘁'

@@ -27,27 +27,6 @@ ctrl.templates.btn = {
             }
         },
     },
-    ['btn_sq'] = {
-        subclass = 'SPST',
-        values = { 0, 1 },
-        default = 1,
-        w = 64,
-        h = 64,
-        texture = {
-            static = {
-                { file = 'sq_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
-            },
-            value = {
-                [0] = {
-                    { file = 'sq_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
-                },
-                [1] = {
-                    { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
-                    { file = 'sq_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
-                },
-            }
-        },
-    },
     ]]
     ['beeg'] = {
         subclass = 'SPST',
@@ -110,6 +89,27 @@ ctrl.templates.btn = {
                 [1] = {
                     { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
                     { file = 'sq_glow', alpha = 0.25, color = nil, layer = -3, path = ctrl.p.btns },
+                },
+            }
+        },
+    },
+    ['sqoff'] = {
+        subclass = 'SPST',
+        values = { 0, 1 },
+        default = 0,
+        w = 42,
+        h = 42,
+        texture = {
+            static = {
+                { file = 'sq_bk', alpha = 1, color = nil, layer = -7, path = ctrl.p.btns }
+            },
+            value = {
+                [0] = {
+                    { file = 'sq_off', alpha = 1, color = nil, layer = -5, path = ctrl.p.btns },
+                    { file = 'sq_on', alpha = 0.1, color = 1, layer = -4, path = ctrl.p.btns },
+                },
+                [1] = {
+                    { file = 'sq_off', alpha = 1, color = nil, layer = -5, path = ctrl.p.btns },
                 },
             }
         },
@@ -261,6 +261,49 @@ ctrl.templates.btn = {
                 },
                 [1] = {
                     { file = 'big_on.png', alpha = 1, color = 1, layer = -4, path = ctrl.p.bx },
+                },
+            }
+        },
+    },
+    ['simple'] = {
+        subclass = 'SPST',
+        values = { 0, 1 },
+        default = 0,
+        w = 128,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'simple_bk.png', alpha = 0.5, color = nil, layer = -7, path = ctrl.p.bx }
+            },
+            value = {
+                [0] = {
+                    { file = 'simple_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                },
+                [1] = {
+                    { file = 'simple_on.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                    { file = 'simple_glow.png', alpha = 0.2, color = 1, layer = -5, path = ctrl.p.bx },
+                },
+            }
+        },
+    },
+    ['oval'] = {
+        subclass = 'NO',
+        values = { 0, 1 },
+        default = 0,
+        w = 256,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'oval3_bk.png', alpha = 1, color = nil, layer = -7, path = ctrl.p.bx }
+            },
+            value = {
+                [0] = {
+                    { file = 'oval3_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                },
+                [1] = {
+                    { file = 'oval3_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                    { file = 'oval3_on1_color.png', alpha = 0.5, color = 1, layer = -5, path = ctrl.p.bx },
+                    { file = 'oval3_on2_white.png', alpha = 1, color = nil, layer = -4, path = ctrl.p.bx },
                 },
             }
         },
