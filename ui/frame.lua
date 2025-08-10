@@ -73,8 +73,8 @@ function ctrl.frame.new(module, o)
     o.globalName = o.globalName or nil
     o.class = o.class or default.class
     o.template = o.template or default.template
-    o.w = o.w or default.w
-    o.h = o.h or default.h
+    o.w = o.w or o.target:GetWidth() or default.w
+    o.h = o.h or o.target:GetHeight() or default.h
     o.x = o.x or default.x
     o.y = o.y or default.y
     o.a = o.a or default.a
@@ -88,7 +88,9 @@ function ctrl.frame.new(module, o)
     local f = CreateFrame(o.class, o.globalName, o.target, o.template)
     f:SetSize(o.w, o.h)
     for an = 1, #o.anchors do
-        f:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y)
+        o.anchors[an].target = o.anchors[an].target or o.target
+        if type(o.anchors[an].target) == 'string' then o.anchors[an].target = module.f[o.anchors[an].target] end
+        f:SetPoint(o.anchors[an].a, o.anchors[an].target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y)
     end
     f:SetParent(o.target)
     f:SetFrameStrata(o.strata)

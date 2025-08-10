@@ -1,10 +1,12 @@
 ## Interface: 110200
 ## Title: ctrl
-## Author: |cffd649fft@wse.nyc|r
+## Author: |cffd649ffSingletail|r
 ## Version: 1.2
 ## Notes: |cff24cf19Control system for Singletail's mods.|r
-## Category: Combat
+## Category: ctrl
 ## Group: ctrl
+## DefaultState: Enabled
+## LoadOnDemand: 0
 ## SavedVariables: CtrlData
 ## IconTexture: Interface\AddOns\ctrl\assets\ctrl\ctrl.png
 

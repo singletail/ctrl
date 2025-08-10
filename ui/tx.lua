@@ -29,21 +29,25 @@ function ctrl.tx.new(module, o)
     o.lvl = o.lvl or 'ARTWORK'
     o.wrap = o.wrap or a.w.c
     o.filter = o.filter or 'TRILINEAR'
-    if not o.anchors then o.anchors = {{ a = o.a, pa = o.pa, x = o.x, y = o.y }} end
 
     local tx = o.target:CreateTexture(nil, o.lvl, nil, o.l)
-    
     tx:SetParent(o.target)
     tx:SetTexture(o.path .. o.t, o.wrap, o.wrap, o.filter)
-    if o.w == 0 then
-        tx:SetSize(o.target:GetWidth(true), o.target:GetHeight(true))
-        tx:SetAllPoints(o.target)
-    else
-        tx:SetSize(o.w, o.h)
+
+    if o.anchors then
         for an = 1, #o.anchors do
             tx:SetPoint(o.anchors[an].a, o.target, o.anchors[an].pa, o.anchors[an].x, o.anchors[an].y)
         end
+    else
+        if o.w == 0 and o.h == 0 then
+            tx:SetSize(o.target:GetWidth(true), o.target:GetHeight(true))
+            tx:SetAllPoints(o.target)
+        else
+            tx:SetSize(o.w, o.h)
+            tx:SetPoint(o.a, o.target, o.pa, o.x, o.y)
+        end
     end
+
     tx:SetAlpha(o.al)
     return tx
 end

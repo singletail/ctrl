@@ -44,11 +44,25 @@ function ctrl.fs.new(module, o)
     o.ww = o.ww or default.ww
     o.t = o.t or ''
 
+--[[
+    o.font = o.font or {}
+    o.font.file = o.font.file or o.fontFile or ctrl.prefs.font.file
+    o.font.size = o.font.size or o.fontSize or ctrl.prefs.font.size
+    o.font.flags = o.font.flags or o.fontFlags or default.fontFlags
+    o.fontObject = ctrl.font(o.font.file, o.font.size, o.font.flags)
+]]
+
+
     o.fontFile = o.fontFile or ctrl.prefs.font.file
     o.fontFile = stripSuffix(o.fontFile)
     o.fontSize = o.fontSize or ctrl.prefs.font.size
     o.fontFlags = o.fontFlags or default.fontFlags
     o.fontObject = ctrl.font(o.fontFile, o.fontSize, o.fontFlags)
+
+
+    if not o.fontObject then
+        ctrl.log(ctrl, 1, 'error: font object not found for '..o.font.file..' '..o.font.size..' '..' '..module.name)
+    end
 
     local fs = o.target:CreateFontString()
     fs:SetParent(o.target)
