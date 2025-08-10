@@ -25,20 +25,9 @@ ctrl.dev = ctrl.mod:new(mod)
 
 function ctrl.dev.UI_SCALE_CHANGED()
     ctrl.dev.scale = UIParent:GetEffectiveScale()
+    ctrl.dev.fontHeight = ctrl.dev.font:GetFontHeight()
 end
 
-local ipsum = [[
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-]]
-
-
--- this contains settings used for both construction and redraw, and will be overwritten by data in savedvariables eventually.
--- frame load order is frame.main, then layout, then slider, then subframes
 ctrl.dev.theme = {
     ['univac'] = {
         font = {
@@ -46,7 +35,7 @@ ctrl.dev.theme = {
             size = 13,
         },
         frame = { -- numbered, because order is important
-            [1] = { name='main', w=640, h=384, x=256, y=-384, a=a.tl, pa=a.tl, isResizable=1, isMovable=1, min={ w=64, h=64 }, max={ w=1024, h=1024 } },
+            [1] = { name='main', w=640, h=384, x=256, y=-384, a=a.tl, pa=a.tl, isResizable=1, isMovable=1 },
             [2] = { name='layout', target='main', anchors = {{a=a.tl,pa=a.tl,x=0,y=0},{a=a.br,pa=a.br,x=0,y=0}} },
             [3] = { name='head', target='layout', h=36, anchors = {{a=a.tl,pa=a.tl,x=0,y=0},{a=a.br,pa=a.tr,x=0,y=-36}}},
             [4] = { name='slider_v', target='layout', w=4, anchors = {{a=a.t,target='head',pa=a.b,x=220,y=0},{a=a.b,target='layout',pa=a.b,x=220,y=4}} },
@@ -80,15 +69,6 @@ ctrl.dev.theme = {
     }
 }
 
-
-
-
-
-
-
-
--- Welcome
-
 function ctrl.dev:welcome()
     local msg=c.r..s.ctrl..' '..c.d..c.o..'c'..c.y..'t'..c.d..c.g..'r'..c.d..c.b..'l '..c.d..c.v..'v'..ctrl.version..c.d
     msg=msg..' by '..c.p..s.singletail..' '..'Singletail-Proudmoore'..c.d
@@ -97,12 +77,6 @@ function ctrl.dev:welcome()
     local msg2 = c.r..s.api..c.d..' '..c.o..buildVersion..c.d..' '..c.y..buildNumber..c.d..' '..c.g..buildDate..c.d..' '..c.b..interfaceVersion..c.d
     self:add(msg2)
 end
-
-
-
-
-
--- Output
 
 function ctrl.dev:pre()
     ctrl.dev.output:ClearHighlightText()
@@ -115,7 +89,6 @@ function ctrl.dev:write(text)
 end
 
 function ctrl.dev:post()
-    ctrl.dev:pre()
     ctrl.dev.scrollToBottom()
 end
 
@@ -141,26 +114,10 @@ function ctrl.dev:err(err)
     self:post()
 end
 
---[[
-local function ctrl_print(...)
-	local out = ""
-	for i=1,select("#", ...) do
-		if i > 1 then
-			out = out .. ", "
-		end
-		out = out .. tostring(select(i, ...))
-	end
-	ctrl.dev:add(out)
-end
-
-local function pack(...)
-    return {n=select("#",...),...}
-end
-]]
-
 
 -- Print
 
+-- This is a bit silly, because it has to support 3 kinds of tables.
 local function ctrl_recursive(input, limit, strindent)
     limit = limit or 1024
     if (limit < 1) then return limit - 1 end
@@ -198,7 +155,6 @@ local function ctrl_print(...)
     local str = table.concat(t, ', ')
     ctrl.dev:add(str)
 end
-
 
 -- execution
 
@@ -278,42 +234,6 @@ function ctrl.dev:btn_pp()
     self:debug('ctrl.dev.mode.pp=', self.mode.pp)
 end
 
-function ctrl.dev:btn_testfn()
-    self.input:SetText('local function testfn()\n  local t={}\n    for i=1,8 do\n      t[i]="test"\n    end\n  print(t)\nend\n\ntestfn()')
-end
-
-function ctrl.dev:click(btn)
-    ctrl.dev:debug('click', btn.name)
-    if ctrl.dev['btn_'..btn.name] then ctrl.dev['btn_'..btn.name](self) end
-end
-
-
-
--- Input Scripts
-
-local function OnEnterPressed(f)
-    if IsControlKeyDown() or ctrl.dev.mode.multiline == 1 then ctrl.dev:do_pcall() return end
-    ctrl.dev.input:Insert('\n')
-end
-
-local function OnEditFocusGained(f)
-    ctrl.dev:debug('OnEditFocusGained', f.name)
-end
-
-local function OnKeyDown(f, key)
-    ctrl.dev:debug('OnKeyDown', tostring(key))
-end
-
-function ctrl.dev:addInputScripts()
-    ctrl.dev.input:SetScript('OnEnterPressed', function(evtf) OnEnterPressed(evtf) end)
-    ctrl.dev.input:SetScript('OnEditFocusGained', function(evtf) OnEditFocusGained(evtf) end)
-    ctrl.dev.input:SetScript('OnKeyDown', OnKeyDown)
-end
-
-
-
--- min/max
-
 function ctrl.dev:btn_min()
     self.btn.btn_min:toggle()
     self.mode.min = self.btn.btn_min:getValue()
@@ -336,108 +256,32 @@ function ctrl.dev:btn_max()
     self.f.main:SetPoint(a.bl, self.f.main, a.bl, 0, self.options.frame.y)
 end
 
-
--- Frame Parent Scroll Functions
-
-local function pf_onMouseWheel(pf, delta)
-    ctrl.dev:debug('pf_onMouseWheel', tostring(pf.name), tostring(delta))
-    local child = pf.child
-    local parentHeight = pf:GetHeight()
-    local childHeight = child:GetHeight()
-    local maxY = childHeight - parentHeight
-    local newY = child.pos - (delta * 10)
-    if newY < 0 then newY = 0 end
-    if newY > maxY then newY = maxY end
-    child.pos = newY
-    child:SetPoint(a.tl, pf, a.tl, 0, child.pos)
-    child:SetPoint(a.tr, pf, a.tr, 0, child.pos)
-end
-
--- Editbox Config
-
-function ctrl.dev:configureInput(f)
-    f.pos = 0
-    f.parent = f:GetParent()
-    f.parent.child = f
-    --f.parent:SetClipsChildren(true)
-    f:SetAutoFocus(false)
-    f:SetFontObject(ctrl.dev.font)
-    f:SetTextColor(1, 1, 1, 1)
-    f:SetHighlightColor(1, 0.8, 0, 0.5)
-    f:SetMultiLine(true)
-    f:SetMaxBytes(1024*1024)
-    f:SetJustifyH('LEFT')
-    f:SetTextInsets(8, 8, 8, 8)
-    f:EnableMouseWheel(false)
-    f.parent:EnableMouseWheel(true)
-    f.parent:SetScript('OnMouseWheel', function(pf, delta) pf_onMouseWheel(pf, delta) end)
-    f:Enable()
-end
-
-function ctrl.dev:configureOutput(f)
-    f.pos = 0
-    f.parent = f:GetParent()
-    f.parent.child = f
-    --f.parent:SetClipsChildren(true)
-    f:SetAutoFocus(false)
-    f:SetFontObject(ctrl.dev.font)
-    f:SetTextColor(1, 1, 1, 1)
-    f:SetHighlightColor(1, 0.8, 0, 0.5)
-    f:SetMultiLine(true)
-    f:SetMaxBytes(1024*1024)
-    f:SetJustifyH('LEFT')
-    f:SetTextInsets(8, 8, 8, 8)
-    f:EnableMouseWheel(false)
-    f.parent:EnableMouseWheel(true)
-    f.parent:SetScript('OnMouseWheel', function(pf, delta) pf_onMouseWheel(pf, delta) end)
-    f:Enable()
-end
-
-function ctrl.dev:build_editboxes()
-    self.output = self.output or CreateFrame('EditBox', nil, ctrl.dev.f.output)
-    --self.output.name = 'output'
-    self.output:SetWidth(ctrl.dev.f.output:GetWidth())
-    self.output:SetPoint(a.tl, ctrl.dev.f.output, a.tl, 0, 0)
-    self.output:SetPoint(a.tr, ctrl.dev.f.output, a.tr, 0, 0)
-    self:configureOutput(self.output)
-
-    self.input = self.input or CreateFrame('EditBox', nil, ctrl.dev.f.input)
-    self.input:SetPoint(a.tl, ctrl.dev.f.input, a.tl, 0, 0)
-    self.input:SetPoint(a.tr, ctrl.dev.f.input, a.tr, 0, 0)
-    --self.input.name = 'input'
-    self:configureInput(self.input)
-
-    self:addInputScripts()
-
-    CTRLOUTPUT = ctrl.dev.output
-end
-
--- Frames
-
-function ctrl.dev.scrollToBottom()
-    local lh = ctrl.dev.font:GetFontHeight()
-    local text = ctrl.dev.output:GetText()
-    local l = strlen(text)
-    local n = 0
-    for i=1,l do
-        if text:sub(i,i) == '\n' then
-            n = n + 1
-        end
-    end
-    local h = n * lh
-    local ph = ctrl.dev.f.output:GetHeight()
-    local y = 0
-    if h > ph then
-        y = h - ph
-    end
-    ctrl.dev.output:SetPoint(a.tl, ctrl.dev.f.output, a.tl, 0, y)
-    ctrl.dev.output:SetPoint(a.tr, ctrl.dev.f.output, a.tr, 0, y)
-    --ctrl.dev:debug('scrollToBottom',  'h', h, 'ph', ph, 'y', y)
+function ctrl.dev:click(btn)
+    ctrl.dev:debug('click', btn.name)
+    if ctrl.dev['btn_'..btn.name] then ctrl.dev['btn_'..btn.name](self) end
 end
 
 
+-- Input Scripts
 
--- Slider
+local function OnEnterPressed(f)
+    if IsControlKeyDown() or ctrl.dev.mode.multiline == 1 then ctrl.dev:do_pcall() return end
+    ctrl.dev.input:Insert('\n')
+end
+
+local function OnEditFocusGained(f)
+    ctrl.dev:debug('OnEditFocusGained', f.name)
+end
+
+local function OnKeyDown(f, key)
+    ctrl.dev:debug('OnKeyDown', tostring(key))
+end
+
+function ctrl.dev:addInputScripts()
+    ctrl.dev.input:SetScript('OnEnterPressed', function(evtf) OnEnterPressed(evtf) end)
+    ctrl.dev.input:SetScript('OnEditFocusGained', function(evtf) OnEditFocusGained(evtf) end)
+    ctrl.dev.input:SetScript('OnKeyDown', OnKeyDown)
+end
 
 local function slider_onMouseUp(f) -- TODO: save position to prefs
     f:SetScript('OnUpdate', nil)
@@ -477,10 +321,73 @@ end
 
 -- Frames
 
+function ctrl.dev.editBoxHeight(f)
+    local text, lines = f:GetText(), 0
+    for i=1,strlen(text) do
+        if text:sub(i,i) == '\n' then lines = lines + 1 end
+    end
+    return lines * ctrl.dev.fontHeight
+end
+
+function ctrl.dev:scrollToBottom()
+    local editBoxHeight = ctrl.dev.editBoxHeight(self.output)
+    local frameHeight = self.f.output:GetHeight()
+    local y = 0
+    if editBoxHeight > frameHeight then y = editBoxHeight - frameHeight end
+    ctrl.dev.output:SetPoint(a.tl, ctrl.dev.f.output, a.tl, 0, y)
+    ctrl.dev.output:SetPoint(a.tr, ctrl.dev.f.output, a.tr, 0, y)
+end
+
+local function pf_onMouseWheel(pf, delta)
+    ctrl.dev:debug('pf_onMouseWheel', tostring(pf.name), tostring(delta))
+    local child = pf.child
+    local parentHeight = pf:GetHeight()
+    local childHeight = ctrl.dev.editBoxHeight(child)
+    local maxY = childHeight - parentHeight
+    local _, _, _, _, childY = child:GetPoint(1)
+    local newY = childY - (delta * 10)
+    if newY < 0 then newY = 0 end
+    if newY > maxY then newY = maxY end
+    child:SetPoint(a.tl, pf, a.tl, 0, newY)
+    child:SetPoint(a.tr, pf, a.tr, 0, newY)
+end
+
+function ctrl.dev:configure_editbox(f)
+    f.pos = 0
+    f.parent = f:GetParent()
+    f.parent.child = f
+    f.parent:SetClipsChildren(true)
+    f:SetAutoFocus(false)
+    f:SetFontObject(ctrl.dev.font)
+    f:SetTextColor(1, 1, 1, 1)
+    f:SetHighlightColor(1, 0.8, 0, 0.5)
+    f:SetMultiLine(true)
+    f:SetMaxBytes(1024 * 1024)
+    f:SetJustifyH('LEFT')
+    f:SetTextInsets(8, 8, 8, 8)
+    f:EnableMouseWheel(false)
+    f.parent:EnableMouseWheel(true)
+    f.parent:SetScript('OnMouseWheel', function(pf, delta) pf_onMouseWheel(pf, delta) end)
+    f:Enable()
+end
+
+function ctrl.dev:build_editboxes()
+    self.output = self.output or CreateFrame('EditBox', nil, ctrl.dev.f.output)
+    self.output:SetPoint(a.tl, ctrl.dev.f.output, a.tl, 0, 0)
+    self.output:SetPoint(a.tr, ctrl.dev.f.output, a.tr, 0, 0)
+    self:configure_editbox(self.output)
+    self.input = self.input or CreateFrame('EditBox', nil, ctrl.dev.f.input)
+    self.input:SetPoint(a.tl, ctrl.dev.f.input, a.tl, 0, 0)
+    self.input:SetPoint(a.tr, ctrl.dev.f.input, a.tr, 0, 0)
+    self:configure_editbox(self.input)
+    self:addInputScripts()
+end
+
 function ctrl.dev:build_frames()
     local theme = self.theme[self.options.theme]
     self.scale = UIParent:GetEffectiveScale()
     self.font = ctrl.font(theme.font.name, self.scale * theme.font.size, '')
+    self.fontHeight = self.font:GetFontHeight()
     for _, v in ipairs(theme.frame) do self.f[v.name] = ctrl.frame.new(ctrl.dev, v) end
     self.f.slider_h.dir = 'h'
     self.f.slider_v.dir = 'v'
@@ -491,18 +398,13 @@ function ctrl.dev:build_frames()
     ctrl.fs.generate(self, theme.fs)
 end
 
-
 function ctrl.dev.setup(self)
     self:build_frames()
     self:build_editboxes()
-    --self.output:SetText(ipsum)
-    --self.input:SetText(ipsum)
     self.input:SetText('local function testfn()\n  local t={}\n    for i=1,8 do\n      t[i]="test"\n    end\n  print(t)\nend\n\ntestfn()')
-
     self.btn.multiline:setValue(self.mode.multiline)
     self.btn.pp:setValue(self.mode.pp)
     self:welcome()
-
 end
 
 ctrl.dev:init()
