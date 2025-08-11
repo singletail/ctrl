@@ -5,29 +5,6 @@ local ctrl = select(2, ...)
 
 ctrl.templates = ctrl.templates or {}
 ctrl.templates.btn = {
-    --[[
-    ['btn_smol'] = {
-        subclass = 'SPST',
-        values = { 0, 1 },
-        default = 1,
-        w = 64,
-        h = 64,
-        texture = {
-            static = {
-                { file = 'smol_bk', alpha = 1, color = nil, layer = 2, path = ctrl.p.btns }
-            },
-            value = {
-                [0] = {
-                    { file = 'smol_off', alpha = 1, color = 1, layer = 3, path = ctrl.p.btns },
-                },
-                [1] = {
-                    { file = 'smol_on', alpha = 1, color = 1, layer = 4, path = ctrl.p.btns },
-                    { file = 'smol_glow', alpha = 0.25, color = nil, layer = 5, path = ctrl.p.btns },
-                },
-            }
-        },
-    },
-    ]]
     ['beeg'] = {
         subclass = 'SPST',
         values = { 0, 1 },
@@ -49,29 +26,6 @@ ctrl.templates.btn = {
             }
         },
     },
-    --[[
-    ['prot'] = {
-        subclass = 'SPST',
-        values = { 0, 1 },
-        default = 1,
-        w = 64,
-        h = 64,
-        texture = {
-            static = {
-                { file = 'prot_bk', alpha = 1, color = nil, layer = -6, path = ctrl.p.btns }
-            },
-            value = {
-                [0] = {
-                    { file = 'sq_off', alpha = 1, color = 1, layer = -5, path = ctrl.p.btns },
-                },
-                [1] = {
-                    { file = 'sq_on', alpha = 1, color = 1, layer = -4, path = ctrl.p.btns },
-                    { file = 'sq_glow', alpha = 0.5, color = nil, layer = -3, path = ctrl.p.btns },
-                },
-            }
-        },
-    },
-    ]]
     ['sq'] = {
         subclass = 'NC',
         values = { 0, 1 },
@@ -106,10 +60,10 @@ ctrl.templates.btn = {
             value = {
                 [0] = {
                     { file = 'sq_off', alpha = 1, color = nil, layer = -5, path = ctrl.p.btns },
-                    { file = 'sq_on', alpha = 0.1, color = 1, layer = -4, path = ctrl.p.btns },
                 },
                 [1] = {
                     { file = 'sq_off', alpha = 1, color = nil, layer = -5, path = ctrl.p.btns },
+                    { file = 'sq_on', alpha = 0.1, color = 1, layer = -4, path = ctrl.p.btns },
                 },
             }
         },
@@ -225,7 +179,7 @@ ctrl.templates.btn = {
         },
     },
     ['wide'] = {
-        subclass = 'SPST',
+        subclass = 'NO',
         values = { 0, 1 },
         default = 0,
         w = 72,
@@ -236,8 +190,8 @@ ctrl.templates.btn = {
             },
             value = {
                 [0] = {
-                    { file = 'big_off.png', alpha = 1, color = 1, layer = -5, path = ctrl.p.bx },
-                    { file = 'big_on.png', alpha = 0.5, color = 1, layer = -4, path = ctrl.p.bx },
+                    { file = 'big_off.png', alpha = 1, color = nil, layer = -5, path = ctrl.p.bx },
+                    --{ file = 'big_on.png', alpha = 0.5, color = 1, layer = -4, path = ctrl.p.bx },
                 },
                 [1] = {
                     { file = 'big_on.png', alpha = 1, color = 1, layer = -4, path = ctrl.p.bx },
@@ -246,7 +200,7 @@ ctrl.templates.btn = {
         },
     },
     ['widetoggle'] = {
-        subclass = 'NO',
+        subclass = 'TOGGLE',
         values = { 0, 1 },
         default = 0,
         w = 72,
@@ -261,6 +215,26 @@ ctrl.templates.btn = {
                 },
                 [1] = {
                     { file = 'big_on.png', alpha = 1, color = 1, layer = -4, path = ctrl.p.bx },
+                },
+            }
+        },
+    },
+    ['smol'] = {
+        subclass = 'TOGGLE',
+        values = { 0, 1 },
+        default = 0,
+        w = 36,
+        h = 36,
+        texture = {
+            static = {
+                { file = 'smol_bk.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx }
+            },
+            value = {
+                [0] = {
+                    { file = 'smol_off.png', alpha = 1, color = nil, layer = -5, path = ctrl.p.bx },
+                },
+                [1] = {
+                    { file = 'smol_on.png', alpha = 1, color = 1, layer = -4, path = ctrl.p.bx },
                 },
             }
         },
@@ -304,6 +278,29 @@ ctrl.templates.btn = {
                     { file = 'oval3_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
                     { file = 'oval3_on1_color.png', alpha = 0.5, color = 1, layer = -5, path = ctrl.p.bx },
                     { file = 'oval3_on2_white.png', alpha = 1, color = nil, layer = -4, path = ctrl.p.bx },
+                },
+            }
+        },
+    },
+    ['wf'] = { -- square with light in middle
+        subclass = 'TOGGLE',
+        values = { 0, 1 },
+        default = 0,
+        w = 64,
+        h = 64,
+        texture = {
+            static = {
+                { file = 'wf2_bk.png', alpha = 1, color = nil, layer = -7, path = ctrl.p.bx }
+            },
+            value = {
+                [0] = {
+                    { file = 'wf2_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                },
+                [1] = {
+                    { file = 'wf2_off.png', alpha = 1, color = nil, layer = -6, path = ctrl.p.bx },
+                    { file = 'wf2_on1_color.png', alpha = 0.5, color = 1, layer = -5, path = ctrl.p.bx },
+                    { file = 'wf2_on2_white.png', alpha = 1, color = nil, layer = -4, path = ctrl.p.bx },
+                    { file = 'wf2_on3_color.png', alpha = 1, color = 1, layer = -3, path = ctrl.p.bx },
                 },
             }
         },

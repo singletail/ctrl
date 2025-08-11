@@ -30,7 +30,10 @@ local default = {
 
 local function mouseUp(self, btn, ...)
     if self.enabled == 1 then
-        if self.info.subclass == 'SPST' then
+        if self.info.subclass == 'TOGGLE' then
+            self:toggle()
+            self.module:click(self)
+        elseif self.info.subclass == 'SPST' then
             self:showValue(self.default)
             self.module:click(self, self.info)
         elseif self.info.subclass ~= 'LIGHT' then
@@ -45,7 +48,7 @@ end
 local function mouseDown(self)
     if self.enabled == 1 then
         if self.info.subclass == 'SPST' then
-            self:showValue(abs(self.default - 1))
+            self:showValue(math.abs(self.default - 1))
         elseif self.info.subclass == 'NC' then
             self:showValue(0)
         elseif self.info.subclass ~= 'LIGHT' then
@@ -153,7 +156,7 @@ local function _off(self)
 end
 
 local function _toggle(self)
-    self:setValue(abs(self.value - 1))
+    self:setValue(math.abs(self.value - 1))
     self:refresh()
 end
 
